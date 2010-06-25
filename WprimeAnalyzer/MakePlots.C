@@ -53,24 +53,26 @@ MakePlots(){
     TFile *fin = TFile::Open("Wprime_analysis.root");
     
     samples.push_back(Sample("wz", 2, 1));
-    samples.push_back(Sample("ttbar", 3, 1));
+    //samples.push_back(Sample("ttbar", 3, 1));
+    samples.push_back(Sample("ttbarfast", 8, 1));
     samples.push_back(Sample("zz", 4, 1));
     samples.push_back(Sample("zgamma", 5, 1));
     samples.push_back(Sample("zjets", 6, 1));
-    //samples.push_back("wjets", 7, 1));
-
-    samples.push_back(Sample("wprime400", 1, 1, 0));
+    //samples.push_back(Sample("wjets", 7, 1));
+    
     //samples.push_back("wprime400_W20");
     //samples.push_back("wprime400_W40");
     //samples.push_back("wprime400_WDef");
     //samples.push_back("wprime400_STARTUP");
+    
+    samples.push_back(Sample("wprime400", 1, 1, 0));
     samples.push_back(Sample("wprime500", 1, 2, 0));
     samples.push_back(Sample("wprime600", 1, 3, 0));
     samples.push_back(Sample("wprime700", 1, 4, 0));
     samples.push_back(Sample("wprime800", 1, 5, 0));
     samples.push_back(Sample("wprime900", 1, 6, 0));
     samples.push_back(Sample("TC400",     1, 7, 0));
-
+    
     
     string efftitle[] = {"hEffAbs", "hEffRel", "hNumEvts"};
 
@@ -102,7 +104,7 @@ MakePlots(){
     TCanvas c1;
     c1.Print("Summary.pdf[", "pdf"); 
     for(int i=0;i<3;++i) DrawandSave(fin,efftitle[i], 0, i==2, 1);
-   
+
     int size = variable.size();
     for(int i=0;i<size;++i){
         for(int j=0;j<Num_histo_sets;++j){
@@ -152,7 +154,8 @@ DrawandSave(TFile* fin, string title, bool norm, bool logy, bool eff){
     int size = samples.size();
     for(int i=0; i<size; ++i){
         hist_names.push_back(samples[i].name + "/" + title);
-        //cout<<"Looking for "<<title<<endl;
+        if(!fin->Get(hist_names[i].c_str())) 
+            cout<<"Failed getting "<<title<<" from "<<samples[i].name<<endl;
         hists.push_back((TH1F*) fin->Get(hist_names[i].c_str()));
     }
     
@@ -166,15 +169,17 @@ Draw(vector<TH1F*> &  hists, string filename, bool norm, bool logy, bool eff){
     //printf("  Draw (norm is %i)\n",norm);
     TCanvas c1;
     if(logy) c1.SetLogy();
-    TLegend *legend = new TLegend(0.60,0.65,0.85,0.89,"");
+    TLegend *legend = new TLegend(0.60,0.50,0.85,0.89,"");
 
-    string title =  hists[1]->GetTitle();
+    string title =  hists[0]->GetTitle();
     title +=  ";";
-    title +=  hists[1]->GetXaxis()->GetTitle();
+    title +=  hists[0]->GetXaxis()->GetTitle();
     if(!eff){
         title +=  ";Evts/";
-        title += convertFloattoStr(hists[1]->GetBinWidth(1));
-        title += " GeV";
+        title += convertFloattoStr(hists[0]->GetBinWidth(1));
+        title += " GeV/";
+        title += convertFloattoStr(lumiPb);
+        title += " pb^{-1}";
     }
     
     THStack* hs = new THStack("hs",title.c_str());
