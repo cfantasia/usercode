@@ -30,6 +30,31 @@ const float minWpt = 90;
 // +++++++++++++++++++Z Cuts
 const float minZpt = 90;
 
+// +++++++++++++++++++Electron General Cuts
+const float maxElecEtaBarrel = 1.4442;
+const float minElecEtaEndcap = 1.56;
+const float maxElecEta = 2.5;
+
+const float minElecEt = 10;
+const float maxElecTrkRelIso  [] = {0.09 ,0.04 };
+const float maxElecECalRelIso [] = {0.07 ,0.05 };
+const float maxElecHCalRelIso [] = {0.10 ,0.025};
+const float maxElecSigmaEtaEta[] = {0.01 ,0.03 };
+const float maxElecDeltaPhiIn [] = {0.06 ,0.03 };
+const float maxElecDeltaEtaIn [] = {0.004,0.007};
+const float maxElecHOverE     [] = {0.04 ,0.025};
+
+// +++++++++++++++++++Muon General Cuts
+const int cutMuonType = MUONFITGLOBAL;
+const float maxMuonEta = 2.5;
+const float minMuonPt = 15.;
+const float maxMuonDxy = 0.2;
+const float maxMuonNormChi2 = 10.;
+const int minMuonNPixHit = 0;
+const int minMuonNTrkHit = 10;
+const int minMuonStations = 0;
+const int minMuonHitsUsed = 0;
+
 // +++++++++++++++++++Wmunu
 //The muon must be identified as both global muon and tracker muon 
 const int cutWmunuIsGlobal = true;
@@ -37,24 +62,24 @@ const int cutWmunuIsTracker= true;
 const int cutWmunuGlobalandTracker= true;
 
 //Number of pixel hits > 0 
-const int minWmunuNpixhit = 0;
+//const int minWmunuNpixhit = 0;
 
 //Number of hits in the tracker > 10 
-const int minWmunuNtrkhit = 10;
+//const int minWmunuNtrkhit = 10;
 
 //Transverse impact parameter of the muon with respect to the beam spot < 2 mm 
-const float maxWmunuDxy = 0.2;//It's in cm
+//const float maxWmunuDxy = 0.2;//It's in cm
 
 //Chi2/ndof of the global muon fit < 10 A very loose cut. 
-const float maxWmunuNormChi2 = 10;
+//const float maxWmunuNormChi2 = 10;
 
 //Number of valid hits in the muon chambers used in the global muon fit > 0 
 //This is a powerful but still loose cut to reject decays-in-flight and punch-through at high-pT. Together with the previous Chi2/ndof cut, this is what is known in the reco::Muon structure as GlobalMuonPromptTight bit requirement. We prefer not to not refer to strange names and explain clearly what is done without using CMSSW jargon. 
-const int minWmunuHitsUsed = 0;
+//const int minWmunuHitsUsed = 0;
 
 //Number of muon stations > 1 
 //This cut, particularly effective against punch-through and accidental matchings, is also consistent the the logic of the CMS muon trigger system, which also requires at least two stations in order to give a meaningful estimate of the transverse momentum. 
-const int minWmunuStations = 1;
+//const int minWmunuStations = 1;
 
 //|eta(muon)|<2.1 This cut is required in order to match muon trigger requirements. It could be increased to 2.4 if the L1 single-muon trigger continues to be un-prescaled at high rapidity (but this would probably imply changing the HLT_Mu9 requirement and should not happen when the instantaneous luminosity starts to increase significantly).
 const float maxWmunuEta = 2.1;
@@ -99,19 +124,19 @@ const float minWmunuMET = 50;
 const int cutZmumuType = MUONFITGLOBAL;
 
 //dxy < 0.2 global muon 
-const float maxZmumuDxy = 0.2;
+//const float maxZmumuDxy = 0.2;
 
 //chi-squared fit < 10 
-const float maxZmumuNormChi2 = 10.; 
+//const float maxZmumuNormChi2 = 10.; 
 
 //at least one pixel hit 
-const int minZmumuNpixhit = 0;
+//const int minZmumuNpixhit = 0;
 
-//at least 10 strip hits 
-const int minZmumuNstriphit = 9;
+//Number of hits in the tracker > 10 
+//const int minZmumuNtrkhit = 10;
 
 //at least one muon hit matched to the global fit
-const int minZmumuStations = 0;
+//const int minZmumuStations = 0;
   
 // Muon Isolation 
 //track isolation < 3 GeV/c, where track isolation is defined as the sum of pT of tracks within a cone of deltaR <0.3 around the muon direction 
@@ -229,7 +254,6 @@ const float maxWmunuECalTrkRelIso = 0.1;
 // +++++++++++++++++++ Electron ID Cuts
 const float maxEtaBarrel = 1.479;
 const float minEtaEndcap = 1.55;
-const float maxElecEta = 2.5;
 
 const float minZeePt = 15;
 const float minWenuPt = 20;

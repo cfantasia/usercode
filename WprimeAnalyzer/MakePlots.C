@@ -5,6 +5,7 @@
 #include "TFile.h"
 #include "TTree.h" 
 #include "TH1F.h"
+#include "TGraph.h"
 #include "TCanvas.h"
 #include "TRandom.h"
 #include "TMath.h"
@@ -21,14 +22,15 @@ struct Sample{
     int line;
     int style;
     int fill;
+    bool isSignal;
     Sample(){
-        name = ""; line = 0; style = 0; fill=0;
+        name = ""; line = 0; style = 0; fill=0; isSignal=0;
     }
     Sample(string n, int l, int s){
-        name = n; line = l; style = s; fill = l;
+        name = n; line = l; style = s; fill=0; isSignal = 0;
     }
-    Sample(string n, int l, int s, int f){
-        name = n; line = l; style = s; fill = f;
+    Sample(string n, int l, int s, int f, bool i=0){
+        name = n; line = l; style = s; fill = f; isSignal = i;
     }
 
 };
@@ -41,37 +43,38 @@ vector<Sample> samples;
 string convertFloattoStr(float num);
 void DrawandSave(TFile* fin, string title, bool norm, bool logy, bool eff);
 void Draw(vector<TH1F*> & hists,string filename, bool norm, bool logy, bool eff);
+void DrawSelection(TFile* fin, string title, bool mincut);
 void PlotEff(TFile* fin, string title);
-void PlotList(TEntryList* SMergedlist,TEntryList* BMergedlist,string title);
-void GetLists(TFile* fin,TEntryList** Slist,TEntryList** Blist);
-TEntryList* ListAnd(TEntryList* l1,TEntryList* l2);
-TEntryList* ListAnd(vector<TEntryList*> list);
-
+bool Straddles(float a, float b, float num);
 
 void
 MakePlots(){  
-    TFile *fin = TFile::Open("Wprime_analysis.root");
+    TFile *fin = TFile::Open("Wprime_analysis_Zjets.root");
     
-    samples.push_back(Sample("wz", 2, 1));
-    //samples.push_back(Sample("ttbar", 3, 1));
-    samples.push_back(Sample("ttbarfast", 8, 1));
-    samples.push_back(Sample("zz", 4, 1));
-    samples.push_back(Sample("zgamma", 5, 1));
-    samples.push_back(Sample("zjets", 6, 1));
-    //samples.push_back(Sample("wjets", 7, 1));
+    samples.push_back(Sample("wz", 2, 1, 0));
+    //samples.push_back(Sample("ttbar", 3, 1, 0));
+    samples.push_back(Sample("ttbarfast", 8, 1, 0));
+    samples.push_back(Sample("zz", 4, 1, 0));
+    samples.push_back(Sample("zgamma", 5, 1, 0));
+    samples.push_back(Sample("zjets", 6, 1, 0));
+    samples.push_back(Sample("wjets", 7, 1, 0));
     
-    //samples.push_back("wprime400_W20");
-    //samples.push_back("wprime400_W40");
-    //samples.push_back("wprime400_WDef");
-    //samples.push_back("wprime400_STARTUP");
     
-    samples.push_back(Sample("wprime400", 1, 1, 0));
-    samples.push_back(Sample("wprime500", 1, 2, 0));
-    samples.push_back(Sample("wprime600", 1, 3, 0));
-    samples.push_back(Sample("wprime700", 1, 4, 0));
-    samples.push_back(Sample("wprime800", 1, 5, 0));
-    samples.push_back(Sample("wprime900", 1, 6, 0));
-    samples.push_back(Sample("TC400",     1, 7, 0));
+    samples.push_back(Sample("wprime400", 1, 1, 0, 1));
+    samples.push_back(Sample("wprime500", 1, 2, 0, 1));
+    samples.push_back(Sample("wprime600", 1, 3, 0, 1));
+    samples.push_back(Sample("wprime700", 1, 4, 0, 1));
+    samples.push_back(Sample("wprime800", 1, 5, 0, 1));
+    samples.push_back(Sample("wprime900", 1, 6, 0, 1));
+    samples.push_back(Sample("TC400",     1, 7, 0, 1));
+
+    for(size_t i=0; i<samples.size(); ++i){
+        if(!fin->GetKey(samples[i].name.c_str() )){
+            cout<<"Didn't find "<<samples[i].name<<". Removing."<<endl;
+            samples.erase(samples.begin()+i);
+            i--;
+        }
+    }
     
     
     string efftitle[] = {"hEffAbs", "hEffRel", "hNumEvts"};
@@ -85,35 +88,71 @@ MakePlots(){
     variable.push_back("hWpt");      
     variable.push_back("hZpt");      
     variable.push_back("hMET");          
-    variable.push_back("hZmass");      
-    variable.push_back("hZeemass");      
-    variable.push_back("hZmumumass");      
+    variable.push_back("hZmass");      //7
+    variable.push_back("hZeemass");    //8  
+    variable.push_back("hZmumumass");     //9 
+    variable.push_back("hWTransmass");      
+    variable.push_back("hWenuTransmass");      
+    variable.push_back("hWmunuTransmass");      
     variable.push_back("hElecPt");
-    /*
-    variable.push_back("hElecdEta");
-    variable.push_back("hElecdPhi");
-    variable.push_back("hElecSigmann");
-    variable.push_back("hElecEP");
-    variable.push_back("hElecHE");
-    variable.push_back("hElecRelCaloIso");
-    variable.push_back("hElecRelTrkIso");
-    */
-    //variable.push_back("hJetsDeltaEta");
+    variable.push_back("hElecEt");
+    variable.push_back("hElecTrkRelIso");
+    variable.push_back("hElecECalRelIso");
+    variable.push_back("hElecHCalRelIso");
+    variable.push_back("hElecSigmaEtaEta");
+    variable.push_back("hElecDPhi");
+    variable.push_back("hElecDEta");
+    variable.push_back("hElecHOverE");
+    //variable.push_back("hElecEP");
 
+    variable.push_back("hMuonPt" );       
+    variable.push_back("hMuonDxy");       
+    variable.push_back("hMuonNormChi2");  
+    variable.push_back("hMuonNPix");      
+    variable.push_back("hMuonNTrk");      
+    variable.push_back("hMuonStation");   
+    variable.push_back("hMuonSip");   
+        
+    vector<string> selection_variable;  vector<bool> mincut;
+    selection_variable.push_back("hElecEt");          mincut.push_back(true);
+    selection_variable.push_back("hElecTrkRelIso");   mincut.push_back(false);
+    selection_variable.push_back("hElecECalRelIso");  mincut.push_back(false);
+    selection_variable.push_back("hElecHCalRelIso");  mincut.push_back(false);
+    selection_variable.push_back("hElecSigmaEtaEta"); mincut.push_back(false);
+    selection_variable.push_back("hElecDPhi");        mincut.push_back(false);
+    selection_variable.push_back("hElecDEta");        mincut.push_back(false); 
+    selection_variable.push_back("hElecHOverE");      mincut.push_back(false);
+    //selection_variable.push_back("hElecEP");          mincut.push_back(true);
+
+    selection_variable.push_back("hMuonPt" );          mincut.push_back(true);
+    selection_variable.push_back("hMuonDxy");          mincut.push_back(false);
+    selection_variable.push_back("hMuonNormChi2");     mincut.push_back(false);
+    selection_variable.push_back("hMuonNPix");         mincut.push_back(true);
+    selection_variable.push_back("hMuonNTrk");         mincut.push_back(true);
+    selection_variable.push_back("hMuonStation");      mincut.push_back(true);
+        
 
     TCanvas c1;
     c1.Print("Summary.pdf[", "pdf"); 
+    c1.Print("Selection.pdf[", "pdf"); 
     for(int i=0;i<3;++i) DrawandSave(fin,efftitle[i], 0, i==2, 1);
 
     int size = variable.size();
     for(int i=0;i<size;++i){
         for(int j=0;j<Num_histo_sets;++j){
             string title = variable[i] + "_" + Cut_Name[j];
-            DrawandSave(fin,title,0,i==8 || i==15, 0);
+            DrawandSave(fin,title,0,i==7 || i==8 || i==9, 0);
         }
+    }
+
+    for(size_t i=0; i < selection_variable.size(); ++i){
+        string title = selection_variable[i];
+        DrawSelection(fin,title, mincut[i]);
     }
    
     c1.Print("Summary.pdf]", "pdf"); 
+    c1.Print("Selection.pdf]", "pdf"); 
+
     //for(int i=0;i<3;++i) PlotEff(fin,efftitle[i]);
 
     /*
@@ -159,7 +198,7 @@ DrawandSave(TFile* fin, string title, bool norm, bool logy, bool eff){
         hists.push_back((TH1F*) fin->Get(hist_names[i].c_str()));
     }
     
-    string filename = "plots/" + title + ".eps";
+    string filename = "plots/" + title + ".gif";
 
     Draw(hists,filename,norm, logy, eff);
 }
@@ -236,69 +275,6 @@ Draw(vector<TH1F*> &  hists, string filename, bool norm, bool logy, bool eff){
     c1.Print("Summary.pdf","pdf");	
     delete hs;
 }
-/*
-Draw2(vector<TH1F*> &  hists, string filename){
-    float sum,max1,max2,max;
-    int first, last, Ndiv;
-
-    TCanvas c1;
-    TH1F *h1,*h2;
-    TAxis *axis;
-
-    h1 = (TH1F*) fin->Get(h1_name.c_str());
-    axis = h1->GetXaxis();
-    first = axis->GetFirst();
-    last  = axis->GetLast();
-    sum = h1->Integral(first+1,last); 
-    h1->Scale(1./sum);
-    axis->SetRange(first+1,last);
-
-    h2 = (TH1F*) fin->Get(h2_name.c_str());
-    axis = h2->GetXaxis();
-    first = axis->GetFirst();
-    last  = axis->GetLast();
-    sum = h2->Integral(first+1,last); 
-    h2->Scale(1./sum);
-    axis->SetRange(first+1,last);
-
-    max1 = h1->GetMaximum();
-    max2 = h2->GetMaximum();
-
-    max = 1.1*TMath::Max(max1,max2);
-    h1->SetMaximum(max);
-
-    //For Edgar's APS Plots
-    h1->SetStats(kFALSE);
-    h2->SetStats(kFALSE);
-    
-    h1->GetXaxis()->SetLabelSize(0.05);
-    h2->GetXaxis()->SetLabelSize(0.05);
-
-	//Ndiv = h1->GetXaxis()->GetNdivisions(); cout<<"Ndiv is "<<Ndiv<<endl;
-	h1->GetXaxis()->SetNdivisions(10);
-
-    h1->SetTitle("");
-    h2->SetTitle("");
-    ///////////
-
-    h1->SetLineColor(kRed);  h1->Draw();
-    h2->SetLineColor(kBlue); h2->Draw("same");
-
-    TLegend *legend = new TLegend(0.60,0.78,0.85,0.87,"");
-    legend->AddEntry(h1,"W'(M=400GeV)", "L");
-    legend->AddEntry(h2,"WZjj", "L");
-    legend->SetTextSize(0.04);
-	legend->SetBorderSize(0);
-	legend->SetFillColor(kWhite);
-    legend->Draw();
-    
-    c1.SaveAs(filename.c_str());
-}
-*/
-void
-MakePlots2(){
-    
-}
 
 void
 PlotEff(TFile* fin, string title){
@@ -309,110 +285,160 @@ PlotEff(TFile* fin, string title){
 
     string h1_name = dir1 + "/" + title;
     string h2_name = dir2 + "/" + title;
-    string filename = title + ".eps";
+    string filename = title + ".gif";
 
     TCanvas c1;
     TH1F *h1,*h2;
-        
+
     h1 = (TH1F*) fin->Get(h1_name.c_str());
     h2 = (TH1F*) fin->Get(h2_name.c_str());
 
     h1->SetStats(kFALSE);
     h2->SetStats(kFALSE);
-	
-	TAxis* axis = h1->GetXaxis();
-	for(int i=0; i<Num_histo_sets; ++i) axis->SetBinLabel(i+1,Cut_Name[i].c_str());
+
+    TAxis* axis = h1->GetXaxis();
+    for(int i=0; i<Num_histo_sets; ++i) axis->SetBinLabel(i+1,Cut_Name[i].c_str());
 
     h1->SetLineColor(kRed);  h1->Draw();
     h2->SetLineColor(kBlue); h2->Draw("same");
-	
-	TLegend *legend = new TLegend(0.60,0.78,0.85,0.87,"");
+
+    TLegend *legend = new TLegend(0.60,0.78,0.85,0.87,"");
     legend->AddEntry(h1,"W'(M=400GeV)", "L");
     legend->AddEntry(h2,"WZjj", "L");
     legend->SetTextSize(0.04);
-	legend->SetBorderSize(0);
-	legend->SetFillColor(kWhite);
+    legend->SetBorderSize(0);
+    legend->SetFillColor(kWhite);
     legend->Draw();
 
 
     c1.SaveAs(filename.c_str());
 }
 
+
 void
-PlotList(TEntryList* SMergedlist,TEntryList* BMergedlist,string title){
-    printf("  Plot Lists\n");
-    TCanvas c1;
+DrawSelection(TFile* fin, string title, bool mincut){
+    //printf("  Draw Selection\n");
+    /***********
+    Note: WZ is signal and TTbar + Zjets is background
+    for these plots!!!!!
+    ***********/
 
-    string filename = title + ".eps";
-
-    TFile *fin1 = TFile::Open("data/Wprime400_mergedOutputTree.root");
-    TFile *fin2 = TFile::Open("data/WZjj_mergedOutputTree.root");
+    int sig_idx, bkg1_idx, bkg2_idx;
+    sig_idx = bkg1_idx = bkg2_idx = -1;
  
-    TTree* tree1 = (TTree*) fin1->Get("WZ");
-    TTree* tree2 = (TTree*) fin2->Get("WZ");
-     
-    tree1->SetEntryList(SMergedlist);
-    tree2->SetEntryList(BMergedlist);
+    const string signal_name = "wz";
+    const string bkg1_name = "ttbarfast";
+    const string bkg2_name = "zjets";
+
+    for(size_t i=0; i<samples.size(); ++i){
+        if(!signal_name.compare(samples[i].name)){
+            sig_idx = i;
+            //cout<<"Sample Signal"<<endl;
+        }
+        if(!bkg1_name.compare(samples[i].name)){
+            bkg1_idx = i; cout<<samples[i].name<<endl;
+        }
+        if(!bkg2_name.compare(samples[i].name)){
+            bkg2_idx = i; cout<<samples[i].name<<endl;
+        }
+    }
+    if(sig_idx == -1 || bkg1_idx == -1 || bkg2_idx == -1){
+        cout<<"Didn't find a sample.  Exiting."<<endl;
+        return;
+    }
+
+    vector<TH1F*> hists;
+    string fulltitle;
+    for(int cut=0; cut!= Num_histo_sets; ++cut){
+        string title_match = "h" + Cut_Name[cut];
+        if(!title_match.compare(title)){
+            fulltitle = title + "_" + Cut_Name[cut-1];
+            cout<<"Using Cut: "<<Cut_Name[cut-1]<<" for histo:"<<title<<endl;
+            //cout<<"Check: "<<Cut_Name[cut]<<" == "<<title<<endl; 
+            break;
+        }
+    }    
+
+    vector<string> hist_names;     
+    int size = samples.size();
+    for(int i=0; i<size; ++i){
+        hist_names.push_back(samples[i].name + "/" + fulltitle);
+        if(!fin->Get(hist_names[i].c_str())) 
+            cout<<"Failed getting "<<fulltitle<<" from "<<samples[i].name<<endl;
+        hists.push_back((TH1F*) fin->Get(hist_names[i].c_str()));
+    }
     
-    tree1->SetLineColor(kRed);
-    tree2->SetLineColor(kBlue);
+    //TAxis* axis = hists[0]->GetXaxis();
+    int first = 0;
+    int last  = hists[0]->GetNbinsX() + 1;//axis->GetLast() + 1;
+    int nbins = hists[0]->GetNbinsX() + 2;//last-first+1;
 
-    tree1->Draw(title.c_str(),"weight");
-    tree2->Draw(title.c_str(), "weight", "same");    
+    const float Nsig_tot  = hists[ sig_idx]->Integral(first, last);
+    const float Nbkg_tot  = hists[bkg1_idx]->Integral(first, last)
+                          + hists[bkg2_idx]->Integral(first, last);
 
-    c1.SaveAs(filename.c_str());
+    //printf("Tot sig:%f   Tot Bkg:%f\n", Nsig_tot, Nbkg_tot);
+    //printf("first:%i, last:%i, nbins:%i or %i\n", first, last, nbins, hists[0]->GetNbinsX());
 
-    //list1->Print("all");
-    printf("Signal Tree: %s\n",SMergedlist->GetTreeName());
-    cout<<"Signal: "<<SMergedlist->GetN()<<endl
-	<<"Bkgrd: "<<BMergedlist->GetN()<<endl;
+    double* Nsig = new double[nbins];
+    double* Nbkg = new double[nbins];
 
-    //BMergedlist->Print("all");
-}
-
-void
-GetLists(TFile* fin,TEntryList** Slist,TEntryList** Blist){
-    printf("  Get Lists\n");
-    for(int i=0;i<Nlists;++i){
-	Slist[i] = (TEntryList*) fin->Get(Form("wprime400/cut%i",i));
-	Blist[i] = (TEntryList*) fin->Get(Form("wzjj/cut%i",i));
+    if(mincut){
+        for(int bin=first; bin<=last; ++bin){//for min cut
+            //printf("bin:%i low:%f\n",bin, hists[0]->GetBinCenter(bin));
+            Nsig[bin] = 0;
+            Nbkg[bin] = 0;
+            
+            Nsig[bin] = hists[sig_idx]->Integral(bin, last);
+            
+            Nbkg[bin]  = hists[bkg1_idx]->Integral(bin, last);
+            Nbkg[bin] += hists[bkg2_idx]->Integral(bin, last);
+            
+            Nsig[bin] /= Nsig_tot;
+            Nbkg[bin] /= Nbkg_tot;
+        }
+    }else{
+        for(int bin=first; bin<=last; ++bin){//for max cut
+            //printf("bin:%i low:%f\n",bin, hists[0]->GetBinCenter(bin));
+            Nsig[bin] = 0;
+            Nbkg[bin] = 0;
+            
+            Nsig[bin] = hists[sig_idx]->Integral(first, bin);
+            
+            Nbkg[bin]  = hists[bkg1_idx]->Integral(first, bin);
+            Nbkg[bin] += hists[bkg2_idx]->Integral(first, bin);
+            
+            Nsig[bin] /= Nsig_tot;
+            Nbkg[bin] /= Nbkg_tot;
+        }
     }
-}
 
-TEntryList* 
-ListAnd(TEntryList* l1,TEntryList* l2){
-    printf("  List Add\n");
-    int size = l1->GetN();
-    TEntryList* l3 = new TEntryList("mergedcuts","merged");
+    TCanvas c1;
+    TGraph graph(nbins, Nsig, Nbkg);
+    string graph_title = title + " Selection Plot;Signal Eff;Background Eff";
+    graph.SetTitle(graph_title.c_str());
+    graph.Draw("A*");
+    c1.Print("Summary.pdf", "pdf");
+    c1.Print("Selection.pdf", "pdf");
 
-    int evtnum = l1->GetEntry(0);
-    for(int i=0;i<size;++i){
-	if(l2->Contains(evtnum)) l3->Enter(evtnum);
-	evtnum = l1->Next();
+    int cutbin;
+    for(int bin=first; bin<last; ++bin){
+        if(Straddles(Nsig[bin],Nsig[bin+1], 0.98)){
+            cout<<"Bin: "<<bin<<": "<<Nsig[bin]<<" - "<<Nsig[bin+1]<<endl;
+            if(Nsig[bin] > Nsig[bin+1]) cutbin = bin;
+            else                        cutbin = bin+1;
+            cout<<title<<" cut is "<<hists[0]->GetBinCenter(cutbin)<<endl;
+        }
     }
 
-    return l3;
 }
 
-TEntryList* 
-ListAnd(vector<TEntryList*> list){
-    printf("  List And (Vectors)\n");
-    int Nlistused = list.size();
-    int Nevts = list.at(0)->GetN();
-    TEntryList* newlist = new TEntryList("mergedcuts","merged");
+bool 
+Straddles(float a, float b, float num){
+    if(a >= num && num >= b) return true;
+    if(b >= num && num >= a) return true;
     
-    bool keep = true;
-    int evtnum = list.at(0)->GetEntry(0); //initialize
-    for(int i=0;i<Nevts;++i){
-	keep = true;
-	for(int j=0;keep && j<Nlistused; ++j){
-	    if(!list.at(j)->Contains(evtnum)) keep=false;
-	}
-	if(keep) newlist->Enter(evtnum);
-	evtnum = list.at(0)->Next();
-    }
-
-    return newlist;
+    return false;
 }
 
 string convertFloattoStr(float num){
