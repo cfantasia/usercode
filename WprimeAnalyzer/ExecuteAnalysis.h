@@ -54,7 +54,7 @@ struct InputFile{
 
 // +++++++++++++++++++location of data files and samples info
 //string top_level_dir = "/localdata/ecarrera/analyses/wprime_to_wz/root_uples/";
-string top_level_dir = "/uscms_data/d2/fantasia/CMSSW_3_5_7/src/Wprime/";
+string top_level_dir = "/uscms_data/d2/fantasia/CMSSW_3_5_8_patch4/src/Wprime/";
 //string top_level_dir = "dcap://cmsgridftp.fnal.gov:24125/pnfs/cms/WAX/11/store/user/fantasia/3_5_7/Wprime/"; //Doesn't work
 //string top_level_dir = "dcap://cmsgridftp.fnal.gov:24125/pnfs/fnal.gov/usr/cms/WAX/11/store/user/fantasia/3_5_7/Wprime/"; //Works
 
@@ -84,12 +84,13 @@ Int_t           triggerBitMask;
 
 vector<float>   *electron_phi;
 vector<float>   *electron_eta;
+vector<float>   *electron_ScEta;
 vector<float>   *electron_pt;
 vector<float>   *electron_energy;
 vector<float>   *electron_px;
 vector<float>   *electron_py;
 vector<float>   *electron_pz;
-vector<float>   *electron_et;
+vector<float>   *electron_ScEt;
 vector<float>   *electron_trackIso;
 //vector<float>   *electron_caloIso;
 vector<float>   *electron_ecaloIso;
@@ -109,7 +110,8 @@ vector<float>   *muon_trackIso;
 vector<float>   *muon_ecaloIso;
 vector<float>   *muon_hcaloIso;
 vector<int  >   *muon_fitType;
-vector<int  >   *muon_GlobalandTracker;    
+vector<int  >   *muon_isGlobal;    
+vector<int  >   *muon_isTracker;    
 vector<int  >   *muon_numGlobalMatches;    
 vector<int  >   *muon_numValidMuonHits;    
 vector<int>     *muon_globalNpixelHits;
@@ -167,6 +169,10 @@ float Z_genPt;
 float gendp;
 float recodp;
 float WlepGenPt;
+float WDpt;
+float WDphi;
+float WDeta;
+float WDr;
 /////////////////////////
 
 // +++++++++++++++++++useful constants
@@ -186,7 +192,7 @@ const int Num_histo_sets = 10; //matches the number of cuts
 const string Cut_Name[] = {"HLT", "ValidWZ", "NumZs", "Muon", "Elec", 
                            "ZMass", "Ht", "Zpt", "Wpt", "FwdJets"};
 */
-const int Num_histo_sets = 28; //matches the number of cuts
+const int Num_histo_sets = 29; //matches the number of cuts
 const string Cut_Name[] = {"NOCUT", "HLT", "ValidWZ", "NumZs", 
                            "ElecEta","ElecEt", "ElecTrkRelIso",
                            "ElecECalRelIso", "ElecHCalRelIso",
@@ -198,7 +204,8 @@ const string Cut_Name[] = {"NOCUT", "HLT", "ValidWZ", "NumZs",
                            "MuonNTrk", "MuonStation",
                            "MuonHitsUsed",
                            "Zdecay", "Wdecay", 
-                           "Ht", "Zpt", "Wpt", "MET"};
+                           "Ht", "Zpt", "Wpt", "MET",
+                           "ALLCUTS"};
 TH1F * hWZInvMass[Num_histo_sets];
 TH1F * hWZTransMass[Num_histo_sets];
 TH1F * hHt[Num_histo_sets];
@@ -242,6 +249,11 @@ TH1F * hMuonNPix[Num_histo_sets];
 TH1F * hMuonNTrk[Num_histo_sets];
 TH1F * hMuonStation[Num_histo_sets];
 TH1F * hMuonSip[Num_histo_sets];
+
+TH1F * hWDpt[Num_histo_sets];
+TH1F * hWDphi[Num_histo_sets];
+TH1F * hWDeta[Num_histo_sets];
+TH1F * hWDr[Num_histo_sets];
 
 TH1F * hEffRel;
 TH1F * hEffAbs;

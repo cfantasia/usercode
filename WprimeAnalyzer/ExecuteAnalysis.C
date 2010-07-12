@@ -17,10 +17,10 @@ void getEff(float & eff, float & deff, float Num, float Denom)
 {
 //--------------------------------------------------------------
     if(Denom){
-	eff = Num/Denom;
-	deff = TMath::Sqrt(eff * (1-eff)/Denom);
+        eff = Num/Denom;
+        deff = TMath::Sqrt(eff * (1-eff)/Denom);
     }else{
-	eff = deff = 0;
+        eff = deff = 0;
     }
 
 }//getEff
@@ -65,6 +65,11 @@ double deltaEta(double eta1, double eta2)
     return eta;
 }
 
+TH1F*
+Declare_Histo(string name, string title, int nbins, float min, float max){
+    TH1F* hist = new TH1F(name.c_str(),title.c_str(),nbins,min,max);
+    return hist;
+}
 
 //--------------------------------------------------------------
 void Declare_Histos()
@@ -253,7 +258,7 @@ void Declare_Histos()
   int WenuTransmassbin = 10;
   for(int i=0; i<Num_histo_sets; ++i){
       string name = "hWenuTransmass_" + Cut_Name[i];
-      string title = "Reconstructed Transmass of W (After "+Cut_Name[i]+" Cut);m_{W}^{Reco} (GeV);";
+      string title = "Reconstructed Transmass of Wenu (After "+Cut_Name[i]+" Cut);m_{W}^{Reco} (GeV);";
       hWenuTransmass[i] = new TH1F(name.c_str(),title.c_str(),WenuTransmassbin,WenuTransmassMin,WenuTransmassMax);
   }
 
@@ -263,7 +268,7 @@ void Declare_Histos()
   int WmunuTransmassbin = 10;
   for(int i=0; i<Num_histo_sets; ++i){
       string name = "hWmunuTransmass_" + Cut_Name[i];
-      string title = "Reconstructed Transmass of W (After "+Cut_Name[i]+" Cut);m_{W}^{Reco} (GeV);";
+      string title = "Reconstructed Transmass of Wmunu (After "+Cut_Name[i]+" Cut);m_{W}^{Reco} (GeV);";
       hWmunuTransmass[i] = new TH1F(name.c_str(),title.c_str(),WmunuTransmassbin,WmunuTransmassMin,WmunuTransmassMax);
   }
 
@@ -291,7 +296,7 @@ void Declare_Histos()
 
 //////////////
   //Electron Properties
-  int ElecPtbin = 100;
+  int ElecPtbin = 500;
   float ElecPtMin = 0.;
   float ElecPtMax = 500.;
   for(int i=0; i<Num_histo_sets; ++i){
@@ -300,7 +305,7 @@ void Declare_Histos()
       hElecPt[i] = new TH1F(name.c_str(),title.c_str(),ElecPtbin,ElecPtMin,ElecPtMax);
   }
 
-  int ElecEtbin = 100;
+  int ElecEtbin = 500;
   float ElecEtMin = 0.;
   float ElecEtMax = 500.;
   for(int i=0; i<Num_histo_sets; ++i){
@@ -345,9 +350,9 @@ void Declare_Histos()
       hElecEP[i] = new TH1F(name.c_str(),title.c_str(),ElecEPbin,ElecEPMin,ElecEPMax);
   }
 
-  int ElecHEbin = 1000;
+  int ElecHEbin = 2000;
   float ElecHEMin = 0.;
-  float ElecHEMax = 0.1;
+  float ElecHEMax = 2.;
   for(int i=0; i<Num_histo_sets; ++i){
       string name = "hElecHOverE_" + Cut_Name[i];
       string title = "Electron H over E (After "+Cut_Name[i]+" Cut);H/E;";
@@ -366,7 +371,7 @@ void Declare_Histos()
 */  
   int ElecTrkRelIsobin = 1000;
   float ElecTrkRelIsoMin = 0.;
-  float ElecTrkRelIsoMax = 1.;
+  float ElecTrkRelIsoMax = 2.;
   for(int i=0; i<Num_histo_sets; ++i){
       string name = "hElecTrkRelIso_" + Cut_Name[i];
       string title = "Electron Relative Track Iso (After "+Cut_Name[i]+" Cut);TrkRelIso;";
@@ -375,24 +380,24 @@ void Declare_Histos()
 
   int ElecECalRelIsobin = 1000;
   float ElecECalRelIsoMin = 0.;
-  float ElecECalRelIsoMax = 1.;
+  float ElecECalRelIsoMax = 2.;
   for(int i=0; i<Num_histo_sets; ++i){
       string name = "hElecECalRelIso_" + Cut_Name[i];
-      string title = "Electron Relative Track Iso (After "+Cut_Name[i]+" Cut);ECalRelIso;";
+      string title = "Electron Relative ECal Iso (After "+Cut_Name[i]+" Cut);ECalRelIso;";
       hElecECalRelIso[i] = new TH1F(name.c_str(),title.c_str(),ElecECalRelIsobin,ElecECalRelIsoMin,ElecECalRelIsoMax);
   }
 
   int ElecHCalRelIsobin = 1000;
   float ElecHCalRelIsoMin = 0.;
-  float ElecHCalRelIsoMax = 1.;
+  float ElecHCalRelIsoMax = 2.;
   for(int i=0; i<Num_histo_sets; ++i){
       string name = "hElecHCalRelIso_" + Cut_Name[i];
-      string title = "Electron Relative Track Iso (After "+Cut_Name[i]+" Cut);HCalRelIso;";
+      string title = "Electron Relative HCal Iso (After "+Cut_Name[i]+" Cut);HCalRelIso;";
       hElecHCalRelIso[i] = new TH1F(name.c_str(),title.c_str(),ElecHCalRelIsobin,ElecHCalRelIsoMin,ElecHCalRelIsoMax);
   }
 //////////
   //Muon Histograms
-  int MuonPtbin = 100;
+  int MuonPtbin = 500;
   float MuonPtMin = 0.;
   float MuonPtMax = 500.;
   for(int i=0; i<Num_histo_sets; ++i){
@@ -401,7 +406,7 @@ void Declare_Histos()
       hMuonPt[i] = new TH1F(name.c_str(),title.c_str(),MuonPtbin,MuonPtMin,MuonPtMax);
   }
 
-  int MuonDxybin = 100;
+  int MuonDxybin = 500;
   float MuonDxyMin = 0.;
   float MuonDxyMax = 1.;
   for(int i=0; i<Num_histo_sets; ++i){
@@ -410,7 +415,7 @@ void Declare_Histos()
       hMuonDxy[i] = new TH1F(name.c_str(),title.c_str(),MuonDxybin,MuonDxyMin,MuonDxyMax);
   }
 
-  int MuonNormChi2bin = 100;
+  int MuonNormChi2bin = 50;
   float MuonNormChi2Min = 0.;
   float MuonNormChi2Max = 50.;
   for(int i=0; i<Num_histo_sets; ++i){
@@ -419,7 +424,7 @@ void Declare_Histos()
       hMuonNormChi2[i] = new TH1F(name.c_str(),title.c_str(),MuonNormChi2bin,MuonNormChi2Min,MuonNormChi2Max);
   }
 
-  int MuonNPixbin = 100;
+  int MuonNPixbin = 50;
   float MuonNPixMin = 0.;
   float MuonNPixMax = 50.;
   for(int i=0; i<Num_histo_sets; ++i){
@@ -428,7 +433,7 @@ void Declare_Histos()
       hMuonNPix[i] = new TH1F(name.c_str(),title.c_str(),MuonNPixbin,MuonNPixMin,MuonNPixMax);
   }
 
-  int MuonNTrkbin = 100;
+  int MuonNTrkbin = 50;
   float MuonNTrkMin = 0.;
   float MuonNTrkMax = 50.;
   for(int i=0; i<Num_histo_sets; ++i){
@@ -437,7 +442,7 @@ void Declare_Histos()
       hMuonNTrk[i] = new TH1F(name.c_str(),title.c_str(),MuonNTrkbin,MuonNTrkMin,MuonNTrkMax);
   }
 
-  int MuonStationbin = 100;
+  int MuonStationbin = 50;
   float MuonStationMin = 0.;
   float MuonStationMax = 50.;
   for(int i=0; i<Num_histo_sets; ++i){
@@ -455,8 +460,35 @@ void Declare_Histos()
       hMuonSip[i] = new TH1F(name.c_str(),title.c_str(),MuonSipbin,MuonSipMin,MuonSipMax);
   }
 
+///W Reco Check Plots/////////////////
 
-//////////
+  for(int i=0; i<Num_histo_sets; ++i){
+      string name = "hWDpt_" + Cut_Name[i];
+      string title = "W Lepton Delta pt (After "+Cut_Name[i]+" Cut);Dpt;";
+      hWDpt[i] = new TH1F(name.c_str(),title.c_str(),100,-10,10);
+  }
+
+  for(int i=0; i<Num_histo_sets; ++i){
+      string name = "hWDphi_" + Cut_Name[i];
+      string title = "W Lepton Delta phi (After "+Cut_Name[i]+" Cut);Dphi;";
+      hWDphi[i] = new TH1F(name.c_str(),title.c_str(),100,0,4);
+  }
+
+  for(int i=0; i<Num_histo_sets; ++i){
+      string name = "hWDeta_" + Cut_Name[i];
+      string title = "W Lepton Delta eta (After "+Cut_Name[i]+" Cut);Deta;";
+      hWDeta[i] = new TH1F(name.c_str(),title.c_str(),100,0,10);
+  }
+
+  for(int i=0; i<Num_histo_sets; ++i){
+      string name = "hWDr_" + Cut_Name[i];
+      string title = "W Lepton Delta R (After "+Cut_Name[i]+" Cut);DR;";
+      hWDr[i] = new TH1F(name.c_str(),title.c_str(),100,0,10);
+  }
+
+
+
+///Eff Plots///////
   string title = "Expected # of Events / " + convertFloatToStr(lumiPb) + " pb^{-1}";
   hNumEvts = new TH1F("hNumEvts",title.c_str(),Num_histo_sets,0,Num_histo_sets);
   hEffRel = new TH1F("hEffRel","Relative Efficiency",Num_histo_sets,0,Num_histo_sets);
@@ -771,6 +803,20 @@ void Load_Input_Files(string file_desc,
           RecruitOrderedFiles(files,Nfiles,0,0,
                               filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"wmunu")){
+          Nfiles = 1;
+          files.push_back(InputFile()); 
+          const string filename = "Wmunu_outputTree.root";
+          RecruitOrderedFiles(files,Nfiles,0,0,
+                              filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"wenu")){
+          Nfiles = 1;
+          files.push_back(InputFile()); 
+          const string filename = "Wenu_outputTree.root";
+          RecruitOrderedFiles(files,Nfiles,0,0,
+                              filename,"",file_desc);
+  } 
   else cout<<"No samples were found with the name "<<file_desc<<endl;
 
   
@@ -903,15 +949,19 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("Z_leptonIndex1",&Z_leptonIndex1);
     WZtree->SetBranchAddress("Z_leptonIndex2",&Z_leptonIndex2);
     WZtree->SetBranchAddress("triggerBitMask", &triggerBitMask);
+
+    //WZtree->SetBranchAddress("electron_ScEt",&electron_ScEt);
+    //WZtree->SetBranchAddress("electron_ScEta",&electron_ScEta);
   
     WZtree->SetBranchAddress("electron_phi",&electron_phi);
     WZtree->SetBranchAddress("electron_eta",&electron_eta);
+    WZtree->SetBranchAddress("electron_ScEta",&electron_ScEta);
     WZtree->SetBranchAddress("electron_pt",&electron_pt);
     WZtree->SetBranchAddress("electron_energy",&electron_energy);
     WZtree->SetBranchAddress("electron_px",&electron_px);
     WZtree->SetBranchAddress("electron_py",&electron_py);
     WZtree->SetBranchAddress("electron_pz",&electron_pz);
-    WZtree->SetBranchAddress("electron_et",&electron_et);
+    WZtree->SetBranchAddress("electron_ScEt",&electron_ScEt);
     WZtree->SetBranchAddress("electron_isoEtTrackerDr30", &electron_trackIso);
     WZtree->SetBranchAddress("electron_isoEtEcalDr30", &electron_ecaloIso);
     WZtree->SetBranchAddress("electron_isoEtHcalDr30", &electron_hcaloIso);
@@ -930,7 +980,8 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("muon_isoEtEcalDr30",&muon_ecaloIso); 
     WZtree->SetBranchAddress("muon_isoEtHcalDr30",&muon_hcaloIso); 
     WZtree->SetBranchAddress("muon_fitType",&muon_fitType);
-    WZtree->SetBranchAddress("muon_GlobalandTracker",&muon_GlobalandTracker);    
+    WZtree->SetBranchAddress("muon_isGlobal",&muon_isGlobal);    
+    WZtree->SetBranchAddress("muon_isTracker",&muon_isTracker);    
     WZtree->SetBranchAddress("muon_numGlobalMatches",&muon_numGlobalMatches);    
     WZtree->SetBranchAddress("muon_numValidMuonHits",&muon_numValidMuonHits);    
     WZtree->SetBranchAddress("muon_numPixelHits",&muon_globalNpixelHits);
@@ -1019,16 +1070,17 @@ void Fill_Histos(int index, float weight)
 
 
     vector<int> idxs;
-    if(Z_flavor == PDGELEC){
+    if(Z_flavor == PDGELEC){//Only write W electrons
         //idxs.push_back(Z_leptonIndex1);
         //idxs.push_back(Z_leptonIndex2);
     }
-    if(W_flavor == PDGELEC && Z_flavor == PDGMUON){
+    if(W_flavor == PDGELEC && Z_flavor == PDGMUON 
+       && inEndCap(electron_ScEta->at(W_leptonIndex))){
         idxs.push_back(W_leptonIndex);
     }
     for(size_t i=0; i<idxs.size(); ++i){
         hElecPt[index]->Fill(electron_pt->at(idxs[i]),weight);
-        hElecEt[index]->Fill(electron_et->at(idxs[i]),weight);
+        hElecEt[index]->Fill(electron_ScEt->at(idxs[i]),weight);
         hElecdEta[index]->Fill(electron_deltaEtaIn->at(idxs[i]),weight);
         hElecdPhi[index]->Fill(electron_deltaPhiIn->at(idxs[i]),weight);
         hElecSigmann[index]->Fill(electron_sigmaEtaEta->at(idxs[i]),weight);
@@ -1059,6 +1111,11 @@ void Fill_Histos(int index, float weight)
         hMuonSip[index]->Fill(
             muon_globalD0->at(idxs[i])/muon_globalD0Error->at(idxs[i]));
     }
+    
+    hWDpt[index]->Fill(WDpt,weight);
+    hWDphi[index]->Fill(WDphi,weight);
+    hWDeta[index]->Fill(WDeta,weight);
+    hWDr[index]->Fill(WDr,weight);
         
 }//Fill_Histos
 
@@ -1120,7 +1177,12 @@ void saveHistos(TFile * fout, string dir)
       hMuonNTrk[i]->Write();
       hMuonStation[i]->Write();
       hMuonSip[i]->Write();
-  
+
+      hWDpt[i]->Write();
+      hWDphi[i]->Write();
+      hWDeta[i]->Write();
+      hWDr[i]->Write();
+
       cutlist[i]->Write();
   }
   hNumEvts->Write();
@@ -1130,10 +1192,6 @@ void saveHistos(TFile * fout, string dir)
   return;
 
 }//saveHistos
-
-
-
-
 
 
 //Writing results to a txt file
@@ -1266,7 +1324,7 @@ void Get_Distributions(vector<InputFile>& files,
       if(W_flavor == 13) recodp = deltaPhi(muon_phi->at(W_leptonIndex),met_phi);
 
       bool check = false;
-
+      /*
       if(Z_mass > 60 && Z_mass < 70){
           check = true;
           cout<<"Event: "<<eventID<<endl;
@@ -1278,7 +1336,7 @@ void Get_Distributions(vector<InputFile>& files,
               <<endl;
 
       }
-
+      */
 
       for(unsigned int part=0; part!=genParticle_et->size(); part++){
           /*
@@ -1296,6 +1354,25 @@ void Get_Distributions(vector<InputFile>& files,
           if(abs(genMother_pdgId->at(part)) == PDGW){
               WlepGenPt = genParticle_pt->at(part);
               gendp = deltaPhi(genParticle_phi->at(part), genmet_phi);
+
+              if      (W_flavor == 11){
+                  WDpt = genParticle_pt->at(part) - electron_pt->at(W_leptonIndex);
+                  WDphi = deltaPhi(genParticle_phi->at(part), electron_phi->at(W_leptonIndex));
+                  WDeta = deltaEta(genParticle_eta->at(part), electron_eta->at(W_leptonIndex));
+                  WDr = sqrt(WDphi*WDphi + WDeta*WDeta);
+              }else if(0 && W_flavor == 13){
+                  WDpt = genParticle_pt->at(part) - muon_pt->at(W_leptonIndex);
+                  WDphi = deltaPhi(genParticle_phi->at(part), muon_phi->at(W_leptonIndex));
+                  WDeta = deltaEta(genParticle_eta->at(part), muon_eta->at(W_leptonIndex));
+                  WDr = sqrt(WDphi*WDphi + WDeta*WDeta);
+              }else{
+                  WDpt = -999;
+                  WDphi = -999;
+                  WDeta = -999;
+                  WDr = -999;
+              }
+
+
               /*
               cout<<genParticle_et->at(part)<<endl
                   <<genmet_et<<endl
@@ -1313,6 +1390,7 @@ void Get_Distributions(vector<InputFile>& files,
                   <<endl;
               */
           }
+          /*
           if(abs(genMother_pdgId->at(part)) == PDGZ){
               Z_genMass = genMother_mass->at(part);
               Z_genEta = genMother_eta->at(part);
@@ -1340,12 +1418,12 @@ void Get_Distributions(vector<InputFile>& files,
                       <<" pz: "<<genParticle_pz->at(part)
                       <<endl;
               }
-
           }
+          */
       }
 
 
-      cout<<"-------------"<<endl;
+      //cout<<"-------------"<<endl;
 
       //////////////////////
       if (debugme) cout<<"Processing event "<<i<<endl;
@@ -1358,28 +1436,36 @@ void Get_Distributions(vector<InputFile>& files,
 
 
       //cuts: These need to be ordered the same as Cut_Name in header file
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight,i); //No Cuts
+      
       if(!PassTriggersCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      
+      //These are used to look at cut eff.
+      //if(Z_flavor != 11 || W_flavor != 13) continue;
+      //if(Z_flavor != 13 || W_flavor != 11) continue;
+      //if(!inBarrel(electron_ScEta->at(W_leptonIndex))) continue;
+      //if(!inEndCap(electron_ScEta->at(W_leptonIndex))) continue;
       if(!PassValidWandZCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      
       if(!PassNumberOfZsCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);
       
-
       ////////////////New Elec Cuts////////////////
       bool pass = true;
+      
       if(Z_flavor == PDGELEC ){
           idxs.push_back(Z_leptonIndex1); 
-          inEC.push_back(inEndCap(electron_eta->at(Z_leptonIndex1)));
+          inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex1)));
           idxs.push_back(Z_leptonIndex2);
-          inEC.push_back(inEndCap(electron_eta->at(Z_leptonIndex2)));
+          inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex2)));
       }     
       if (W_flavor == PDGELEC){
           idxs.push_back(W_leptonIndex); 
-          inEC.push_back(inEndCap(electron_eta->at(W_leptonIndex)));
+          inEC.push_back(inEndCap(electron_ScEta->at(W_leptonIndex)));
       }
-         
+      
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassElecEtaCut        (idxs[lep])) pass = false;
       if(!pass) continue;
@@ -1489,16 +1575,23 @@ void Get_Distributions(vector<InputFile>& files,
       ////Other Cuts/////////////
       if(!PassZDecayCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+
       if(!PassWDecayCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);      
+
       if(!PassHtCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+
       if(!PassZptCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+
       if(!PassWptCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+
       if(!PassMETCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+
+      Tabulate_Me(Num_surv_cut,cut_index,weight,i); //After All Cuts
       
     }//event loop
     
@@ -1521,9 +1614,6 @@ void Get_Distributions(vector<InputFile>& files,
   saveHistos(fout, dir);
   
 }//Get_Distributions
-
-
-
 
 
 //Trigger requirements
@@ -1647,20 +1737,17 @@ PassZDecayCut(){
 //-----------------------------------------------------------
 bool 
 PassWenuCut(){
-    if(!PassElecEtaCut        (W_leptonIndex)) return false;
+    //if(!PassElecEtaCut        (W_leptonIndex)) return false;
 
-    bool inEC = inEndCap(electron_eta->at(W_leptonIndex));
+    //bool inEC = inEndCap(electron_ScEta->at(W_leptonIndex));
     if(!PassElecEtCut         (W_leptonIndex,PDGW)) return false;
-    //if(!PassElecNMissHitsCut  (W_leptonIndex,PDGW,inEC)) return false; //Not Used
-    //if(!PassElecDistCut       (W_leptonIndex,PDGW,inEC)) return false; //Not Used
-    //if(!PassElecdCotThetaCut  (W_leptonIndex,PDGW,inEC)) return false; //Not Used
-    if(!PassElecTrkRelIsoCut  (W_leptonIndex,PDGW,inEC)) return false;
-    if(!PassElecECalRelIsoCut (W_leptonIndex,PDGW,inEC)) return false;
-    if(!PassElecHCalRelIsoCut (W_leptonIndex,PDGW,inEC)) return false;
-    if(!PassElecSigmaEtaEtaCut(W_leptonIndex,PDGW,inEC)) return false;
-    if(!PassElecDeltaPhiCut   (W_leptonIndex,PDGW,inEC)) return false;
-    if(!PassElecDeltaEtaCut   (W_leptonIndex,PDGW,inEC)) return false;
-    if(!PassElecHOverECut     (W_leptonIndex,PDGW,inEC)) return false;
+    //if(!PassElecTrkRelIsoCut  (W_leptonIndex,PDGW,inEC)) return false;
+    //if(!PassElecECalRelIsoCut (W_leptonIndex,PDGW,inEC)) return false;
+    //if(!PassElecHCalRelIsoCut (W_leptonIndex,PDGW,inEC)) return false;
+    //if(!PassElecSigmaEtaEtaCut(W_leptonIndex,PDGW,inEC)) return false;
+    //if(!PassElecDeltaPhiCut   (W_leptonIndex,PDGW,inEC)) return false;
+    //if(!PassElecDeltaEtaCut   (W_leptonIndex,PDGW,inEC)) return false;
+    //if(!PassElecHOverECut     (W_leptonIndex,PDGW,inEC)) return false;
     
     return true;
 }
@@ -1671,15 +1758,9 @@ bool
 PassWmunuCut(){
 
     if(!PassMuonTypeCut      (W_leptonIndex,PDGW)) return false; 
-    //if(!PassMuonNpixhitCut   (W_leptonIndex,PDGW)) return false; 
-    //if(!PassMuonNtrkhitCut   (W_leptonIndex,PDGW)) return false; 
-    //if(!PassMuonDxyCut       (W_leptonIndex,PDGW)) return false; 
-    //if(!PassMuonNormChi2Cut  (W_leptonIndex,PDGW)) return false; 
-    //if(!PassMuonHitsUsedCut  (W_leptonIndex,PDGW)) return false; 
-    //if(!PassMuonStationsCut  (W_leptonIndex,PDGW)) return false; 
-    if(!PassMuonEtaCut       (W_leptonIndex,PDGW)) return false;
+    //if(!PassMuonEtaCut       (W_leptonIndex,PDGW)) return false;
     if(!PassMuonPtCut        (W_leptonIndex,PDGW)) return false;
-    if(!PassMuonCombRelIsoCut(W_leptonIndex,PDGW)) return false;
+    //if(!PassMuonCombRelIsoCut(W_leptonIndex,PDGW)) return false;
     if(!PassMuonMETCut       ())                   return false;
 
     return true;
@@ -1694,23 +1775,10 @@ PassZeeCut(){
         if(i==0) idx = Z_leptonIndex1;
         else     idx = Z_leptonIndex2;
         
-        if(!PassElecEtaCut        (idx)) return false;
-
-        bool inEC = inEndCap(electron_eta->at(idx));
         if(!PassElecEtCut         (idx,PDGZ)) return false;
-        //if(!PassElecMatchedCut    (idx,PDGZ,inEC)) return false; 
-        //if(!PassElecNMissHitsCut  (idx,PDGZ,inEC)) return false; //Not Used
-        //if(!PassElecDistCut       (idx,PDGZ,inEC)) return false; //Not Used
-        //if(!PassElecdCotThetaCut  (idx,PDGZ,inEC)) return false; //Not Used
-        if(!PassElecZmassCut      ())              return false;
-        if(!PassElecTrkRelIsoCut  (idx,PDGZ,inEC)) return false;
-        if(!PassElecECalRelIsoCut (idx,PDGZ,inEC)) return false;
-        if(!PassElecHCalRelIsoCut (idx,PDGZ,inEC)) return false;
-        if(!PassElecSigmaEtaEtaCut(idx,PDGZ,inEC)) return false;
-        if(!PassElecDeltaPhiCut   (idx,PDGZ,inEC)) return false;
-        if(!PassElecDeltaEtaCut   (idx,PDGZ,inEC)) return false;
-        if(!PassElecHOverECut     (idx,PDGZ,inEC)) return false;
     }
+    if(!PassElecZmassCut      ())              return false;
+
     return true;
 }
 
@@ -1724,16 +1792,11 @@ PassZmumuCut(){
         else     idx = Z_leptonIndex2;
 
         if(!PassMuonTypeCut     (idx,PDGZ)) return false; 
-        //if(!PassMuonDxyCut      (idx,PDGZ)) return false; 
-        //if(!PassMuonNormChi2Cut (idx,PDGZ)) return false;
-        //if(!PassMuonNpixhitCut  (idx,PDGZ)) return false; 
-        //if(!PassMuonNtrkhitCut  (idx,PDGZ)) return false; 
         //if(!PassMuonTrkAbsIsoCut(idx,PDGZ)) return false; 
-        if(!PassMuonPtCut       (idx,PDGZ)) return false; //Cory: Causing Trouble?
+        if(!PassMuonPtCut       (idx,PDGZ)) return false; 
         if(!PassMuonEtaCut      (idx,PDGZ)) return false;
-        if(!PassMuonZmassCut    ())         return false;
-        //if(!PassMuonStationsCut (idx,PDGZ)) return false;
     }
+    if(!PassMuonZmassCut    ())         return false;
     return true;
 }
 
@@ -1757,11 +1820,11 @@ bool PassElecEtCut(int idx,int parent){
     if(debugme) cout<<"Check Electron Et Cut"<<endl;
 
     if      (parent == 0){
-        return (electron_et->at(idx) > minElecEt);
+        return (electron_ScEt->at(idx) > minElecEt);
     }else if      (parent == PDGW){
-        return (electron_et->at(idx) > minWenuEt);
+        return (electron_ScEt->at(idx) > minWenuEt);
     }else if(parent == PDGZ){
-        return (electron_et->at(idx) > minZeeEt);
+        return (electron_ScEt->at(idx) > minZeeEt);
     }
     return false;
 }//--- PassElecEtCut
@@ -1769,7 +1832,7 @@ bool PassElecEtCut(int idx,int parent){
 bool PassElecEtaCut(int idx){
 //-----------------------------------------------------------
     if(debugme) cout<<"Check Electron Eta Cut"<<endl;
-    float eta = electron_eta->at(idx);
+    float eta = electron_ScEta->at(idx);
     return (inBarrel(eta) || inEndCap(eta));
 }//--- PassElecEtaCut
 /*
@@ -1929,12 +1992,12 @@ bool PassElecHOverECut(int idx,int parent,bool inEC){
 bool PassMuonTypeCut(int idx,int parent){
     if(debugme) cout<<"Check Muon Type Cut"<<endl;
     if      (parent == 0){
-        return (muon_fitType->at(idx) == cutMuonType); 
+        return (muon_isGlobal->at(idx) ); 
     }else if      (parent == PDGW){
-        return (muon_GlobalandTracker->at(idx) == cutWmunuGlobalandTracker); 
+        return (muon_isGlobal->at(idx) && muon_isTracker->at(idx)); 
     }else if(parent == PDGZ){
-        return (muon_fitType->at(Z_leptonIndex1) == cutZmumuType &&
-                muon_fitType->at(Z_leptonIndex2) == cutZmumuType );
+        return (muon_isGlobal->at(Z_leptonIndex1) &&
+                muon_isGlobal->at(Z_leptonIndex2)  );
     }
     return false;
 }//--- PassMuonTypeCut
@@ -2209,6 +2272,8 @@ void ExecuteAnalysis()
   vector<InputFile> wjets_files;
   vector<InputFile> TC400_files;
   vector<InputFile> test_files;
+  vector<InputFile> wmunu_files;
+  vector<InputFile> wenu_files;
 
   //load the harcoded crosssectios
   //add background or signal containers as needed
@@ -2227,14 +2292,10 @@ void ExecuteAnalysis()
   //the results will be written under respective directories
   //Add as many as you need:
   string dir;
-/*  
+  
   dir = "wprime400";
   Load_Input_Files(dir, wprime400_files, lumiPb);
   Get_Distributions(wprime400_files, fout, dir, out);
-  
-  //dir = "wprime400_WDef";
-  //Load_Input_Files(dir, wprime400_WDef_files, lumiPb);
-  //Get_Distributions(wprime400_WDef_files, fout, dir, out);
   
   dir = "wprime500";
   Load_Input_Files(dir, wprime500_files, lumiPb);
@@ -2259,7 +2320,7 @@ void ExecuteAnalysis()
   dir = "wz";
   Load_Input_Files(dir, wz_files, lumiPb);
   Get_Distributions(wz_files, fout, dir, out);
-*//*
+
   dir = "ttbar";
   Load_Input_Files(dir, ttbar_files, lumiPb);
   Get_Distributions(ttbar_files, fout, dir, out); 
@@ -2275,7 +2336,7 @@ void ExecuteAnalysis()
   dir = "zgamma";
   Load_Input_Files(dir, zgamma_files, lumiPb);
   Get_Distributions(zgamma_files, fout, dir, out);
-  */
+  
   dir = "zjets";
   Load_Input_Files(dir, zjets_files, lumiPb);
   Get_Distributions(zjets_files, fout, dir, out);
@@ -2291,6 +2352,14 @@ void ExecuteAnalysis()
   //dir = "test";
   //Load_Input_Files(dir, test_files, lumiPb);
   //Get_Distributions(test_files, fout, dir, out);
+
+  dir = "wmunu";
+  //Load_Input_Files(dir, wmunu_files, lumiPb);
+  //Get_Distributions(wmunu_files, fout, dir, out);
+
+  dir = "wenu";
+  //Load_Input_Files(dir, wenu_files, lumiPb);
+  //Get_Distributions(wenu_files, fout, dir, out);
 
   out.close(); 
   fout->Close();

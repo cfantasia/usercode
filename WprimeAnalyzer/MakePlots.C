@@ -5,6 +5,7 @@
 #include "TFile.h"
 #include "TTree.h" 
 #include "TH1F.h"
+#include "TMultiGraph.h"
 #include "TGraph.h"
 #include "TCanvas.h"
 #include "TRandom.h"
@@ -15,6 +16,7 @@
 #include <vector>
 #include "TROOT.h"
 #include "TStyle.h"
+#include "TLine.h"
 #include <ExecuteAnalysis.h>
 
 struct Sample{
@@ -42,22 +44,24 @@ vector<Sample> samples;
 
 string convertFloattoStr(float num);
 void DrawandSave(TFile* fin, string title, bool norm, bool logy, bool eff);
-void Draw(vector<TH1F*> & hists,string filename, bool norm, bool logy, bool eff);
+void Draw(vector<TH1F*> & hists,string filename, bool norm, bool logy, bool eff, TLine* line=NULL);
 void DrawSelection(TFile* fin, string title, bool mincut);
 void PlotEff(TFile* fin, string title);
 bool Straddles(float a, float b, float num);
 
 void
 MakePlots(){  
-    TFile *fin = TFile::Open("Wprime_analysis_Zjets.root");
+    TFile *fin = TFile::Open("Wprime_analysis.root");
     
     samples.push_back(Sample("wz", 2, 1, 0));
     //samples.push_back(Sample("ttbar", 3, 1, 0));
     samples.push_back(Sample("ttbarfast", 8, 1, 0));
     samples.push_back(Sample("zz", 4, 1, 0));
     samples.push_back(Sample("zgamma", 5, 1, 0));
-    samples.push_back(Sample("zjets", 6, 1, 0));
+    //samples.push_back(Sample("zjets", 6, 1, 0));
     samples.push_back(Sample("wjets", 7, 1, 0));
+    samples.push_back(Sample("wmunu", 8, 1, 0));
+    samples.push_back(Sample("wenu", 9, 1, 0));
     
     
     samples.push_back(Sample("wprime400", 1, 1, 0, 1));
@@ -94,6 +98,12 @@ MakePlots(){
     variable.push_back("hWTransmass");      
     variable.push_back("hWenuTransmass");      
     variable.push_back("hWmunuTransmass");      
+    variable.push_back("hWDpt");      
+    variable.push_back("hWDphi");      
+    variable.push_back("hWDeta");      
+    variable.push_back("hWDr");      
+    
+    /*
     variable.push_back("hElecPt");
     variable.push_back("hElecEt");
     variable.push_back("hElecTrkRelIso");
@@ -112,7 +122,8 @@ MakePlots(){
     variable.push_back("hMuonNTrk");      
     variable.push_back("hMuonStation");   
     variable.push_back("hMuonSip");   
-        
+    */  
+    
     vector<string> selection_variable;  vector<bool> mincut;
     selection_variable.push_back("hElecEt");          mincut.push_back(true);
     selection_variable.push_back("hElecTrkRelIso");   mincut.push_back(false);
@@ -130,6 +141,7 @@ MakePlots(){
     selection_variable.push_back("hMuonNPix");         mincut.push_back(true);
     selection_variable.push_back("hMuonNTrk");         mincut.push_back(true);
     selection_variable.push_back("hMuonStation");      mincut.push_back(true);
+    //selection_variable.push_back("hMuonSip");          mincut.push_back(false);   
         
 
     TCanvas c1;
@@ -204,7 +216,7 @@ DrawandSave(TFile* fin, string title, bool norm, bool logy, bool eff){
 }
 
 void
-Draw(vector<TH1F*> &  hists, string filename, bool norm, bool logy, bool eff){
+Draw(vector<TH1F*> &  hists, string filename, bool norm, bool logy, bool eff, TLine* line){
     //printf("  Draw (norm is %i)\n",norm);
     TCanvas c1;
     if(logy) c1.SetLogy();
@@ -271,6 +283,8 @@ Draw(vector<TH1F*> &  hists, string filename, bool norm, bool logy, bool eff){
     legend->SetFillStyle(0);
     legend->Draw();
 
+    if(line) line->Draw();
+
     c1.SaveAs(filename.c_str());
     c1.Print("Summary.pdf","pdf");	
     delete hs;
@@ -330,16 +344,17 @@ DrawSelection(TFile* fin, string title, bool mincut){
     const string bkg1_name = "ttbarfast";
     const string bkg2_name = "zjets";
 
+    cout<<endl;
+
     for(size_t i=0; i<samples.size(); ++i){
         if(!signal_name.compare(samples[i].name)){
-            sig_idx = i;
-            //cout<<"Sample Signal"<<endl;
+            sig_idx = i; //cout<<"Sample Signal"<<endl;
         }
         if(!bkg1_name.compare(samples[i].name)){
-            bkg1_idx = i; cout<<samples[i].name<<endl;
+            bkg1_idx = i; //cout<<"Found "<<samples[i].name<<endl;
         }
         if(!bkg2_name.compare(samples[i].name)){
-            bkg2_idx = i; cout<<samples[i].name<<endl;
+            bkg2_idx = i; //cout<<"Found "<<samples[i].name<<endl;
         }
     }
     if(sig_idx == -1 || bkg1_idx == -1 || bkg2_idx == -1){
@@ -347,7 +362,6 @@ DrawSelection(TFile* fin, string title, bool mincut){
         return;
     }
 
-    vector<TH1F*> hists;
     string fulltitle;
     for(int cut=0; cut!= Num_histo_sets; ++cut){
         string title_match = "h" + Cut_Name[cut];
@@ -359,9 +373,11 @@ DrawSelection(TFile* fin, string title, bool mincut){
         }
     }    
 
+    vector<TH1F*> hists;
     vector<string> hist_names;     
     int size = samples.size();
     for(int i=0; i<size; ++i){
+        //if(1) continue;
         hist_names.push_back(samples[i].name + "/" + fulltitle);
         if(!fin->Get(hist_names[i].c_str())) 
             cout<<"Failed getting "<<fulltitle<<" from "<<samples[i].name<<endl;
@@ -413,23 +429,55 @@ DrawSelection(TFile* fin, string title, bool mincut){
         }
     }
 
-    TCanvas c1;
-    TGraph graph(nbins, Nsig, Nbkg);
-    string graph_title = title + " Selection Plot;Signal Eff;Background Eff";
-    graph.SetTitle(graph_title.c_str());
-    graph.Draw("A*");
-    c1.Print("Summary.pdf", "pdf");
-    c1.Print("Selection.pdf", "pdf");
-
-    int cutbin;
+    int cutbin=-1;
     for(int bin=first; bin<last; ++bin){
         if(Straddles(Nsig[bin],Nsig[bin+1], 0.98)){
-            cout<<"Bin: "<<bin<<": "<<Nsig[bin]<<" - "<<Nsig[bin+1]<<endl;
+            cout<<"Bin: "<<bin<<" straddles: "<<Nsig[bin]<<" -> "<<Nsig[bin+1]<<endl;
             if(Nsig[bin] > Nsig[bin+1]) cutbin = bin;
             else                        cutbin = bin+1;
-            cout<<title<<" cut is "<<hists[0]->GetBinCenter(cutbin)<<endl;
+            cout<<title<<" cut is "
+                <<hists[0]->GetBinLowEdge(cutbin)
+                <<" < "<<hists[0]->GetBinCenter(cutbin)
+                <<" < "<<hists[0]->GetBinLowEdge(cutbin+1)<<endl
+                <<" With Sig Eff "<<Nsig[cutbin]<<" and Bkg Eff "<<Nbkg[cutbin]
+                <<endl;
         }
     }
+
+    TCanvas c1;
+    string graph_name = "g" + title;
+    string graph_title = title + " Selection Plot;Signal Eff;Background Eff";
+
+    TMultiGraph mg(graph_name.c_str(), graph_title.c_str());
+    TGraph graph(nbins, Nsig, Nbkg);
+    TGraph point(1, &Nsig[cutbin], &Nbkg[cutbin]);
+    point.SetMarkerColor(kRed);
+
+    mg.Add(&graph,"*");
+    mg.Add(&point,"*");
+    
+    mg.Draw("A");
+    TLine line(hists[0]->GetBinCenter(cutbin),0,
+               hists[0]->GetBinCenter(cutbin),1000000);
+    line.SetLineColor(kRed);
+    //c1.Print("Summary.pdf", "pdf");
+
+    for(size_t i=0; i<samples.size(); ++i){
+        if(signal_name.compare(samples[i].name) &&
+           bkg1_name.compare(samples[i].name) &&
+           bkg2_name.compare(samples[i].name) ){
+
+            //cout<<"Didn't find "<<samples[i].name<<". Removing."<<endl;
+            samples.erase(samples.begin()+i);
+        }
+    }
+
+    
+
+    string filename = "plots/" + title + ".gif";  
+    Draw(hists,filename,0,1,0,&line);
+
+    c1.Print("Selection.pdf", "pdf");
 
 }
 

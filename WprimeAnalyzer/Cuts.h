@@ -36,30 +36,29 @@ const float minElecEtaEndcap = 1.56;
 const float maxElecEta = 2.5;
 
 const float minElecEt = 10;
-const float maxElecTrkRelIso  [] = {0.09 ,0.04 };
-const float maxElecECalRelIso [] = {0.07 ,0.05 };
-const float maxElecHCalRelIso [] = {0.10 ,0.025};
-const float maxElecSigmaEtaEta[] = {0.01 ,0.03 };
-const float maxElecDeltaPhiIn [] = {0.06 ,0.03 };
-const float maxElecDeltaEtaIn [] = {0.004,0.007};
-const float maxElecHOverE     [] = {0.04 ,0.025};
+const float maxElecTrkRelIso  [] = {1.70 ,1.01 }; //{0.15 ,0.08 };
+const float maxElecECalRelIso [] = {0.49 ,0.24 }; //{2.00 ,0.06 };
+const float maxElecHCalRelIso [] = {0.21 ,0.12 }; //{0.12 ,0.05 };
+const float maxElecSigmaEtaEta[] = {0.02 ,0.04 }; //{0.01 ,0.03 };
+const float maxElecDeltaPhiIn [] = {0.08 ,0.07 }; //{0.08 ,0.7  };
+const float maxElecDeltaEtaIn [] = {0.010,0.02 }; //{0.007,0.01 };
+const float maxElecHOverE     [] = {0.14 ,0.12 }; //{0.15 ,0.07 };
 
 // +++++++++++++++++++Muon General Cuts
-const int cutMuonType = MUONFITGLOBAL;
+const int cutMuonIsGlobal = true;//MUONFITGLOBAL;
 const float maxMuonEta = 2.5;
-const float minMuonPt = 15.;
-const float maxMuonDxy = 0.2;
-const float maxMuonNormChi2 = 10.;
-const int minMuonNPixHit = 0;
-const int minMuonNTrkHit = 10;
-const int minMuonStations = 0;
-const int minMuonHitsUsed = 0;
+const float minMuonPt = 10.;
+const float maxMuonDxy = 0.1;
+const float maxMuonNormChi2 = 5.;
+const int minMuonNPixHit = 1;
+const int minMuonNTrkHit = 12;
+const int minMuonStations = 1;
+const int minMuonHitsUsed = 4;
 
 // +++++++++++++++++++Wmunu
 //The muon must be identified as both global muon and tracker muon 
 const int cutWmunuIsGlobal = true;
 const int cutWmunuIsTracker= true;
-const int cutWmunuGlobalandTracker= true;
 
 //Number of pixel hits > 0 
 //const int minWmunuNpixhit = 0;
@@ -121,7 +120,7 @@ const float minWmunuMET = 50;
 /* Muon ID criteria 
    we require the presence of two global muons Detailed quality cuts are under study. Preliminary cut are: 
 */
-const int cutZmumuType = MUONFITGLOBAL;
+const int cutZmumuIsGlobal = true;//MUONFITGLOBAL;
 
 //dxy < 0.2 global muon 
 //const float maxZmumuDxy = 0.2;
