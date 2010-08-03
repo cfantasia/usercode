@@ -58,7 +58,7 @@ MakePlots(){
     samples.push_back(Sample("ttbarfast", 8, 1, 0));
     samples.push_back(Sample("zz", 4, 1, 0));
     samples.push_back(Sample("zgamma", 5, 1, 0));
-    //samples.push_back(Sample("zjets", 6, 1, 0));
+    samples.push_back(Sample("zjets", 6, 1, 0));
     samples.push_back(Sample("wjets", 7, 1, 0));
     samples.push_back(Sample("wmunu", 8, 1, 0));
     samples.push_back(Sample("wenu", 9, 1, 0));
@@ -86,23 +86,36 @@ MakePlots(){
     vector<string> variable; 
     
     variable.push_back("hWZInvMass");
-    variable.push_back("hGenWZInvMass");
+    variable.push_back("hGenWZInvMass");//1
     variable.push_back("hWZTransMass");
-    variable.push_back("hHt");       
+    variable.push_back("hHt");       //3
     variable.push_back("hWpt");      
-    variable.push_back("hZpt");      
+    variable.push_back("hZpt");      //5
     variable.push_back("hMET");          
     variable.push_back("hZmass");      //7
     variable.push_back("hZeemass");    //8  
     variable.push_back("hZmumumass");     //9 
     variable.push_back("hWTransmass");      
-    variable.push_back("hWenuTransmass");      
+    variable.push_back("hWenuTransmass");  //11    
     variable.push_back("hWmunuTransmass");      
-    variable.push_back("hWDpt");      
+    variable.push_back("hWDpt");      //13
     variable.push_back("hWDphi");      
-    variable.push_back("hWDeta");      
+    variable.push_back("hWDeta");      //15
     variable.push_back("hWDr");      
+    variable.push_back("hWmass");      
+    variable.push_back("hZeemassTT");
+    variable.push_back("hZeemassTF");
+    variable.push_back("hZmumumassTT");
+    variable.push_back("hZmumumassTF");
     
+    variable.push_back("hElecTrkRelIso"); 
+    variable.push_back("hElecECalRelIso");
+    variable.push_back("hElecHCalRelIso");
+    variable.push_back("hElecEP");
+    variable.push_back("hMuonRelIso");
+    variable.push_back("hMuonSip");
+
+    variable.push_back("hGenWTransmassDiff");
     /*
     variable.push_back("hElecPt");
     variable.push_back("hElecEt");
@@ -126,9 +139,9 @@ MakePlots(){
     
     vector<string> selection_variable;  vector<bool> mincut;
     selection_variable.push_back("hElecEt");          mincut.push_back(true);
-    selection_variable.push_back("hElecTrkRelIso");   mincut.push_back(false);
-    selection_variable.push_back("hElecECalRelIso");  mincut.push_back(false);
-    selection_variable.push_back("hElecHCalRelIso");  mincut.push_back(false);
+    //selection_variable.push_back("hElecTrkRelIso");   mincut.push_back(false);
+    //selection_variable.push_back("hElecECalRelIso");  mincut.push_back(false);
+    //selection_variable.push_back("hElecHCalRelIso");  mincut.push_back(false);
     selection_variable.push_back("hElecSigmaEtaEta"); mincut.push_back(false);
     selection_variable.push_back("hElecDPhi");        mincut.push_back(false);
     selection_variable.push_back("hElecDEta");        mincut.push_back(false); 
@@ -153,7 +166,7 @@ MakePlots(){
     for(int i=0;i<size;++i){
         for(int j=0;j<Num_histo_sets;++j){
             string title = variable[i] + "_" + Cut_Name[j];
-            DrawandSave(fin,title,0,i==7 || i==8 || i==9, 0);
+            DrawandSave(fin,title,i>=13,i==7 || i==8 || i==9, 0);
         }
     }
 

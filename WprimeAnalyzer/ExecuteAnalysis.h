@@ -70,11 +70,15 @@ Float_t         W_pt;
 Float_t         Z_pt;
 Float_t         Z_mass;
 Float_t         W_transMass;
+Float_t         W_phi;
+Float_t         W_eta;
 Int_t           numberOfZs;
 Float_t         met_phi;
 Float_t         met_et;
 Float_t         pfMet_et;
 Float_t         WZ_invMassMinPz;
+Float_t         W_neutrino_pzMinPz;
+Float_t         W_neutrino_pzMaxPz;
 //Float_t         WZ_invMassMaxPz;
 Float_t         WZ_transMass;
 Int_t           W_leptonIndex;
@@ -82,6 +86,7 @@ Int_t           Z_leptonIndex1;
 Int_t           Z_leptonIndex2;
 Int_t           triggerBitMask;
 
+vector<float>   *electron_mass;
 vector<float>   *electron_phi;
 vector<float>   *electron_eta;
 vector<float>   *electron_ScEta;
@@ -101,14 +106,19 @@ vector<float>   *electron_eOverP;
 vector<float>   *electron_hOverE;
 vector<float>   *electron_sigmaEtaEta;
 
+vector<float>   *muon_energy;
 vector<float>   *muon_eta;
 vector<float>   *muon_phi;
 vector<float>   *muon_pt;
+vector<float>   *muon_px;
+vector<float>   *muon_py;
+vector<float>   *muon_pz;
 vector<float>   *muon_innerD0;
 vector<float>   *muon_innerD0Error;
 vector<float>   *muon_trackIso;
-vector<float>   *muon_ecaloIso;
-vector<float>   *muon_hcaloIso;
+vector<float>   *muon_caloIso;
+//vector<float>   *muon_ecaloIso;
+//vector<float>   *muon_hcaloIso;
 vector<int  >   *muon_fitType;
 vector<int  >   *muon_isGlobal;    
 vector<int  >   *muon_isTracker;    
@@ -161,8 +171,15 @@ vector<float>   *muonGenMother_pz;
 
 ///My calculated qualities//////////////////
 float Ht;
+bool TT;
+bool TF;
 float WZ_genMass;
 float W_genTransMass;
+float W_genpt;
+float W_genphi;
+float W_geneta;
+float W_genpz;
+float W_mass;
 float Z_genMass;
 float Z_genEta;
 float Z_genPt;
@@ -173,6 +190,15 @@ float WDpt;
 float WDphi;
 float WDeta;
 float WDr;
+
+float lep_genpz;
+
+float neu_px;
+float neu_py;
+float neu_pz;
+float neu_genpx;
+float neu_genpy;
+float neu_genpz;
 /////////////////////////
 
 // +++++++++++++++++++useful constants
@@ -192,10 +218,9 @@ const int Num_histo_sets = 10; //matches the number of cuts
 const string Cut_Name[] = {"HLT", "ValidWZ", "NumZs", "Muon", "Elec", 
                            "ZMass", "Ht", "Zpt", "Wpt", "FwdJets"};
 */
-const int Num_histo_sets = 29; //matches the number of cuts
-const string Cut_Name[] = {"NOCUT", "HLT", "ValidWZ", "NumZs", 
-                           "ElecEta","ElecEt", "ElecTrkRelIso",
-                           "ElecECalRelIso", "ElecHCalRelIso",
+const int Num_histo_sets = 26; //matches the number of cuts
+const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs", 
+                           "ElecEta","ElecEt", 
                            "ElecSigmaEtaEta", "ElecDPhi",
                            "ElecDEta", "ElecHOverE",
                            "MuonType", "MuonEta",
@@ -205,7 +230,7 @@ const string Cut_Name[] = {"NOCUT", "HLT", "ValidWZ", "NumZs",
                            "MuonHitsUsed",
                            "Zdecay", "Wdecay", 
                            "Ht", "Zpt", "Wpt", "MET",
-                           "ALLCUTS"};
+                           "AllCuts"};
 TH1F * hWZInvMass[Num_histo_sets];
 TH1F * hWZTransMass[Num_histo_sets];
 TH1F * hHt[Num_histo_sets];
@@ -223,6 +248,7 @@ TH1F * hZmumumass[Num_histo_sets];
 TH1F * hGenZmass[Num_histo_sets];
 TH1F * hGenWTransmass[Num_histo_sets];
 TH1F * hGenWTransmassDiff[Num_histo_sets];
+TH1F * hWmass[Num_histo_sets];
 TH1F * hWTransmass[Num_histo_sets];
 TH1F * hWenuTransmass[Num_histo_sets];
 TH1F * hWmunuTransmass[Num_histo_sets];
@@ -247,6 +273,7 @@ TH1F * hMuonDxy[Num_histo_sets];
 TH1F * hMuonNormChi2[Num_histo_sets];
 TH1F * hMuonNPix[Num_histo_sets];
 TH1F * hMuonNTrk[Num_histo_sets];
+TH1F * hMuonRelIso[Num_histo_sets];
 TH1F * hMuonStation[Num_histo_sets];
 TH1F * hMuonSip[Num_histo_sets];
 
@@ -254,6 +281,11 @@ TH1F * hWDpt[Num_histo_sets];
 TH1F * hWDphi[Num_histo_sets];
 TH1F * hWDeta[Num_histo_sets];
 TH1F * hWDr[Num_histo_sets];
+
+TH1F * hZeemassTT[Num_histo_sets];
+TH1F * hZeemassTF[Num_histo_sets];
+TH1F * hZmumumassTT[Num_histo_sets];
+TH1F * hZmumumassTF[Num_histo_sets];
 
 TH1F * hEffRel;
 TH1F * hEffAbs;
@@ -279,8 +311,6 @@ void Declare_Lists();
 double deltaR(double eta1, double phi1, double eta2, double phi2);
 int Check_Files(unsigned Nfiles, vector<InputFile> & files);
 void Load_Input_Files(string file_desc,vector<InputFile> & files,float lumiPb);
-int Load_Cross_Sections(vector<InputFile> & wzjj_files,
-                        vector<InputFile> & wprime400_files);
 void Set_Branch_Addresses(TTree* WZtree);
 void Fill_Histos(int index, float weight);
 void saveHistos(TFile * fout, string dir);
@@ -289,6 +319,8 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
 void Tabulate_Me(int Num_surv_cut[], int& cut_index,const float& weight,const int& evtnum);
 void Get_Distributions(vector<InputFile>& files,TFile *fout, 
                        string dir, ofstream & out);
+void UseSample(string dir, vector<InputFile> & files, float lumiPb,
+               TFile * fout, ofstream & out);
 void ExecuteAnalysis();
 
 ///
@@ -308,6 +340,7 @@ bool PassWenuCut();
 bool PassWmunuCut();
 bool PassZeeCut();
 bool PassZmumuCut();
+bool PassZmassCut();
 
 bool PassElecEtaCut(int idx);
 bool PassElecPtCut(int idx,int parent);
@@ -316,32 +349,29 @@ bool PassElecEtCut(int idx,int parent);
 //bool PassElecNMissHitsCut(int idx,int parent,bool inEC);
 //bool PassElecDistCut(int idx,int parent,bool inEC);
 //bool PassElecdCotThetaCut(int idx,int parent,bool inEC);
-bool PassElecZmassCut();
-bool PassElecTrkRelIsoCut(int idx,int parent,bool inEC);
-bool PassElecECalRelIsoCut(int idx,int parent,bool inEC);
-bool PassElecHCalRelIsoCut(int idx,int parent,bool inEC);
-bool PassElecSigmaEtaEtaCut(int idx,int parent,bool inEC);
-bool PassElecDeltaPhiCut(int idx,int parent,bool inEC);
-bool PassElecDeltaEtaCut(int idx,int parent,bool inEC);
-bool PassElecHOverECut(int idx,int parent,bool inEC);
+bool PassElecTrkRelIsoCut(int idx,bool inEC);
+bool PassElecECalRelIsoCut(int idx,bool inEC);
+bool PassElecHCalRelIsoCut(int idx,bool inEC);
+bool PassElecSigmaEtaEtaCut(int idx,bool inEC);
+bool PassElecDeltaPhiCut(int idx,bool inEC);
+bool PassElecDeltaEtaCut(int idx,bool inEC);
+bool PassElecHOverECut(int idx,bool inEC);
 
-bool PassMuonTypeCut(int idx,int parent);
+bool PassMuonTypeCut(int idx);
 bool PassMuonNpixhitCut(int idx);
 bool PassMuonNtrkhitCut(int idx);
 bool PassMuonNormChi2Cut(int idx);
 bool PassMuonHitsUsedCut(int idx);
 bool PassMuonStationsCut(int idx);
-bool PassMuonEtaCut(int idx,int parent);
+bool PassMuonEtaCut(int idx);
 bool PassMuonPtCut(int idx,int parent);
-bool PassMuonCombRelIsoCut(int idx,int parent);
-bool PassMuonMETCut();
+bool PassMuonCombRelIsoCut(int idx);
 bool PassMuonDxyCut(int idx);
-bool PassMuonTrkAbsIsoCut(int idx,int parent);
-bool PassMuonEtaCut(int idx,int parent);
-bool PassMuonZmassCut();
 
 float Calc_Ht();
 float Calc_GenWZInvMass();
+float Calc_MuonRelIso(int idx);
+bool PassTightCut(int idx);
 
 
 #endif//#define _ExecuteAnalysis_h_
