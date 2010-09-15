@@ -1117,7 +1117,7 @@ void Fill_Histos(int index, float weight)
         hMuonRelIso[index]->Fill(Calc_MuonRelIso(idxs[i]), weight);
         hMuonStation[index]->Fill(muon_numGlobalMatches->at(idxs[i]), weight);
         hMuonSip[index]->Fill(
-            muon_globalD0->at(idxs[i])/muon_globalD0Error->at(idxs[i]));
+            muon_globalD0->at(idxs[i])/muon_globalD0Error->at(idxs[i]),weight);
     }
     
     hWDpt[index]->Fill(WDpt,weight);
