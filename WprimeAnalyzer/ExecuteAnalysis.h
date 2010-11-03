@@ -58,9 +58,13 @@ string top_level_dir = "/uscms_data/d2/fantasia/CMSSW_3_8_4_patch2/src/RunWZ/";
 
 // +++++++++++++++++++Variables to store Branch Addresses:
 Int_t           eventID;
+Int_t           runNumber;
+Int_t           lumiBlock;
 
-Int_t           HLT_Mu9;
-Int_t           HLT_Photon10_L1R;
+Int_t           pass_HLT_Mu3;
+Int_t           pass_HLT_Mu5;
+Int_t           pass_HLT_Mu9;
+Int_t           pass_HLT_Photon10_L1R;
 
 Int_t           W_flavor;
 Int_t           Z_flavor;
@@ -358,6 +362,7 @@ float Calc_GenWZInvMass();
 float Calc_MuonRelIso(int idx);
 bool Calc_RecoCompare();
 bool PassTightCut(int idx, int flavor);
+void PrintEvent();
 
 
 #endif//#define _ExecuteAnalysis_h_

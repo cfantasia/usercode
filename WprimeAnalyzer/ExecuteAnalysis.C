@@ -897,28 +897,32 @@ void Set_Branch_Addresses(TTree* WZtree)
 //-----------------------------------------------------------
     if(debugme) cout<<"Setting Branch Addresses"<<endl;
 
+    WZtree->SetBranchAddress("runNumber", &runNumber);
     WZtree->SetBranchAddress("eventID", &eventID);
+    WZtree->SetBranchAddress("lumiBlock", &lumiBlock);
 
-    //WZtree->SetBranchAddress("HLT_Mu9", &HLT_Mu9);
-    //WZtree->SetBranchAddress("HLT_Photon10_L1R", &HLT_Photon10_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Mu3", &pass_HLT_Mu3);
+    WZtree->SetBranchAddress("pass_HLT_Mu5", &pass_HLT_Mu5);
+    WZtree->SetBranchAddress("pass_HLT_Mu9", &pass_HLT_Mu9);
+    WZtree->SetBranchAddress("pass_HLT_Photon10_L1R", &pass_HLT_Photon10_L1R);
 
-    WZtree->SetBranchAddress("W_flavor",&W_flavor);
+    WZtree->SetBranchAddress("pfW_flavor",&W_flavor);
     WZtree->SetBranchAddress("Z_flavor",&Z_flavor);
-    WZtree->SetBranchAddress("W_pt",&W_pt);
+    WZtree->SetBranchAddress("pfW_pt",&W_pt);
     WZtree->SetBranchAddress("Z_pt",&Z_pt);
     WZtree->SetBranchAddress("Z_mass",&Z_mass);
-    WZtree->SetBranchAddress("W_transMass",&W_transMass);
-    WZtree->SetBranchAddress("W_phi",&W_phi);
-    WZtree->SetBranchAddress("W_eta",&W_eta);
+    WZtree->SetBranchAddress("pfW_transMass",&W_transMass);
+    WZtree->SetBranchAddress("pfW_phi",&W_phi);
+    WZtree->SetBranchAddress("pfW_eta",&W_eta);
     WZtree->SetBranchAddress("numberOfZs",&numberOfZs);
     WZtree->SetBranchAddress("met_phi",&met_phi);
     WZtree->SetBranchAddress("met_et",&met_et);
     WZtree->SetBranchAddress("pfMet_et",&pfMet_et);
-    WZtree->SetBranchAddress("WZ_invMassMinPz",&WZ_invMassMinPz);
-    WZtree->SetBranchAddress("W_neutrino_pzMinPz",&W_neutrino_pzMinPz);
-    WZtree->SetBranchAddress("W_neutrino_pzMaxPz",&W_neutrino_pzMaxPz);
+    WZtree->SetBranchAddress("pfWZ_invMassMinPz",&WZ_invMassMinPz);
+    WZtree->SetBranchAddress("pfW_neutrino_pzMinPz",&W_neutrino_pzMinPz);
+    WZtree->SetBranchAddress("pfW_neutrino_pzMaxPz",&W_neutrino_pzMaxPz);
     WZtree->SetBranchAddress("WZ_transMass",&WZ_transMass);
-    WZtree->SetBranchAddress("W_leptonIndex",&W_leptonIndex);
+    WZtree->SetBranchAddress("pfW_leptonIndex",&W_leptonIndex);
     WZtree->SetBranchAddress("Z_leptonIndex1",&Z_leptonIndex1);
     WZtree->SetBranchAddress("Z_leptonIndex2",&Z_leptonIndex2);
     WZtree->SetBranchAddress("triggerBitMask", &triggerBitMask);
@@ -1452,6 +1456,8 @@ void Get_Distributions(vector<InputFile>& files,
       if(!PassWptCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);
 
+      PrintEvent();
+
       if(!PassMETCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);
 
@@ -1488,7 +1494,7 @@ bool PassTriggersCut()
 //-----------------------------------------------------------
     if(debugme) cout<<"Trigger requirements"<<endl;
 
-    if( !(HLT_Photon10_L1R || HLT_Mu9) ) return false;
+    if( !(pass_HLT_Photon10_L1R || pass_HLT_Mu9) ) return false;
 
     return true;
 
@@ -2131,6 +2137,39 @@ bool PassTightCut(int idx, int flavor)
     }
     return true;
 }//--- Tight Cut
+
+void PrintEvent(){
+    cout<<"run #: "<<runNumber
+        <<" lumi: "<<lumiBlock
+        <<" eventID: "<<eventID
+        <<" Z_flavor "<<Z_flavor
+        <<" Z_mass "<<Z_mass
+        <<" W_flavor "<<W_flavor
+        <<" W_transMass "<<W_transMass
+        <<endl;
+
+    if(Z_flavor == 11){
+        cout<<" Z_electron_pt1 "<<electron_pt->at(Z_leptonIndex1)
+            <<" Z_electron_pt2 "<<electron_pt->at(Z_leptonIndex2);
+    }else{
+        cout<<" Z_muon_pt1 "<<muon_pt->at(Z_leptonIndex1)
+            <<" Z_muon_pt2 "<<muon_pt->at(Z_leptonIndex2);
+    }
+
+    cout<<endl;
+
+    if(W_flavor == 11){
+        cout<<" W_electron_pt "<<electron_pt->at(W_leptonIndex);
+    }else{
+        cout<<" W_electron_pt "<<muon_pt->at(W_leptonIndex);
+    }
+    
+    
+    cout<<" pfMet_et: "<<pfMet_et
+        <<" met_et: "<<met_et
+        <<endl<<endl;
+    return;
+}
 
 void 
 UseSample(string dir, vector<InputFile> & files, 
