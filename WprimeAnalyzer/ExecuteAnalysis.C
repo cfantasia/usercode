@@ -386,17 +386,7 @@ void Declare_Histos()
       string title = "Electron H over E (After "+Cut_Name[i]+" Cut);H/E;";
       hElecHE[i] = new TH1F(name.c_str(),title.c_str(),ElecHEbin,ElecHEMin,ElecHEMax);
   }
-/*
-  int ElecRelCaloIsobin = 100;
-  float ElecRelCaloIsoMin = 0.;
-  float ElecRelCaloIsoMax = 1.;
 
-  for(int i=0; i<Num_histo_sets; ++i){
-      string name = "hElecRelCaloIso_" + Cut_Name[i];
-      string title = "Electron Relative CaloIso (After "+Cut_Name[i]+" Cut);RelCalIso;";
-      hElecRelCaloIso[i] = new TH1F(name.c_str(),title.c_str(),ElecRelCaloIsobin,ElecRelCaloIsoMin,ElecRelCaloIsoMax);
-  }
-*/  
   int ElecTrkRelIsobin = 1000;
   float ElecTrkRelIsoMin = 0.;
   float ElecTrkRelIsoMax = 2.;
@@ -540,17 +530,6 @@ void Declare_Histos()
 
 }//Declare_Histos
 
-void Declare_Lists()
-{
-//--------------------------------------------------------------
-
-  if (debugme) cout<<"Declare lists"<<endl;
-
-  for(int i=0; i<Num_histo_sets; ++i) cutlist[i] = new TEntryList(Cut_Name[i].c_str(),Cut_Name[i].c_str());
-
-}//Declare_Lists
-
-
 //See if particle(only Electron??) is in Barrel
 //--------------------------------------------------------------
 bool inBarrel(float eta)
@@ -578,8 +557,6 @@ double deltaR(double eta1, double phi1, double eta2, double phi2)
 }
 
 
-
-
 //check if the input files are there
 //----------------------------------------------------------
 int Check_Files(unsigned Nfiles, vector<InputFile> & files)
@@ -594,9 +571,6 @@ int Check_Files(unsigned Nfiles, vector<InputFile> & files)
     }  
   return 0;
 }
-
-
-
 
 
 //Recruit files that are numbered from a given sample
@@ -630,7 +604,7 @@ void RecruitOrderedFiles(vector<InputFile> & files, const int& Nfiles,
     }
     else {cout<<"Something went wrong with the files. Quiting..."
               <<endl; abort();}
-    
+
   
 }// --RecruitOrderedFiles
 
@@ -669,33 +643,13 @@ void RecruitBinnedFiles(vector<InputFile> & files, const int& Nfiles,
 
 //load the input files from the top_level_dir
 //-----------------------------------------------------------
-void Load_Input_Files(string file_desc, 
-                    vector<InputFile> & files, 
-                    float lumiPb)
+bool Load_Input_Files(string file_desc, 
+                      vector<InputFile> & files)
 {
 //-----------------------------------------------------------
   if (debugme)cout<<"Loading input Files...."<<endl;
 
   cout << "\n Processing " << file_desc<< " files " << endl << endl;
-
-//   if(file_desc == "QCD")
-//     {
-//       const int NfilesQCD = 09;
-//       Nfiles = NfilesQCD;
-//       if(Check_Files(Nfiles, files))
-// 	return;
-
-//       string low[NfilesQCD]= 
-// 	{"100", "150", "200", "300", "400", "600", "800", "1200", "1600"};
-//       string high[NfilesQCD]=
-// 	{"150", "200", "300", "400", "600", "800","1200", "1600", "up"};
-  
-//       for(int i = 0; i != Nfiles; ++i)
-// 	{
-// 	  files[i].pathname = top_level_dir + string("QCD_")+low[i]+string("_")+high[i]+string("_212_Ideal_Minv_ptGlobMu.root");
-// 	}
-      
-//     } // QCD
 
   //switch between different sample cases and
   //recruit the files. 
@@ -809,8 +763,6 @@ void Load_Input_Files(string file_desc,
       bins.push_back("300toInf");
 
       Nfiles = dirs.size()*bins.size();
-      //float Zee_xsec[] = {4416,145.4,131.5,84.38,32.32,9.981,2.76 ,0.7241,0.1946,0.07539};
-      //float Zmm_xsec[] = {4434,143.8,131.8,83.92,32.35,9.918,2.757,0.7226,0.193 ,0.07627};
       binned = true;
       for(int i=0; i!=Nfiles; ++i){
           files.push_back(InputFile());
@@ -855,6 +807,35 @@ void Load_Input_Files(string file_desc,
           RecruitOrderedFiles(files,Nfiles,0,0,
                               filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"EGSep17ReReco")){
+          Nfiles = 1;
+          files.push_back(InputFile()); 
+          const string filename = "TrileptonPatTuple-EGSep17ReReco-v02_WZ.root";
+          RecruitOrderedFiles(files,Nfiles,0,0,
+                              filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"MuSep17ReReco")){
+          Nfiles = 1;
+          files.push_back(InputFile()); 
+          const string filename = "TrileptonPatTuple-MuSep17ReReco-v02_WZ.root";
+          RecruitOrderedFiles(files,Nfiles,0,0,
+                              filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"ElectronPromptReco")){
+          Nfiles = 1;
+          files.push_back(InputFile()); 
+          const string filename = "TrileptonPatTuple-ElectronPromptReco-v02_WZ.root";
+          RecruitOrderedFiles(files,Nfiles,0,0,
+                              filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"MuPromptReco")){
+          Nfiles = 1;
+          files.push_back(InputFile()); 
+          const string filename = "TrileptonPatTuple-MuPromptReco-v02_WZ.root";
+          RecruitOrderedFiles(files,Nfiles,0,0,
+                              filename,"",file_desc);
+  } 
+
   else cout<<"No samples were found with the name "<<file_desc<<endl;
 
   
@@ -865,10 +846,9 @@ void Load_Input_Files(string file_desc,
   for(int i = 0; i != Nfiles; ++i){ // loop over input files
       string pathname = files[i].pathname;
       TFile * file = TFile::Open(pathname.c_str());
-      //TFile * file = new TFile(pathname.c_str());
-      if(!(file->IsOpen()))	{
+      if(!file || !(file->IsOpen())){
           cerr <<" *** Missing file: "<< pathname << " !!! "<<endl; 
-          continue;
+          return false;
       }
       if (debugme)cout<<"Processing file: "<<pathname<<endl;
       
@@ -896,6 +876,8 @@ void Load_Input_Files(string file_desc,
       }else{
           files[i].weight = lumiPb*(files[i].x_sect)/(files[i].Nprod_evt);
       }
+      
+      if(files[i].x_sect == 0) files[i].weight = 1;
 
       cout <<"Events produced in file = "<<files[i].Nprod_evt
            <<",  # of entries = "<< files[i].tree->GetEntries() 
@@ -904,7 +886,7 @@ void Load_Input_Files(string file_desc,
       
   } // loop over input files 2
   
-  return;
+  return true;
 }
 
 
@@ -917,8 +899,8 @@ void Set_Branch_Addresses(TTree* WZtree)
 
     WZtree->SetBranchAddress("eventID", &eventID);
 
-    WZtree->SetBranchAddress("HLT_Mu9", &HLT_Mu9);
-    WZtree->SetBranchAddress("HLT_Photon10_L1R", &HLT_Photon10_L1R);
+    //WZtree->SetBranchAddress("HLT_Mu9", &HLT_Mu9);
+    //WZtree->SetBranchAddress("HLT_Photon10_L1R", &HLT_Photon10_L1R);
 
     WZtree->SetBranchAddress("W_flavor",&W_flavor);
     WZtree->SetBranchAddress("Z_flavor",&Z_flavor);
@@ -935,16 +917,12 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("WZ_invMassMinPz",&WZ_invMassMinPz);
     WZtree->SetBranchAddress("W_neutrino_pzMinPz",&W_neutrino_pzMinPz);
     WZtree->SetBranchAddress("W_neutrino_pzMaxPz",&W_neutrino_pzMaxPz);
-    //WZtree->SetBranchAddress("WZ_invMassMaxPz",&WZ_invMassMaxPz);
     WZtree->SetBranchAddress("WZ_transMass",&WZ_transMass);
     WZtree->SetBranchAddress("W_leptonIndex",&W_leptonIndex);
     WZtree->SetBranchAddress("Z_leptonIndex1",&Z_leptonIndex1);
     WZtree->SetBranchAddress("Z_leptonIndex2",&Z_leptonIndex2);
     WZtree->SetBranchAddress("triggerBitMask", &triggerBitMask);
 
-    //WZtree->SetBranchAddress("electron_ScEt",&electron_ScEt);
-    //WZtree->SetBranchAddress("electron_ScEta",&electron_ScEta);
-  
     WZtree->SetBranchAddress("electron_mass",&electron_mass);
     WZtree->SetBranchAddress("electron_phi",&electron_phi);
     WZtree->SetBranchAddress("electron_eta",&electron_eta);
@@ -955,9 +933,9 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("electron_py",&electron_py);
     WZtree->SetBranchAddress("electron_pz",&electron_pz);
     WZtree->SetBranchAddress("electron_ScEt",&electron_ScEt);
-    WZtree->SetBranchAddress("electron_isoEtTrackerDr30", &electron_trackIso);
-    WZtree->SetBranchAddress("electron_isoEtEcalDr30", &electron_ecaloIso);
-    WZtree->SetBranchAddress("electron_isoEtHcalDr30", &electron_hcaloIso);
+    WZtree->SetBranchAddress("electron_trackIso", &electron_trackIso);
+    WZtree->SetBranchAddress("electron_ecalIso", &electron_ecaloIso);
+    WZtree->SetBranchAddress("electron_hcalIso", &electron_hcaloIso);
     WZtree->SetBranchAddress("electron_deltaEtaIn", &electron_deltaEtaIn);
     WZtree->SetBranchAddress("electron_deltaPhiIn", &electron_deltaPhiIn);
     WZtree->SetBranchAddress("electron_eOverP", &electron_eOverP);
@@ -1030,11 +1008,6 @@ void Set_Branch_Addresses(TTree* WZtree)
 }//Set_Branch_Addresses
 
 
-
-
-
-
-
 //Fill Histograms
 //-----------------------------------------------------------
 void Fill_Histos(int index, float weight)
@@ -1088,12 +1061,11 @@ void Fill_Histos(int index, float weight)
     for(size_t i=0; i<idxs.size(); ++i){
         hElecPt[index]->Fill(electron_pt->at(idxs[i]),weight);
         hElecEt[index]->Fill(electron_ScEt->at(idxs[i]),weight);
-        hElecdEta[index]->Fill(electron_deltaEtaIn->at(idxs[i]),weight);
-        hElecdPhi[index]->Fill(electron_deltaPhiIn->at(idxs[i]),weight);
+        hElecdEta[index]->Fill(fabs(electron_deltaEtaIn->at(idxs[i])),weight);
+        hElecdPhi[index]->Fill(fabs(electron_deltaPhiIn->at(idxs[i])),weight);
         hElecSigmann[index]->Fill(electron_sigmaEtaEta->at(idxs[i]),weight);
         hElecEP[index]->Fill(electron_eOverP->at(idxs[i]),weight);
         hElecHE[index]->Fill(electron_hOverE->at(idxs[i]),weight);
-        //hElecRelCaloIso[index]->Fill(electron_caloIso->at(idxs[i])/electron_pt->at(idxs[i]),weight);
         hElecTrkRelIso[index]->Fill(electron_trackIso->at(idxs[i])/electron_pt->at(idxs[i]),weight);
         hElecECalRelIso[index]->Fill(electron_ecaloIso->at(idxs[i])/electron_pt->at(idxs[i]),weight);
         hElecHCalRelIso[index]->Fill(electron_hcaloIso->at(idxs[i])/electron_pt->at(idxs[i]),weight);
@@ -1178,7 +1150,6 @@ void saveHistos(TFile * fout, string dir)
       hElecSigmann[i]->Write();
       hElecEP[i]->Write();
       hElecHE[i]->Write();
-      //hElecRelCaloIso[i]->Write();
       hElecTrkRelIso[i]->Write();
       hElecECalRelIso[i]->Write();
       hElecHCalRelIso[i]->Write();
@@ -1196,8 +1167,6 @@ void saveHistos(TFile * fout, string dir)
       hWDphi[i]->Write();
       hWDeta[i]->Write();
       hWDr[i]->Write();
-
-      cutlist[i]->Write();
   }
   hNumEvts->Write();
   hEffRel->Write();
@@ -1256,7 +1225,7 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
 //Tabulate results after the cut has been passed
 //-----------------------------------------------------------
 void Tabulate_Me(int Num_surv_cut[], int& cut_index, 
-		 const float& weight, const int& evtnum)
+		 const float& weight)
 {
 //-----------------------------------------------------------
     if(debugme) cout<<"Tabulating results for cut_index = "
@@ -1267,8 +1236,6 @@ void Tabulate_Me(int Num_surv_cut[], int& cut_index,
     //fill the histograms
     Fill_Histos(cut_index,weight);
     
-    cutlist[cut_index]->Enter(evtnum);
-
     //since the event has passed the cut,
     //increase the cut_index for the next cut
     ++cut_index;
@@ -1292,7 +1259,6 @@ void Get_Distributions(vector<InputFile>& files,
   
   
   Declare_Histos();
-  Declare_Lists();
 
   int Nfiles = files.size();
 
@@ -1337,158 +1303,13 @@ void Get_Distributions(vector<InputFile>& files,
 
       TT = TF = false;
       if(Z_flavor){
-          bool tight1 = PassTightCut(Z_leptonIndex1);
-          bool tight2 = PassTightCut(Z_leptonIndex2);
+          bool tight1 = PassTightCut(Z_leptonIndex1, Z_flavor);
+          bool tight2 = PassTightCut(Z_leptonIndex2, Z_flavor);
           //cout<<"tight1: "<<tight1<<" tight2: "<<tight2<<endl;
           TT = tight1 && tight2;
           TF = (tight1 && !tight2) || (!tight1 && tight2);
       }
 
-      if     (W_flavor == 11) recodp = deltaPhi(electron_phi->at(W_leptonIndex),met_phi);
-      else if(W_flavor == 13) recodp = deltaPhi(muon_phi->at(W_leptonIndex),met_phi);
-      else                    recodp = -999;
-      
-      if     (W_flavor == 11 && W_neutrino_pzMinPz){
-          float nu_energy = sqrt(met_et*met_et +
-                                 W_neutrino_pzMinPz*W_neutrino_pzMinPz);
-          float e = electron_energy->at(W_leptonIndex)+nu_energy;
-          float px = electron_px->at(W_leptonIndex)+met_et*cos(met_phi);
-          float py = electron_py->at(W_leptonIndex)+met_et*sin(met_phi);
-          float pz = electron_pz->at(W_leptonIndex)+W_neutrino_pzMinPz;
-          W_mass = sqrt(e*e - px*px - py*py - pz*pz);
-      }else if(W_flavor == 13 && W_neutrino_pzMinPz){
-          float nu_energy = sqrt(met_et*met_et +
-                                 W_neutrino_pzMinPz*W_neutrino_pzMinPz);
-          float e = muon_energy->at(W_leptonIndex)+nu_energy;
-          float px = muon_px->at(W_leptonIndex)+met_et*cos(met_phi);
-          float py = muon_py->at(W_leptonIndex)+met_et*sin(met_phi);
-          float pz = muon_pz->at(W_leptonIndex)+W_neutrino_pzMinPz;
-          W_mass = sqrt(e*e - px*px - py*py - pz*pz);
-      }else{
-          W_mass = -999;
-      }
-      bool check = false;
-      /*
-      if(Z_mass > 60 && Z_mass < 70){
-          check = true;
-          cout<<"Event: "<<eventID<<endl;
-          cout<<"Z_flavor: "<<Z_flavor<<" Z_mass: "<<Z_mass<<" Gen:"<<Z_genMass
-              <<" #Elec"<<electron_pt->size()<<" #Muon"<<muon_pt->size()
-              <<" Z_pt: "<<Z_pt<<" Z_genpt: "<<Z_genPt
-              <<" ZdaugIdx1:"<<Z_leptonIndex1
-              <<" ZdaugIdx2:"<<Z_leptonIndex2
-              <<endl;
-
-      }
-      */
-
-      for(unsigned int part=0; part!=genParticle_et->size(); part++){
-          /*
-          if(abs(genParticle_pdgId->at(part)) == PDGW){
-              W_genTransMass = sqrt(
-                  genParticle_et->at(part)*genParticle_et->at(part) -
-                  genParticle_pt->at(part)*genParticle_pt->at(part) );
-              cout<<"Event: "<<i<<"Index:"<<part
-                  <<" gen trans mass: "<<W_genTransMass
-                  <<" gen mass: "<<genParticle_mass->at(part)
-                  <<" gen eta: "<<genParticle_eta->at(part)
-                  <<endl;
-          }
-          */
-          if(abs(genMother_pdgId->at(part)) == PDGW){
-              WlepGenPt = genParticle_pt->at(part);
-              gendp = deltaPhi(genParticle_phi->at(part), genmet_phi);
-
-              if      (W_flavor == 11){
-                  WDpt = genParticle_pt->at(part) - electron_pt->at(W_leptonIndex);
-                  WDphi = genParticle_phi->at(part);//deltaPhi(genParticle_phi->at(part), electron_phi->at(W_leptonIndex));
-                  WDeta = deltaEta(genParticle_eta->at(part), electron_eta->at(W_leptonIndex));
-                  WDr = sqrt(WDphi*WDphi + WDeta*WDeta);
-                  //cout<<"gen: "<<genParticle_phi->at(part)<<" phi: "<<electron_phi->at(W_leptonIndex)<<endl
-                  //    <<"gen: "<<genParticle_eta->at(part)<<" reco: "<<electron_eta->at(W_leptonIndex)<<endl;
-              }else if(W_flavor == 13){
-                  WDpt = genParticle_pt->at(part) - muon_pt->at(W_leptonIndex);
-                  WDphi = deltaPhi(genParticle_phi->at(part), muon_phi->at(W_leptonIndex));
-                  WDeta = deltaEta(genParticle_eta->at(part), muon_eta->at(W_leptonIndex));
-                  WDr = sqrt(WDphi*WDphi + WDeta*WDeta);
-              }else{
-                  WDpt = -999;
-                  WDphi = -999;
-                  WDeta = -999;
-                  WDr = -999;
-              }
-
-              /*
-              cout<<genParticle_et->at(part)<<endl
-                  <<genmet_et<<endl
-                  <<genParticle_phi->at(part)<<endl
-                  <<genmet_phi<<endl
-                  <<dp<<endl
-                  <<1-cos(dp)<<endl
-                  
-                  <<endl;
-              */
-              W_genTransMass = sqrt(2*genmet_et*genParticle_et->at(part)*(1-cos(gendp)));
-              
-              W_genpt = genMother_pt->at(part);
-              W_genphi = genMother_phi->at(part);
-              W_geneta = genMother_eta->at(part);
-              W_genpz = genMother_pz->at(part);
-
-              lep_genpz = genParticle_pz->at(part);
-              //lep_genpt = genParticle_pt->at(part);
-              //lep_genphi = genParticle_phi->at(part);
-
-              neu_px = met_et*cos(met_phi);
-              neu_py = met_et*sin(met_phi);
-              neu_pz = W_neutrino_pzMinPz;
-
-              neu_genpx = genMother_px->at(part) - genParticle_px->at(part);
-              neu_genpy = genMother_py->at(part) - genParticle_py->at(part);
-              neu_genpz = genMother_pz->at(part) - genParticle_pz->at(part);
-
-              /*
-              cout<<"Event: "<<i<<" Index:"<<part
-                  <<" gen trans mass: "<<W_genTransMass
-                  <<endl;
-              */
-          }
-          /*
-          if(abs(genMother_pdgId->at(part)) == PDGZ){
-              Z_genMass = genMother_mass->at(part);
-              Z_genEta = genMother_eta->at(part);
-              Z_genPt = genMother_pt->at(part);
-              if(check && Z_flavor == 11 && abs(genParticle_pdgId->at(part)) == 11){
-                  cout<<"Gen PDG:"<<genParticle_pdgId->at(part)
-                      <<" E: "<<genParticle_energy->at(part)
-                      <<" px: "<<genParticle_px->at(part)
-                      <<" py: "<<genParticle_py->at(part)
-                      <<" pz: "<<genParticle_pz->at(part)
-                      <<endl;
-                  for(int e=0; e<electron_pt->size(); ++e){
-                      cout<<"Electron "<<e
-                      <<" E: "<<electron_energy->at(e)
-                      <<" px: "<<electron_px->at(e)
-                      <<" py: "<<electron_py->at(e)
-                      <<" pz: "<<electron_pz->at(e)
-                      <<endl;
-                  }
-              }else if(check && Z_flavor == 11){
-                  cout<<"Other particle: "<<genParticle_pdgId->at(part)
-                      <<" E: "<<genParticle_energy->at(part)
-                      <<" px: "<<genParticle_px->at(part)
-                      <<" py: "<<genParticle_py->at(part)
-                      <<" pz: "<<genParticle_pz->at(part)
-                      <<endl;
-              }
-          }
-          */
-      }
-
-
-      //cout<<"-------------"<<endl;
-
-      //////////////////////
       if (debugme) cout<<"Processing event "<<i<<endl;
 
       //an index to indicate current cut number
@@ -1497,23 +1318,23 @@ void Get_Distributions(vector<InputFile>& files,
       vector<int> idxs;
       vector<int> inEC;
 
-
       //cuts: These need to be ordered the same as Cut_Name in header file
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i); //No Cuts
+      Tabulate_Me(Num_surv_cut,cut_index,weight); //No Cuts
       
-      if(!PassTriggersCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      //if(!PassTriggersCut()) continue; //Cory
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       //These are used to look at cut eff.
       //if(Z_flavor != 11 || W_flavor != 13) continue;
       //if(Z_flavor != 13 || W_flavor != 11) continue;
       //if(!inBarrel(electron_ScEta->at(W_leptonIndex))) continue;
       //if(!inEndCap(electron_ScEta->at(W_leptonIndex))) continue;
-      if(!PassValidWandZCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      
+      if(!PassValidWandZCut()) continue; //Cory
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       if(!PassNumberOfZsCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       ////////////////New Elec Cuts////////////////
       bool pass = true;
@@ -1532,39 +1353,34 @@ void Get_Distributions(vector<InputFile>& files,
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassElecEtaCut        (idxs[lep])) pass = false;
       if(!pass) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassElecEtCut         (idxs[lep],0)) pass = false;
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassElecSigmaEtaEtaCut(idxs[lep],inEC[lep])) pass = false;
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassElecDeltaPhiCut   (idxs[lep],inEC[lep])) pass = false;
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassElecDeltaEtaCut   (idxs[lep],inEC[lep])) pass = false;
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassElecHOverECut     (idxs[lep],inEC[lep])) pass = false;       
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
-
-      /////////
-      //if(!PassElecCut()) continue;
-      //Tabulate_Me(Num_surv_cut,cut_index,weight,i);
-      /////////
-      //if(!PassMuonCut()) continue;
-      //Tabulate_Me(Num_surv_cut,cut_index,weight,i);      
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
+      
+      /////////Muon Cuts////////////
       
       idxs.clear(); inEC.clear();
       if(Z_flavor == PDGMUON ){
@@ -1578,101 +1394,69 @@ void Get_Distributions(vector<InputFile>& files,
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonTypeCut      (idxs[lep])) pass = false; 
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonEtaCut       (idxs[lep])) pass = false;
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonPtCut        (idxs[lep],0)) pass = false;
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonDxyCut       (idxs[lep])) pass = false; 
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonNormChi2Cut  (idxs[lep])) pass = false; 
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonNpixhitCut   (idxs[lep])) pass = false; 
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonNtrkhitCut   (idxs[lep])) pass = false; 
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonStationsCut  (idxs[lep])) pass = false;
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassMuonHitsUsedCut  (idxs[lep])) pass = false;
       if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       ////Other Cuts/////////////
       if(!PassZDecayCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       if(!PassWDecayCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);      
+      Tabulate_Me(Num_surv_cut,cut_index,weight);      
 
       if(!PassHtCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       if(!PassZptCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       if(!PassWptCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       if(!PassMETCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i);
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      if(false && W_transMass < 10){
-          cout<<" W_transMass: "<<W_transMass
-              <<" W_transMass (gen): "<<W_genTransMass<<endl
-              <<" W_pt: "<<W_pt
-              <<" W_pt (gen): "<<W_genpt<<endl
-              <<" W_eta: "<<W_eta
-              <<" W_eta (gen): "<<W_geneta<<endl
-              <<" W_phi: "<<W_phi
-              <<" W_phi (gen): "<<W_genphi<<endl
-              /*
-              <<" lep_pt: "<<lep_pt
-              <<" lep_pt (gen): "<<lep_genpt<<endl
-              <<" lep_phi: "<<lep_phi
-              <<" lep_phi (gen): "<<lep_genphi<<endl
-              */
-              <<" neu_px: "<<neu_px
-              <<" neu_px (gen): "<<neu_genpx<<endl
-              <<" neu_py: "<<neu_py
-              <<" neu_py (gen): "<<neu_genpy<<endl
-              <<" neu_pz: "<<neu_pz
-              <<" neu_pz (gen): "<<neu_genpz<<endl
-              
-              <<" W_pz (gen): "<<W_genpz<<endl;
-          cout<<" lep_pz (gen): "<<lep_genpz<<endl;
-          cout<<" lep_pz: ";
-          if(Z_flavor == 11) cout<<electron_pz->at(W_leptonIndex);
-          if(Z_flavor == 13) cout<<muon_pz->at(W_leptonIndex);
-          cout<<endl;
-          cout<<" neu minpz"<<W_neutrino_pzMinPz<<endl 
-              <<" neu maxpz"<<W_neutrino_pzMaxPz<<endl 
-              <<endl;
-      }
-
-      Tabulate_Me(Num_surv_cut,cut_index,weight,i); //After All Cuts
+      //After All Cuts
+      Tabulate_Me(Num_surv_cut,cut_index,weight); 
       
     }//event loop
     
@@ -1738,30 +1522,6 @@ bool PassNumLeptonsCut()
 
     return true;
 }//--- PassNumLeptonsCut
-
-//Check if min # of leptons have min pt
-//-----------------------------------------------------------
-bool PassLeptonPtCut()
-{
-//-----------------------------------------------------------
-    if(debugme) cout<<"Check min pt"<<endl;
-    //Cory: This is not the right way to do this, should check boson leptons
-    //but it is not used anywhere
-    int count=0;
-    int size = muon_pt->size();
-    for(int i=0;i<size;++i){
-	if(muon_pt->at(i) > minMuonPt) ++count;
-	if(count > 3) return true;
-    }
-
-    size = electron_pt->size();
-    for(int i=0;i<size;++i){
-	if(electron_pt->at(i) > minElecPt) ++count;
-	if(count > 3) return true;
-    }
-
-    return false;
-}//--- PassLeptonPtCut
 */
 
 //Check if there is more Zs than required
@@ -2148,19 +1908,204 @@ float Calc_GenWZInvMass()
         float PY = genParticle_py->at(idZ)+genParticle_py->at(idW);
         float PZ = genParticle_pz->at(idZ)+genParticle_pz->at(idW);
         float m = sqrt(E*E - PX*PX - PY*PY - PZ*PZ);
-/*
-        cout<<"E:"<<E
-            <<" PX:"<<PX
-            <<" PY:"<<PY
-            <<" PZ:"<<PZ
-            <<" Mass calc is "<<m<<endl;
-*/
+        /*
+          cout<<"E:"<<E
+          <<" PX:"<<PX
+          <<" PY:"<<PY
+          <<" PZ:"<<PZ
+          <<" Mass calc is "<<m<<endl;
+        */
         return m;
              
     }
     return -1;
-
+    
 }//--- Calc Gen Inv Mass
+
+//MET Cut
+//-----------------------------------------------------------
+bool Calc_RecoCompare()
+{
+    if     (W_flavor == 11) recodp = deltaPhi(electron_phi->at(W_leptonIndex),met_phi);
+    else if(W_flavor == 13) recodp = deltaPhi(muon_phi->at(W_leptonIndex),met_phi);
+    else                    recodp = -999;
+    
+    if     (W_flavor == 11 && W_neutrino_pzMinPz){
+        float nu_energy = sqrt(met_et*met_et +
+                               W_neutrino_pzMinPz*W_neutrino_pzMinPz);
+        float e = electron_energy->at(W_leptonIndex)+nu_energy;
+        float px = electron_px->at(W_leptonIndex)+met_et*cos(met_phi);
+        float py = electron_py->at(W_leptonIndex)+met_et*sin(met_phi);
+        float pz = electron_pz->at(W_leptonIndex)+W_neutrino_pzMinPz;
+        W_mass = sqrt(e*e - px*px - py*py - pz*pz);
+    }else if(W_flavor == 13 && W_neutrino_pzMinPz){
+        float nu_energy = sqrt(met_et*met_et +
+                               W_neutrino_pzMinPz*W_neutrino_pzMinPz);
+        float e = muon_energy->at(W_leptonIndex)+nu_energy;
+        float px = muon_px->at(W_leptonIndex)+met_et*cos(met_phi);
+        float py = muon_py->at(W_leptonIndex)+met_et*sin(met_phi);
+        float pz = muon_pz->at(W_leptonIndex)+W_neutrino_pzMinPz;
+        W_mass = sqrt(e*e - px*px - py*py - pz*pz);
+    }else{
+        W_mass = -999;
+    }
+    /*    
+      bool check = false;
+    
+      if(Z_mass > 60 && Z_mass < 70){
+      check = true;
+      cout<<"Event: "<<eventID<<endl;
+      cout<<"Z_flavor: "<<Z_flavor<<" Z_mass: "<<Z_mass<<" Gen:"<<Z_genMass
+      <<" #Elec"<<electron_pt->size()<<" #Muon"<<muon_pt->size()
+      <<" Z_pt: "<<Z_pt<<" Z_genpt: "<<Z_genPt
+      <<" ZdaugIdx1:"<<Z_leptonIndex1
+      <<" ZdaugIdx2:"<<Z_leptonIndex2
+      <<endl;
+      
+      }
+    */
+    
+    for(unsigned int part=0; part!=genParticle_et->size(); part++){
+        /*
+          if(abs(genParticle_pdgId->at(part)) == PDGW){
+          W_genTransMass = sqrt(
+          genParticle_et->at(part)*genParticle_et->at(part) -
+          genParticle_pt->at(part)*genParticle_pt->at(part) );
+          cout<<"Event: "<<i<<"Index:"<<part
+          <<" gen trans mass: "<<W_genTransMass
+          <<" gen mass: "<<genParticle_mass->at(part)
+          <<" gen eta: "<<genParticle_eta->at(part)
+          <<endl;
+          }
+        */
+        if(abs(genMother_pdgId->at(part)) == PDGW){
+            WlepGenPt = genParticle_pt->at(part);
+            gendp = deltaPhi(genParticle_phi->at(part), genmet_phi);
+            
+            if      (W_flavor == 11){
+                WDpt = genParticle_pt->at(part) - electron_pt->at(W_leptonIndex);
+                WDphi = genParticle_phi->at(part);//deltaPhi(genParticle_phi->at(part), electron_phi->at(W_leptonIndex));
+                WDeta = deltaEta(genParticle_eta->at(part), electron_eta->at(W_leptonIndex));
+                WDr = sqrt(WDphi*WDphi + WDeta*WDeta);
+                //cout<<"gen: "<<genParticle_phi->at(part)<<" phi: "<<electron_phi->at(W_leptonIndex)<<endl
+                //    <<"gen: "<<genParticle_eta->at(part)<<" reco: "<<electron_eta->at(W_leptonIndex)<<endl;
+            }else if(W_flavor == 13){
+                WDpt = genParticle_pt->at(part) - muon_pt->at(W_leptonIndex);
+                WDphi = deltaPhi(genParticle_phi->at(part), muon_phi->at(W_leptonIndex));
+                WDeta = deltaEta(genParticle_eta->at(part), muon_eta->at(W_leptonIndex));
+                WDr = sqrt(WDphi*WDphi + WDeta*WDeta);
+            }else{
+                WDpt = -999;
+                WDphi = -999;
+                WDeta = -999;
+                WDr = -999;
+            }
+            
+            /*
+              cout<<genParticle_et->at(part)<<endl
+              <<genmet_et<<endl
+              <<genParticle_phi->at(part)<<endl
+              <<genmet_phi<<endl
+              <<dp<<endl
+              <<1-cos(dp)<<endl
+              
+              <<endl;
+            */
+            W_genTransMass = sqrt(2*genmet_et*genParticle_et->at(part)*(1-cos(gendp)));
+            
+            W_genpt = genMother_pt->at(part);
+            W_genphi = genMother_phi->at(part);
+            W_geneta = genMother_eta->at(part);
+            W_genpz = genMother_pz->at(part);
+            
+            lep_genpz = genParticle_pz->at(part);
+            //lep_genpt = genParticle_pt->at(part);
+            //lep_genphi = genParticle_phi->at(part);
+            
+            neu_px = met_et*cos(met_phi);
+            neu_py = met_et*sin(met_phi);
+            neu_pz = W_neutrino_pzMinPz;
+            
+            neu_genpx = genMother_px->at(part) - genParticle_px->at(part);
+            neu_genpy = genMother_py->at(part) - genParticle_py->at(part);
+            neu_genpz = genMother_pz->at(part) - genParticle_pz->at(part);
+            
+              /*
+                cout<<"Event: "<<i<<" Index:"<<part
+                <<" gen trans mass: "<<W_genTransMass
+                <<endl;
+              */
+        }
+        /*
+          if(abs(genMother_pdgId->at(part)) == PDGZ){
+          Z_genMass = genMother_mass->at(part);
+          Z_genEta = genMother_eta->at(part);
+          Z_genPt = genMother_pt->at(part);
+          if(check && Z_flavor == 11 && abs(genParticle_pdgId->at(part)) == 11){
+          cout<<"Gen PDG:"<<genParticle_pdgId->at(part)
+          <<" E: "<<genParticle_energy->at(part)
+          <<" px: "<<genParticle_px->at(part)
+          <<" py: "<<genParticle_py->at(part)
+          <<" pz: "<<genParticle_pz->at(part)
+          <<endl;
+          for(int e=0; e<electron_pt->size(); ++e){
+          cout<<"Electron "<<e
+          <<" E: "<<electron_energy->at(e)
+          <<" px: "<<electron_px->at(e)
+          <<" py: "<<electron_py->at(e)
+          <<" pz: "<<electron_pz->at(e)
+          <<endl;
+          }
+          }else if(check && Z_flavor == 11){
+          cout<<"Other particle: "<<genParticle_pdgId->at(part)
+          <<" E: "<<genParticle_energy->at(part)
+          <<" px: "<<genParticle_px->at(part)
+          <<" py: "<<genParticle_py->at(part)
+          <<" pz: "<<genParticle_pz->at(part)
+          <<endl;
+          }
+          }
+        */
+    }
+    
+    
+    //cout<<"-------------"<<endl;
+    
+    if(false && W_transMass < 10){
+        cout<<" W_transMass: "<<W_transMass
+            <<" W_transMass (gen): "<<W_genTransMass<<endl
+            <<" W_pt: "<<W_pt
+            <<" W_pt (gen): "<<W_genpt<<endl
+            <<" W_eta: "<<W_eta
+            <<" W_eta (gen): "<<W_geneta<<endl
+            <<" W_phi: "<<W_phi
+            <<" W_phi (gen): "<<W_genphi<<endl
+            /*
+              <<" lep_pt: "<<lep_pt
+              <<" lep_pt (gen): "<<lep_genpt<<endl
+              <<" lep_phi: "<<lep_phi
+              <<" lep_phi (gen): "<<lep_genphi<<endl
+              */
+            <<" neu_px: "<<neu_px
+            <<" neu_px (gen): "<<neu_genpx<<endl
+            <<" neu_py: "<<neu_py
+            <<" neu_py (gen): "<<neu_genpy<<endl
+            <<" neu_pz: "<<neu_pz
+            <<" neu_pz (gen): "<<neu_genpz<<endl
+            
+            <<" W_pz (gen): "<<W_genpz<<endl;
+        cout<<" lep_pz (gen): "<<lep_genpz<<endl;
+        cout<<" lep_pz: ";
+        if(Z_flavor == 11) cout<<electron_pz->at(W_leptonIndex);
+        if(Z_flavor == 13) cout<<muon_pz->at(W_leptonIndex);
+        cout<<endl;
+        cout<<" neu minpz"<<W_neutrino_pzMinPz<<endl 
+            <<" neu maxpz"<<W_neutrino_pzMaxPz<<endl 
+            <<endl;
+    }
+
+    return 0;
+}
 
 //MET Cut
 //-----------------------------------------------------------
@@ -2171,16 +2116,16 @@ bool PassMETCut()
 
 //Pass Tight Cut
 //-----------------------------------------------------------
-bool PassTightCut(int idx)
+bool PassTightCut(int idx, int flavor)
 {
-    if(Z_flavor == 11){
+    if(flavor == 11){
         bool inEC = inEndCap(electron_ScEta->at(idx));
         if(!PassElecEtCut         (idx,PDGW)) return false;
         if(!PassElecTrkRelIsoCut  (idx,inEC)) return false;
         if(!PassElecECalRelIsoCut (idx,inEC)) return false;
         if(!PassElecHCalRelIsoCut (idx,inEC)) return false;
 
-    }else if (Z_flavor == 13){
+    }else if (flavor == 13){
         if(!PassMuonPtCut(idx, PDGW)) return false;
         if(!PassMuonCombRelIsoCut(idx)) return false;
     }
@@ -2189,8 +2134,10 @@ bool PassTightCut(int idx)
 
 void 
 UseSample(string dir, vector<InputFile> & files, 
-          float lumiPb, TFile* fout, ofstream & out){
-    Load_Input_Files(dir, files, lumiPb);
+          TFile* fout, ofstream & out){
+    if(!Load_Input_Files(dir, files)){
+        return;
+    }
     Get_Distributions(files, fout, dir, out);
 }
 
@@ -2210,33 +2157,12 @@ void ExecuteAnalysis()
  
   //containers to
   //include signal and background files
-  vector<InputFile> wprime400_files;
-  vector<InputFile> wprime400STARTUP_files;
-  vector<InputFile> wprime400_W20_files;
-  vector<InputFile> wprime400_W40_files;
-  vector<InputFile> wprime400_WDef_files;
-  vector<InputFile> wprime500_files;
-  vector<InputFile> wprime600_files;
-  vector<InputFile> wprime700_files;
-  vector<InputFile> wprime800_files;
-  vector<InputFile> wprime900_files;
-  //vector<InputFile> wzjj_files;
-  vector<InputFile> wz_files;
-  vector<InputFile> ttbar_files;
-  vector<InputFile> ttbarfast_files;
-  vector<InputFile> zz_files;
-  vector<InputFile> zgamma_files;
-  vector<InputFile> zjets_files;
-  vector<InputFile> wjets_files;
-  vector<InputFile> TC400_files;
-  vector<InputFile> test_files;
-  vector<InputFile> wmunu_files;
-  vector<InputFile> wenu_files;
 
-  //load the harcoded crosssectios
-  //add background or signal containers as needed
-  //Load_Cross_Sections(wzjj_files, wprime400_files); //Cory: took this out
- 
+  vector<InputFile> EGSep17_files;
+  vector<InputFile> MuSep17_files;
+  vector<InputFile> ElectronPrompt_files;
+  vector<InputFile> MuPromptReco_files;
+
   //keep account of events
   string outfile("event_counts.txt");
   ofstream out(outfile.c_str());
@@ -2249,33 +2175,30 @@ void ExecuteAnalysis()
   //nicely into background/signal-type directories
   //the results will be written under respective directories
   //Add as many as you need:
-  UseSample("wprime400",wprime400_files, lumiPb, fout, out);
-  //UseSample("wprime500",wprime500_files, lumiPb, fout, out);
-  //UseSample("wprime600",wprime600_files, lumiPb, fout, out);
-  //UseSample("wprime700",wprime700_files, lumiPb, fout, out);
-  //UseSample("wprime800",wprime800_files, lumiPb, fout, out);
-  //UseSample("wprime900",wprime900_files, lumiPb, fout, out);
-  UseSample("TC400", TC400_files, lumiPb, fout, out);
-  
-  UseSample("wz",wz_files, lumiPb, fout, out);
-  UseSample("ttbar",ttbar_files, lumiPb, fout, out);
-  UseSample("ttbarfast",ttbarfast_files, lumiPb, fout, out);
-  UseSample("zz",zz_files, lumiPb, fout, out);
-  UseSample("zgamma",zgamma_files, lumiPb, fout, out);
-  UseSample("zjets",zjets_files, lumiPb, fout, out);
-  UseSample("wjets",wjets_files, lumiPb, fout, out);
 
-  //UseSample("test",test_files, lumiPb, fout, out);
-  //UseSample("wenu",wenu_files, lumiPb, fout, out);
-  //UseSample("wmunu",wmunu_files, lumiPb, fout, out);
+  //UseSample("wprime400",wprime400_files, fout, out);
+  //UseSample("wprime500",wprime500_files, fout, out);
+  //UseSample("wprime600",wprime600_files, fout, out);
+  //UseSample("wprime700",wprime700_files, fout, out);
+  //UseSample("wprime800",wprime800_files, fout, out);
+  //UseSample("wprime900",wprime900_files, fout, out);
+  //UseSample("TC400", TC400_files, fout, out);
+  /*
+  UseSample("wz",wz_files, fout, out);
+  UseSample("ttbar",ttbar_files, fout, out);
+  UseSample("ttbarfast",ttbarfast_files, fout, out);
+  UseSample("zz",zz_files, fout, out);
+  UseSample("zgamma",zgamma_files, fout, out);
+  UseSample("zjets",zjets_files, fout, out);
+  UseSample("wjets",wjets_files, fout, out);
+  */
+  UseSample("EGSep17ReReco",EGSep17_files, fout, out);
+  UseSample("MuSep17ReReco",MuSep17_files, fout, out);
+  UseSample("ElectronPromptReco",ElectronPrompt_files, fout, out);
+  UseSample("MuPromptReco",MuPromptReco_files, fout, out);
 
   out.close(); 
   fout->Close();
 
 }//ExecuteAnalysis
 
-
-
-
-
-//  LocalWords:  pzMinPz

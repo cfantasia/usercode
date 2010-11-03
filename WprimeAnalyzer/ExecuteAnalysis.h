@@ -20,13 +20,11 @@
 #include "TH1F.h"
 #include "TRandom.h"
 #include "TMath.h"
-#include "TEntryList.h"
 #include <vector>
 #include <algorithm>
 #include <limits>
 #include "TLorentzVector.h"
 
-//#include "../wprime_wz_macros/Cuts.h"
 #include "Cuts.h"
 
 //gROOT->Reset();
@@ -54,7 +52,7 @@ struct InputFile{
 
 // +++++++++++++++++++location of data files and samples info
 //string top_level_dir = "/localdata/ecarrera/analyses/wprime_to_wz/root_uples/";
-string top_level_dir = "/uscms_data/d2/fantasia/CMSSW_3_5_8_patch4/src/Wprime/";
+string top_level_dir = "/uscms_data/d2/fantasia/CMSSW_3_8_4_patch2/src/RunWZ/";
 //string top_level_dir = "dcap://cmsgridftp.fnal.gov:24125/pnfs/cms/WAX/11/store/user/fantasia/3_5_7/Wprime/"; //Doesn't work
 //string top_level_dir = "dcap://cmsgridftp.fnal.gov:24125/pnfs/fnal.gov/usr/cms/WAX/11/store/user/fantasia/3_5_7/Wprime/"; //Works
 
@@ -97,7 +95,6 @@ vector<float>   *electron_py;
 vector<float>   *electron_pz;
 vector<float>   *electron_ScEt;
 vector<float>   *electron_trackIso;
-//vector<float>   *electron_caloIso;
 vector<float>   *electron_ecaloIso;
 vector<float>   *electron_hcaloIso;
 vector<float>   *electron_deltaEtaIn;
@@ -117,8 +114,6 @@ vector<float>   *muon_innerD0;
 vector<float>   *muon_innerD0Error;
 vector<float>   *muon_trackIso;
 vector<float>   *muon_caloIso;
-//vector<float>   *muon_ecaloIso;
-//vector<float>   *muon_hcaloIso;
 vector<int  >   *muon_fitType;
 vector<int  >   *muon_isGlobal;    
 vector<int  >   *muon_isTracker;    
@@ -213,11 +208,6 @@ const float lumiPb = 1000;
 
 
 // +++++++++++++++++++ Histogram Definitions
-/*
-const int Num_histo_sets = 10; //matches the number of cuts
-const string Cut_Name[] = {"HLT", "ValidWZ", "NumZs", "Muon", "Elec", 
-                           "ZMass", "Ht", "Zpt", "Wpt", "FwdJets"};
-*/
 const int Num_histo_sets = 26; //matches the number of cuts
 const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs", 
                            "ElecEta","ElecEt", 
@@ -263,7 +253,6 @@ TH1F * hElecdPhi[Num_histo_sets];
 TH1F * hElecSigmann[Num_histo_sets];
 TH1F * hElecEP[Num_histo_sets];
 TH1F * hElecHE[Num_histo_sets];
-//TH1F * hElecRelCaloIso[Num_histo_sets];
 TH1F * hElecTrkRelIso[Num_histo_sets];
 TH1F * hElecECalRelIso[Num_histo_sets];
 TH1F * hElecHCalRelIso[Num_histo_sets];
@@ -291,9 +280,6 @@ TH1F * hEffRel;
 TH1F * hEffAbs;
 TH1F * hNumEvts;
 
-TEntryList *cutlist[Num_histo_sets];
-
-
 // +++++++++++++++++++ Declare the methods that we use:
 void RecruitOrderedFiles(vector<InputFile> & files, const int& Nfiles,
                          const int& filenum_low, const int& filenum_step,
@@ -307,19 +293,18 @@ bool inBarrel(float eta);
 bool inEndCap(float eta);
 
 void Declare_Histos();
-void Declare_Lists();
 double deltaR(double eta1, double phi1, double eta2, double phi2);
 int Check_Files(unsigned Nfiles, vector<InputFile> & files);
-void Load_Input_Files(string file_desc,vector<InputFile> & files,float lumiPb);
+bool Load_Input_Files(string file_desc,vector<InputFile> & files);
 void Set_Branch_Addresses(TTree* WZtree);
 void Fill_Histos(int index, float weight);
 void saveHistos(TFile * fout, string dir);
 void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
                   const float& Nexp_evt, float Nexp_evt_cut[]);
-void Tabulate_Me(int Num_surv_cut[], int& cut_index,const float& weight,const int& evtnum);
+void Tabulate_Me(int Num_surv_cut[], int& cut_index,const float& weight);
 void Get_Distributions(vector<InputFile>& files,TFile *fout, 
                        string dir, ofstream & out);
-void UseSample(string dir, vector<InputFile> & files, float lumiPb,
+void UseSample(string dir, vector<InputFile> & files,
                TFile * fout, ofstream & out);
 void ExecuteAnalysis();
 
@@ -371,7 +356,8 @@ bool PassMuonDxyCut(int idx);
 float Calc_Ht();
 float Calc_GenWZInvMass();
 float Calc_MuonRelIso(int idx);
-bool PassTightCut(int idx);
+bool Calc_RecoCompare();
+bool PassTightCut(int idx, int flavor);
 
 
 #endif//#define _ExecuteAnalysis_h_
