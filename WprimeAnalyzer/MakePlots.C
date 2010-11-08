@@ -17,6 +17,7 @@
 #include "TStyle.h"
 #include "TLine.h"
 #include <ExecuteAnalysis.h>
+#include <ExecuteAnalysis.C>
 
 struct Sample{
     string name;
