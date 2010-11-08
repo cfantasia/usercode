@@ -10,7 +10,6 @@
 #include "TCanvas.h"
 #include "TRandom.h"
 #include "TMath.h"
-#include "TEntryList.h"
 #include "TLegend.h"
 #include "THStack.h"
 #include <vector>
@@ -37,7 +36,6 @@ struct Sample{
 
 };
 
-const int Nlists = 7;
 vector<Sample> samples;
 //gROOT->SetStyle("Plain");
 //TStyle::SetOptStat(kFALSE);
@@ -52,7 +50,14 @@ bool Straddles(float a, float b, float num);
 void
 MakePlots(){  
     TFile *fin = TFile::Open("Wprime_analysis.root");
-    
+
+    samples.push_back(Sample("EGSep17ReReco", 1, 1, 0));
+    samples.push_back(Sample("MuSep17ReReco", 2, 1, 0));
+    samples.push_back(Sample("ElectronPromptReco", 3, 1, 0));
+    samples.push_back(Sample("MuPromptReco", 4, 1, 0));
+
+
+/*    
     samples.push_back(Sample("wz", 2, 1, 0));
     //samples.push_back(Sample("ttbar", 3, 1, 0));
     samples.push_back(Sample("ttbarfast", 8, 1, 0));
@@ -62,8 +67,7 @@ MakePlots(){
     samples.push_back(Sample("wjets", 7, 1, 0));
     samples.push_back(Sample("wmunu", 8, 1, 0));
     samples.push_back(Sample("wenu", 9, 1, 0));
-    
-    
+       
     samples.push_back(Sample("wprime400", 1, 1, 0, 1));
     samples.push_back(Sample("wprime500", 1, 2, 0, 1));
     samples.push_back(Sample("wprime600", 1, 3, 0, 1));
@@ -71,7 +75,7 @@ MakePlots(){
     samples.push_back(Sample("wprime800", 1, 5, 0, 1));
     samples.push_back(Sample("wprime900", 1, 6, 0, 1));
     samples.push_back(Sample("TC400",     1, 7, 0, 1));
-
+*/
     for(size_t i=0; i<samples.size(); ++i){
         if(!fin->GetKey(samples[i].name.c_str() )){
             cout<<"Didn't find "<<samples[i].name<<". Removing."<<endl;
@@ -86,57 +90,18 @@ MakePlots(){
     vector<string> variable; 
     
     variable.push_back("hWZInvMass");
-    variable.push_back("hGenWZInvMass");//1
     variable.push_back("hWZTransMass");
-    variable.push_back("hHt");       //3
+    variable.push_back("hHt");       //2
     variable.push_back("hWpt");      
-    variable.push_back("hZpt");      //5
+    variable.push_back("hZpt");      //4
     variable.push_back("hMET");          
-    variable.push_back("hZmass");      //7
-    variable.push_back("hZeemass");    //8  
-    variable.push_back("hZmumumass");     //9 
+    variable.push_back("hZmass");      //6
+    variable.push_back("hZeemass");      
+    variable.push_back("hZmumumass");  //8    
     variable.push_back("hWTransmass");      
-    variable.push_back("hWenuTransmass");  //11    
+    variable.push_back("hWenuTransmass");  //10    
     variable.push_back("hWmunuTransmass");      
-    variable.push_back("hWDpt");      //13
-    variable.push_back("hWDphi");      
-    variable.push_back("hWDeta");      //15
-    variable.push_back("hWDr");      
-    variable.push_back("hWmass");      
-    variable.push_back("hZeemassTT");
-    variable.push_back("hZeemassTF");
-    variable.push_back("hZmumumassTT");
-    variable.push_back("hZmumumassTF");
-    
-    variable.push_back("hElecTrkRelIso"); 
-    variable.push_back("hElecECalRelIso");
-    variable.push_back("hElecHCalRelIso");
-    variable.push_back("hElecEP");
-    variable.push_back("hMuonRelIso");
-    variable.push_back("hMuonSip");
 
-    variable.push_back("hGenWTransmassDiff");
-    /*
-    variable.push_back("hElecPt");
-    variable.push_back("hElecEt");
-    variable.push_back("hElecTrkRelIso");
-    variable.push_back("hElecECalRelIso");
-    variable.push_back("hElecHCalRelIso");
-    variable.push_back("hElecSigmaEtaEta");
-    variable.push_back("hElecDPhi");
-    variable.push_back("hElecDEta");
-    variable.push_back("hElecHOverE");
-    //variable.push_back("hElecEP");
-
-    variable.push_back("hMuonPt" );       
-    variable.push_back("hMuonDxy");       
-    variable.push_back("hMuonNormChi2");  
-    variable.push_back("hMuonNPix");      
-    variable.push_back("hMuonNTrk");      
-    variable.push_back("hMuonStation");   
-    variable.push_back("hMuonSip");   
-    */  
-    
     vector<string> selection_variable;  vector<bool> mincut;
     selection_variable.push_back("hElecEt");          mincut.push_back(true);
     //selection_variable.push_back("hElecTrkRelIso");   mincut.push_back(false);
@@ -166,7 +131,7 @@ MakePlots(){
     for(int i=0;i<size;++i){
         for(int j=0;j<Num_histo_sets;++j){
             string title = variable[i] + "_" + Cut_Name[j];
-            DrawandSave(fin,title,i>=13,i==7 || i==8 || i==9, 0);
+            DrawandSave(fin,title,i>=13,0, 0);
         }
     }
 
@@ -178,35 +143,6 @@ MakePlots(){
     c1.Print("Summary.pdf]", "pdf"); 
     c1.Print("Selection.pdf]", "pdf"); 
 
-    //for(int i=0;i<3;++i) PlotEff(fin,efftitle[i]);
-
-    /*
-    int arraycuts[] = {0,1,2,3,4};
-    vector<int> cuts(arraycuts, arraycuts + sizeof(arraycuts) / sizeof(int) );
-
-    TEntryList* Slist[Nlists];
-    TEntryList* Blist[Nlists];
-    GetLists(fin,Slist,Blist);
-
-    vector<TEntryList*> Slistvec;
-    vector<TEntryList*> Blistvec;
-
-    //Which lists to use?
-    int Nlistused = cuts.size();
-    for(int i=0; i<Nlistused; ++i){
-		int entry = cuts.at(i);
-		Slistvec.push_back(Slist[entry]);
-		Blistvec.push_back(Blist[entry]);
-    }
-
-    TEntryList* SMergedlist = ListAnd(Slistvec);
-    TEntryList* BMergedlist = ListAnd(Blistvec);
-
-    for(int i=0; i<2; ++i){
-		PlotList(SMergedlist,BMergedlist,variable[i]);
-    }
-	*/
-  
 }
 
 void
