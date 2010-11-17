@@ -321,6 +321,13 @@ bool Load_Input_Files(string file_desc,
           RecruitOrderedFiles(files,Nfiles,0,0,
                               filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"interesting")){
+          Nfiles = 1;
+          files.push_back(InputFile()); 
+          const string filename = "Interesting_WZ.root";
+          RecruitOrderedFiles(files,Nfiles,0,0,
+                              filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"EGSep17ReReco")){
           Nfiles = 1;
           files.push_back(InputFile()); 
@@ -338,14 +345,14 @@ bool Load_Input_Files(string file_desc,
   else if (!strcmp(file_desc.c_str(),"ElectronPromptReco")){
           Nfiles = 1;
           files.push_back(InputFile()); 
-          const string filename = "TrileptonPatTuple-ElectronPromptReco-v02_WZ.root";
+          const string filename = "TrileptonPatTuple-ElectronPromptReco_WZ.root";
           RecruitOrderedFiles(files,Nfiles,0,0,
                               filename,"",file_desc);
   } 
   else if (!strcmp(file_desc.c_str(),"MuPromptReco")){
           Nfiles = 1;
           files.push_back(InputFile()); 
-          const string filename = "TrileptonPatTuple-MuPromptReco-v02_WZ.root";
+          const string filename = "TrileptonPatTuple-MuPromptReco_WZ.root";
           RecruitOrderedFiles(files,Nfiles,0,0,
                               filename,"",file_desc);
   } 
@@ -445,10 +452,43 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("eventID", &eventID);
     WZtree->SetBranchAddress("lumiBlock", &lumiBlock);
 
+    WZtree->SetBranchAddress("pass_HLT_Photon10_Cleaned_L1R", &pass_HLT_Photon10_Cleaned_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Photon10_L1R", &pass_HLT_Photon10_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Photon15_Cleaned_L1R", &pass_HLT_Photon15_Cleaned_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Photon15_L1R", &pass_HLT_Photon15_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R", &pass_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele10_LW_EleId_L1R", &pass_HLT_Ele10_LW_EleId_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele10_SW_EleId_L1R", &pass_HLT_Ele10_SW_EleId_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele10_SW_L1R", &pass_HLT_Ele10_SW_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele12_SW_TightEleIdIsol_L1R", &pass_HLT_Ele12_SW_TightEleIdIsol_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1", &pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1);
+    WZtree->SetBranchAddress("pass_HLT_Ele15_LW_L1R", &pass_HLT_Ele15_LW_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele15_SW_L1R", &pass_HLT_Ele15_SW_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2", &pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2);
+    WZtree->SetBranchAddress("pass_HLT_Mu11", &pass_HLT_Mu11);
+    WZtree->SetBranchAddress("pass_HLT_Mu15_v1", &pass_HLT_Mu15_v1);
     WZtree->SetBranchAddress("pass_HLT_Mu3", &pass_HLT_Mu3);
     WZtree->SetBranchAddress("pass_HLT_Mu5", &pass_HLT_Mu5);
     WZtree->SetBranchAddress("pass_HLT_Mu9", &pass_HLT_Mu9);
-    WZtree->SetBranchAddress("pass_HLT_Photon10_L1R", &pass_HLT_Photon10_L1R);
+
+    WZtree->SetBranchAddress("prescale_HLT_Photon10_Cleaned_L1R", &prescale_HLT_Photon10_Cleaned_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Photon10_L1R", &prescale_HLT_Photon10_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Photon15_Cleaned_L1R", &prescale_HLT_Photon15_Cleaned_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Photon15_L1R", &prescale_HLT_Photon15_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R", &prescale_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele10_LW_EleId_L1R", &prescale_HLT_Ele10_LW_EleId_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele10_SW_EleId_L1R", &prescale_HLT_Ele10_SW_EleId_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele10_SW_L1R", &prescale_HLT_Ele10_SW_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele12_SW_TightEleIdIsol_L1R", &prescale_HLT_Ele12_SW_TightEleIdIsol_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1", &prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1);
+    WZtree->SetBranchAddress("prescale_HLT_Ele15_LW_L1R", &prescale_HLT_Ele15_LW_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele15_SW_L1R", &prescale_HLT_Ele15_SW_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2", &prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2);
+    WZtree->SetBranchAddress("prescale_HLT_Mu11", &prescale_HLT_Mu11);
+    WZtree->SetBranchAddress("prescale_HLT_Mu15_v1", &prescale_HLT_Mu15_v1);
+    WZtree->SetBranchAddress("prescale_HLT_Mu3", &prescale_HLT_Mu3);
+    WZtree->SetBranchAddress("prescale_HLT_Mu5", &prescale_HLT_Mu5);
+    WZtree->SetBranchAddress("prescale_HLT_Mu9", &prescale_HLT_Mu9);
 
     WZtree->SetBranchAddress("pfW_flavor",&W_flavor);
     WZtree->SetBranchAddress("Z_flavor",&Z_flavor);
@@ -462,6 +502,7 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("met_phi",&met_phi);
     WZtree->SetBranchAddress("met_et",&met_et);
     WZtree->SetBranchAddress("pfMet_et",&pfMet_et);
+    WZtree->SetBranchAddress("tcMet_et", &tcMet_et);
     WZtree->SetBranchAddress("pfWZ_invMassMinPz",&WZ_invMassMinPz);
     WZtree->SetBranchAddress("pfW_neutrino_pzMinPz",&W_neutrino_pzMinPz);
     WZtree->SetBranchAddress("pfW_neutrino_pzMaxPz",&W_neutrino_pzMaxPz);
@@ -539,7 +580,6 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("genParticle_px", &genParticle_px);
     WZtree->SetBranchAddress("genParticle_py", &genParticle_py);
     WZtree->SetBranchAddress("genParticle_pz", &genParticle_pz);
-
 
     WZtree->SetBranchAddress("electronGenMother_pdgId", &electronGenMother_pdgId);
     WZtree->SetBranchAddress("electronGenMother_energy", &electronGenMother_energy);
@@ -629,11 +669,11 @@ float Calc_GenWZInvMass()
 void PrintEvent(){
     cout<<"run #: "<<runNumber
         <<" lumi: "<<lumiBlock
-        <<" eventID: "<<eventID
-        <<" Z_flavor "<<Z_flavor
-        <<" Z_mass "<<Z_mass
-        <<" W_flavor "<<W_flavor
-        <<" W_transMass "<<W_transMass
+        <<" eventID: "<<eventID<<endl
+        <<" Z_flavor: "<<Z_flavor
+        <<" Z_mass: "<<Z_mass
+        <<" W_flavor: "<<W_flavor
+        <<" W_transMass: "<<W_transMass
         <<endl;
 
     if(Z_flavor == 11){
@@ -649,17 +689,19 @@ void PrintEvent(){
     if(W_flavor == 11){
         cout<<" W_electron_pt "<<electron_pt->at(W_leptonIndex);
     }else{
-        cout<<" W_electron_pt "<<muon_pt->at(W_leptonIndex);
+        cout<<" W_muon_pt "<<muon_pt->at(W_leptonIndex);
     }
     
     
     cout<<" pfMet_et: "<<pfMet_et
+        <<" tcMet_et: "<<tcMet_et
         <<" met_et: "<<met_et<<endl
         <<" Ht: "<<Ht
         <<" Zpt: "<<Z_pt
-        <<" Wpt: "<<W_pt
-        <<" WZ Mass: "<<WZ_invMassMinPz
-
+        <<" Wpt: "<<W_pt<<endl
+        <<" WZ Mass: "<<WZ_invMassMinPz<<endl
+        <<" # Elec: "<<electron_pt->size()
+        <<" # Muon: "<<muon_pt->size()
         <<endl<<endl;
     return;
 }
