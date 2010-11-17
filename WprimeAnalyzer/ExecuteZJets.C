@@ -585,13 +585,6 @@ void Get_Distributions(vector<InputFile>& files,
       //if(!PassTriggersCut()) continue; //Cory
       Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      //These are used to look at cut eff.
-      //if(Z_flavor != PDGELEC || W_flavor != PDGMUON) continue;
-      //if(Z_flavor != PDGMUON || W_flavor != PDGELEC) continue;
-      //if(!inBarrel(electron_ScEta->at(W_leptonIndex))) continue;
-      //if(!inEndCap(electron_ScEta->at(W_leptonIndex))) continue;
-
-      //if(!PassValidWandZCut()) continue; //Cory
       if(!Z_flavor) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);
       
@@ -607,10 +600,6 @@ void Get_Distributions(vector<InputFile>& files,
           idxs.push_back(Z_leptonIndex2);
           inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex2)));
       }     
-      if (W_flavor == PDGELEC){
-          //idxs.push_back(W_leptonIndex); 
-          //inEC.push_back(inEndCap(electron_ScEta->at(W_leptonIndex)));
-      }
       
       for(size_t lep=0; lep != idxs.size(); ++lep) 
           if(!PassElecEtaCut        (idxs[lep])) pass = false;
@@ -646,9 +635,6 @@ void Get_Distributions(vector<InputFile>& files,
       if(Z_flavor == PDGMUON ){
           idxs.push_back(Z_leptonIndex1); 
           idxs.push_back(Z_leptonIndex2);
-      }
-      if (W_flavor == PDGMUON){
-          //idxs.push_back(W_leptonIndex); 
       }
       
       for(size_t lep=0; lep != idxs.size(); ++lep) 
@@ -696,24 +682,6 @@ void Get_Distributions(vector<InputFile>& files,
       if(!pass) continue; 
       Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      ////Other Cuts/////////////
-      if(!PassZDecayCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      //if(!PassWDecayCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);      
-
-      if(!PassHtCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      if(!PassZptCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      //if(!PassWptCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      //if(!PassMETCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
 
       Tabulate_Me(Num_surv_cut,cut_index,weight); //After All Cuts
       
@@ -763,6 +731,11 @@ void ExecuteZJets()
   vector<InputFile> MuSep17_files;
   vector<InputFile> ElectronPrompt_files;
   vector<InputFile> MuPromptReco_files;
+
+  vector<InputFile> EGSep17_Dilepton_files;
+  vector<InputFile> MuSep17_Dilepton_files;
+  vector<InputFile> ElectronPrompt_Dilepton_files;
+  vector<InputFile> MuPromptReco_Dilepton_files;
  
   //keep account of events
   string outfile("event_counts_Zjets.txt");
@@ -777,10 +750,15 @@ void ExecuteZJets()
   //the results will be written under respective directories
   //Add as many as you need:
 
-  UseSample("EGSep17ReReco_Dilepton",EGSep17_files, fout, out);
-  UseSample("MuSep17ReReco_Dilepton",MuSep17_files, fout, out);
-  UseSample("ElectronPromptReco_Dilepton",ElectronPrompt_files, fout, out);
-  UseSample("MuPromptReco_Dilepton",MuPromptReco_files, fout, out);
+  UseSample("EGSep17ReReco",EGSep17_files, fout, out);
+  UseSample("MuSep17ReReco",MuSep17_files, fout, out);
+  UseSample("ElectronPromptReco",ElectronPrompt_files, fout, out);
+  UseSample("MuPromptReco",MuPromptReco_files, fout, out);
+
+  UseSample("EGSep17ReReco_Dilepton",EGSep17_Dilepton_files, fout, out);
+  UseSample("MuSep17ReReco_Dilepton",MuSep17_Dilepton_files, fout, out);
+  UseSample("ElectronPromptReco_Dilepton",ElectronPrompt_Dilepton_files, fout, out);
+  UseSample("MuPromptReco_Dilepton",MuPromptReco_Dilepton_files, fout, out);
 
   out.close(); 
   fout->Close();

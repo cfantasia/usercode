@@ -701,6 +701,8 @@ void ExecuteAnalysis()
   //containers to
   //include signal and background files
 
+  vector<InputFile> Interesting_files;
+
   vector<InputFile> EGSep17_files;
   vector<InputFile> MuSep17_files;
   vector<InputFile> ElectronPrompt_files;
@@ -735,6 +737,8 @@ void ExecuteAnalysis()
   UseSample("zjets",zjets_files, fout, out);
   UseSample("wjets",wjets_files, fout, out);
   */
+  //UseSample("interesting",Interesting_files, fout, out);
+
   UseSample("EGSep17ReReco",EGSep17_files, fout, out);
   UseSample("MuSep17ReReco",MuSep17_files, fout, out);
   UseSample("ElectronPromptReco",ElectronPrompt_files, fout, out);

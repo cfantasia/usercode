@@ -18,8 +18,8 @@ bool TF;
 /////////////////////////
 
 // +++++++++++++++++++ Histogram Definitions
-const int Num_histo_sets = 26; //matches the number of cuts
-const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs", 
+const int Num_histo_sets = 20; //matches the number of cuts
+const string Cut_Name[] = {"NoCuts", "HLT", "ValidZ", "NumZs", 
                            "ElecEta","ElecEt", 
                            "ElecSigmaEtaEta", "ElecDPhi",
                            "ElecDEta", "ElecHOverE",
@@ -28,8 +28,6 @@ const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs",
                            "MuonNormChi2", "MuonNPix",
                            "MuonNTrk", "MuonStation",
                            "MuonHitsUsed",
-                           "Zdecay", "Wdecay", 
-                           "Ht", "Zpt", "Wpt", "MET",
                            "AllCuts"};
 TH1F * hWZInvMass[Num_histo_sets];
 TH1F * hWZTransMass[Num_histo_sets];

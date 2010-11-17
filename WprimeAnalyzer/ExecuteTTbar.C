@@ -211,8 +211,6 @@ bool PassFakeLeptonTagCut()
 bool PassFakeLeptonProbeCut()
 {
     
-    cout<<"Testing other lepton!!!"<<endl;
-
     if(W_flavor == PDGELEC){
         return PassTightCut(0, PDGMUON); //Check the other lepton
     }else if(W_flavor == PDGMUON){

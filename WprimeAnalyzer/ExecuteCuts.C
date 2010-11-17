@@ -11,11 +11,44 @@ bool PassTriggersCut()
 //-----------------------------------------------------------
     if(debugme) cout<<"Trigger requirements"<<endl;
 
-    if( !(pass_HLT_Photon10_L1R || pass_HLT_Mu9) ) return false;
-
-    return true;
+    return ( PassMuonTriggerCut() || PassElecTriggerCut() );
 
 }//--- PassTriggersCut()
+
+bool PassElecTriggerCut()
+{
+//-----------------------------------------------------------
+    if(debugme) cout<<"Electron Trigger requirements"<<endl;
+
+    return ((prescale_HLT_Photon10_L1R == 1                     && pass_HLT_Photon10_L1R) ||
+            (prescale_HLT_Photon10_Cleaned_L1R == 1             && pass_HLT_Photon10_Cleaned_L1R) ||
+            (prescale_HLT_Photon15_L1R == 1                     && pass_HLT_Photon15_L1R) ||
+            (prescale_HLT_Photon15_Cleaned_L1R == 1             && pass_HLT_Photon15_Cleaned_L1R) ||
+            (prescale_HLT_Ele10_LW_EleId_L1R == 1               && pass_HLT_Ele10_LW_EleId_L1R ) ||
+            (prescale_HLT_Ele10_SW_EleId_L1R == 1               && pass_HLT_Ele10_SW_EleId_L1R) ||
+            (prescale_HLT_Ele10_SW_L1R == 1                     && pass_HLT_Ele10_SW_L1R) ||
+            (prescale_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R == 1 && pass_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R ) ||
+            (prescale_HLT_Ele12_SW_TightEleIdIsol_L1R == 1      && pass_HLT_Ele12_SW_TightEleIdIsol_L1R ) ||
+            (prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1 == 1    && pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1  ) ||
+            (prescale_HLT_Ele15_LW_L1R == 1                     && pass_HLT_Ele15_LW_L1R ) ||
+            (prescale_HLT_Ele15_SW_L1R == 1                     && pass_HLT_Ele15_SW_L1R ) ||
+            (prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2 == 1    && pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2 )
+        );
+
+
+}//--- PassElecTriggersCut()
+
+bool PassMuonTriggerCut()
+{
+//-----------------------------------------------------------
+    if(debugme) cout<<"Muon Trigger requirements"<<endl;
+
+    return ((prescale_HLT_Mu9     == 1 && pass_HLT_Mu9)     ||
+            (prescale_HLT_Mu11    == 1 && pass_HLT_Mu11)    ||
+            (prescale_HLT_Mu15_v1 == 1 && pass_HLT_Mu15_v1)
+        );
+
+}//--- PassMuonTriggersCut
 
 //Check if there are valid W and Z particles in the event
 //-----------------------------------------------------------
@@ -27,8 +60,8 @@ bool PassValidWandZCut()
 //Cory: We can expand this (maybe in lepton cuts)
 //Cory: Should this be here?
     bool has_valid_W_and_Z = Z_flavor 
-        && W_flavor
-        && WZ_invMassMinPz>0; 
+        && W_flavor;
+//        && WZ_invMassMinPz>0; 
     return has_valid_W_and_Z;
     
 }//--- NotValidWandZCut

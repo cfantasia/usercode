@@ -5,6 +5,8 @@
 
 //methods for the cuts
 bool PassTriggersCut();
+bool PassMuonTriggerCut();
+bool PassElecTriggerCut();
 bool PassValidWandZCut();
 bool PassNumberOfZsCut();
 bool PassWptCut();
