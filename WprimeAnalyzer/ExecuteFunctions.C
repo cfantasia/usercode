@@ -58,22 +58,6 @@ Declare_Histo(string name, string title, int nbins, float min, float max){
     return hist;
 }
 
-//See if particle(only Electron??) is in Barrel
-//--------------------------------------------------------------
-bool inBarrel(float eta)
-{
-    return (fabs(eta) < maxElecEtaBarrel);
-    
-}//InBarrel
-
-bool inEndCap(float eta)
-{
-    float abs_eta = fabs(eta);
-    return (abs_eta > minElecEtaEndcap && abs_eta < maxElecEta);
-          
-}//InEndCap
-
-
 //Just a function to calculate DeltaR
 //--------------------------------------------------------------
 double deltaR(double eta1, double phi1, double eta2, double phi2)
@@ -83,7 +67,6 @@ double deltaR(double eta1, double phi1, double eta2, double phi2)
   double dphi = deltaPhi(phi1, phi2);
   return sqrt(deta * deta + dphi * dphi);
 }
-
 
 //check if the input files are there
 //----------------------------------------------------------
@@ -624,48 +607,6 @@ UseSample(string dir, vector<InputFile> & files,
     Get_Distributions(files, fout, dir, out);
 }
 
-float Calc_GenWZInvMass()
-{
-    int pdg=0, pdgM=0;
-    int idZ=-1;
-    int idW=-1;    
-    int size = genMother_pdgId->size();
-    for(int i=0; i != size; i++){
-        pdg = abs(genParticle_pdgId->at(i));
-        pdgM = abs(genMother_pdgId->at(i));
-        if (pdgM == PDGWPRIME){
-            return genMother_mass->at(i);
-        }
-        if( pdg == PDGZ && pdgM != PDGZ){
-            idZ = i;
-        }
-        if( pdg == PDGW && pdgM != PDGW){
-            idW = i;
-        }
-        
-        if( abs(genParticle_pdgId->at(i)) == PDGZ && pdg > 50){
-            cout<<"Mother of Z is "<<pdg<<endl;
-        }
-    }
-    if(idZ != -1 && idW != -1){
-        float E = genParticle_energy->at(idZ)+genParticle_energy->at(idW);
-        float PX = genParticle_px->at(idZ)+genParticle_px->at(idW);
-        float PY = genParticle_py->at(idZ)+genParticle_py->at(idW);
-        float PZ = genParticle_pz->at(idZ)+genParticle_pz->at(idW);
-        float m = sqrt(E*E - PX*PX - PY*PY - PZ*PZ);
-        /*
-          cout<<"E:"<<E
-          <<" PX:"<<PX
-          <<" PY:"<<PY
-          <<" PZ:"<<PZ
-          <<" Mass calc is "<<m<<endl;
-        */
-        return m;
-             
-    }
-    return -1;
-    
-}//--- Calc Gen Inv Mass
 void PrintEvent(){
     cout<<"run #: "<<runNumber
         <<" lumi: "<<lumiBlock

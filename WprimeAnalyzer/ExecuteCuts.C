@@ -1,7 +1,7 @@
 #ifndef _ExecuteCuts_cxx_
 #define _ExecuteCuts_cxx_
 
-#include <ExecuteCuts.h>
+#include "ExecuteCuts.h"
 
 /////////////////Cuts///////////////////////
 //Trigger requirements
@@ -166,20 +166,6 @@ PassZmumuCut(){
     }
     return true;
 }
-
-/////////////////////////////////////////
-//Check Electron Pt Cut
-//-----------------------------------------------------------
-bool PassElecPtCut(int idx,int parent){
-//-----------------------------------------------------------
-    if(debugme) cout<<"Check Electron Pt Cut"<<endl;
-    if      (parent == PDGW){
-        return (electron_pt->at(idx) > minWenuPt);
-    }else if(parent == PDGZ){
-        return (electron_pt->at(idx) > minZeePt);
-    }
-    return false;
-}//--- PassElecPtCut
 
 bool PassElecEtCut(int idx,int parent){
 //-----------------------------------------------------------
@@ -443,5 +429,60 @@ bool PassTightCut(int idx, int flavor)
     }
     return true;
 }//--- Tight Cut
+
+float Calc_GenWZInvMass()
+{
+    int pdg=0, pdgM=0;
+    int idZ=-1;
+    int idW=-1;    
+    int size = genMother_pdgId->size();
+    for(int i=0; i != size; i++){
+        pdg = abs(genParticle_pdgId->at(i));
+        pdgM = abs(genMother_pdgId->at(i));
+        if (pdgM == PDGWPRIME){
+            return genMother_mass->at(i);
+        }
+        if( pdg == PDGZ && pdgM != PDGZ){
+            idZ = i;
+        }
+        if( pdg == PDGW && pdgM != PDGW){
+            idW = i;
+        }
+        
+        if( abs(genParticle_pdgId->at(i)) == PDGZ && pdg > 50){
+            cout<<"Mother of Z is "<<pdg<<endl;
+        }
+    }
+    if(idZ != -1 && idW != -1){
+        float E = genParticle_energy->at(idZ)+genParticle_energy->at(idW);
+        float PX = genParticle_px->at(idZ)+genParticle_px->at(idW);
+        float PY = genParticle_py->at(idZ)+genParticle_py->at(idW);
+        float PZ = genParticle_pz->at(idZ)+genParticle_pz->at(idW);
+        float m = sqrt(E*E - PX*PX - PY*PY - PZ*PZ);
+        /*
+          cout<<"E:"<<E
+          <<" PX:"<<PX
+          <<" PY:"<<PY
+          <<" PZ:"<<PZ
+          <<" Mass calc is "<<m<<endl;
+        */
+        return m;
+             
+    }
+    return -1;
+    
+}//--- Calc Gen Inv Mass
+
+//See if Electron is in Barrel
+bool inBarrel(float eta)
+{
+    return (fabs(eta) < maxElecEtaBarrel);
+}//InBarrel
+
+bool inEndCap(float eta)
+{
+    float abs_eta = fabs(eta);
+    return (abs_eta > minElecEtaEndcap && abs_eta < maxElecEta);         
+}//InEndCap
 
 #endif//#define _ExecuteCuts_h_

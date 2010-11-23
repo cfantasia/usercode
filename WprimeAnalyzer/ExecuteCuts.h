@@ -3,6 +3,76 @@
 
 #include "ExecuteFunctions.h"
 
+// ++++++++++++++++++++ Consts
+const float NOCUT = 9e9;
+const double PI    = 2.0 * acos(0.);
+const double TWOPI = 2.0 * PI;
+
+const int PDGMUON = 13;
+const int PDGELEC = 11;
+const int PDGW = 24;
+const int PDGZ = 23;
+const int PDGWPRIME = 34;
+
+const float PDGZMASS = 91.1876; //GeV
+
+// +++++++++++++++++++General Cut values
+const int maxNumZs = 1;
+const int minNumLeptons = 3;
+const float minMET = 50;
+
+// +++++++++++++++++++Ht Cuts
+const float minHt = 160;
+const float minHtMet = 0; //Not Used
+
+// +++++++++++++++++++W Cuts
+const float minWpt = 90;
+
+// +++++++++++++++++++Z Cuts
+const float minZpt = 90;
+const float minZmass = 60;
+const float maxZmass = 120;
+
+// +++++++++++++++++++Electron General Cuts
+const float maxElecEtaBarrel = 1.4442;
+const float minElecEtaEndcap = 1.56;
+const float maxElecEta = 2.5;
+
+const float minElecEt = 10;
+const float maxElecSigmaEtaEta[] = {0.02 ,0.04 }; //{0.01 ,0.03 };
+const float maxElecDeltaPhiIn [] = {0.08 ,0.07 }; //{0.08 ,0.7  };
+const float maxElecDeltaEtaIn [] = {0.010,0.02 }; //{0.007,0.01 };
+const float maxElecHOverE     [] = {0.14 ,0.12 }; //{0.15 ,0.07 };
+
+// +++++++++++++++++++Muon General Cuts
+const int cutMuonIsGlobal = true;
+const float maxMuonEta = 2.5;
+const float minMuonPt = 10.;
+const float maxMuonDxy = 0.1;
+const float maxMuonNormChi2 = 5.;
+const int minMuonNPixHit = 1;
+const int minMuonNTrkHit = 12;
+const int minMuonStations = 1;
+const int minMuonHitsUsed = 4;
+
+// +++++++++++++++++++Wmunu
+const int cutWmunuIsGlobal = true;
+const int cutWmunuIsTracker= true;
+
+const float minWmunuMuonPt = 20.;
+const float maxWmunuCombRelIso = 0.15;
+
+const float minZmumuMuonPt = 20.;
+
+// +++++++++++++++++++Wenu
+
+const float minWenuEt = 20;
+const float maxWenuTrkRelIso[]    = {0.30 ,0.20}; //1.70, 1.01
+const float maxWenuECalRelIso[]   = {0.20 ,0.15}; //0.49, 0.24
+const float maxWenuHCalRelIso[]   = {0.15 ,0.12}; //0.21, 0.12
+
+const float minZeeEt = 20;
+
 //methods for the cuts
 bool PassTriggersCut();
 bool PassMuonTriggerCut();
@@ -24,7 +94,6 @@ bool PassZmumuCut();
 bool PassZmassCut();
 
 bool PassElecEtaCut(int idx);
-bool PassElecPtCut(int idx,int parent);
 bool PassElecEtCut(int idx,int parent);
 bool PassElecTrkRelIsoCut(int idx,bool inEC);
 bool PassElecECalRelIsoCut(int idx,bool inEC);
@@ -49,5 +118,9 @@ bool PassTightCut(int idx, int flavor);
 
 float Calc_Ht();
 float Calc_MuonRelIso(int idx);
+float Calc_GenWZInvMass();
+
+bool inBarrel(float eta);
+bool inEndCap(float eta);
 
 #endif//#define _ExecuteCuts_h_

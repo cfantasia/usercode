@@ -17,7 +17,7 @@
 #include <limits>
 #include "TLorentzVector.h"
 
-#include "Cuts.h"
+#include "ExecuteCuts.h"
 
 using namespace std;
 
@@ -50,8 +50,6 @@ string convertFloatToStr(int number);
 void getEff(float & eff, float & deff, float Num, float Denom);
 double deltaEta(double eta1, double eta2);
 double deltaPhi(double phi1, double phi2);
-bool inBarrel(float eta);
-bool inEndCap(float eta);
 
 void Declare_Histos();
 double deltaR(double eta1, double phi1, double eta2, double phi2);
@@ -68,7 +66,6 @@ void Get_Distributions(vector<InputFile>& files,TFile *fout,
 void UseSample(string dir, vector<InputFile> & files,
                TFile * fout, ofstream & out);
 
-float Calc_GenWZInvMass();
 void PrintEvent();
 
 Int_t           eventID;
@@ -217,8 +214,6 @@ vector<float>   *muonGenMother_py;
 vector<float>   *muonGenMother_pz;
 
 // +++++++++++++++++++useful constants
-const double PI    = 2.0 * acos(0.);
-const double TWOPI = 2.0 * PI;
 const bool debugme = false; //print stuff if active
 
 // +++++++++++++++++++
