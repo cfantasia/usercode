@@ -13,11 +13,12 @@
 #include <ExecuteCuts.C>
 
 // +++++++++++++++++++ Histogram Definitions
-const int Num_histo_sets = 4; //matches the number of cuts
 const string Cut_Name[] = {"NoCuts", 
                            "Tag", 
                            "Probe", 
                            "AllCuts"};
+const vector<string> Cut(Cut_Name, Cut_Name + sizeof(Cut_Name) / sizeof(string) );
+const int NCuts = sizeof(Cut_Name) / sizeof(string);//works
 
 // +++++++++++++++++++ Declare the methods that we use:
 void ExecuteTTbar();

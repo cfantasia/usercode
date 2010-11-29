@@ -379,7 +379,7 @@ bool Load_Input_Files(string file_desc,
   //and the number of total events 
   for(int i = 0; i != Nfiles; ++i){ // loop over input files
       string pathname = files[i].pathname;
-      TFile * file = TFile::Open(pathname.c_str());
+      TFile * file = TFile::Open(pathname.c_str(), "read");
       if(!file || !(file->IsOpen())){
           cerr <<" *** Missing file: "<< pathname << " !!! "<<endl; 
           return false;
@@ -447,12 +447,17 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1", &pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1);
     WZtree->SetBranchAddress("pass_HLT_Ele15_LW_L1R", &pass_HLT_Ele15_LW_L1R);
     WZtree->SetBranchAddress("pass_HLT_Ele15_SW_L1R", &pass_HLT_Ele15_SW_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele15_SW_CaloEleId_L1R", &pass_HLT_Ele15_SW_CaloEleId_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele17_SW_CaloEleId_L1R",  &pass_HLT_Ele17_SW_CaloEleId_L1R);
+    WZtree->SetBranchAddress("pass_HLT_Ele17_SW_TightEleId_L1R", &pass_HLT_Ele17_SW_CaloEleId_L1R);
     WZtree->SetBranchAddress("pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2", &pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2);
-    WZtree->SetBranchAddress("pass_HLT_Mu11", &pass_HLT_Mu11);
-    WZtree->SetBranchAddress("pass_HLT_Mu15_v1", &pass_HLT_Mu15_v1);
+    WZtree->SetBranchAddress("pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3", &pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3);
+
     WZtree->SetBranchAddress("pass_HLT_Mu3", &pass_HLT_Mu3);
     WZtree->SetBranchAddress("pass_HLT_Mu5", &pass_HLT_Mu5);
     WZtree->SetBranchAddress("pass_HLT_Mu9", &pass_HLT_Mu9);
+    WZtree->SetBranchAddress("pass_HLT_Mu11", &pass_HLT_Mu11);
+    WZtree->SetBranchAddress("pass_HLT_Mu15_v1", &pass_HLT_Mu15_v1);
 
     WZtree->SetBranchAddress("prescale_HLT_Photon10_Cleaned_L1R", &prescale_HLT_Photon10_Cleaned_L1R);
     WZtree->SetBranchAddress("prescale_HLT_Photon10_L1R", &prescale_HLT_Photon10_L1R);
@@ -466,12 +471,17 @@ void Set_Branch_Addresses(TTree* WZtree)
     WZtree->SetBranchAddress("prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1", &prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1);
     WZtree->SetBranchAddress("prescale_HLT_Ele15_LW_L1R", &prescale_HLT_Ele15_LW_L1R);
     WZtree->SetBranchAddress("prescale_HLT_Ele15_SW_L1R", &prescale_HLT_Ele15_SW_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele15_SW_CaloEleId_L1R", &prescale_HLT_Ele15_SW_CaloEleId_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele17_SW_CaloEleId_L1R",  &prescale_HLT_Ele17_SW_CaloEleId_L1R);
+    WZtree->SetBranchAddress("prescale_HLT_Ele17_SW_TightEleId_L1R", &prescale_HLT_Ele17_SW_CaloEleId_L1R);
     WZtree->SetBranchAddress("prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2", &prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2);
-    WZtree->SetBranchAddress("prescale_HLT_Mu11", &prescale_HLT_Mu11);
-    WZtree->SetBranchAddress("prescale_HLT_Mu15_v1", &prescale_HLT_Mu15_v1);
+    WZtree->SetBranchAddress("prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3", &prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3);
+
     WZtree->SetBranchAddress("prescale_HLT_Mu3", &prescale_HLT_Mu3);
     WZtree->SetBranchAddress("prescale_HLT_Mu5", &prescale_HLT_Mu5);
     WZtree->SetBranchAddress("prescale_HLT_Mu9", &prescale_HLT_Mu9);
+    WZtree->SetBranchAddress("prescale_HLT_Mu11", &prescale_HLT_Mu11);
+    WZtree->SetBranchAddress("prescale_HLT_Mu15_v1", &prescale_HLT_Mu15_v1);
 
     WZtree->SetBranchAddress("pfW_flavor",&W_flavor);
     WZtree->SetBranchAddress("Z_flavor",&Z_flavor);

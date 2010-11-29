@@ -26,12 +26,24 @@ const float minHt = 160;
 const float minHtMet = 0; //Not Used
 
 // +++++++++++++++++++W Cuts
+const float minWtransMass = 20;
 const float minWpt = 90;
+
+const float minWmunuMuonPt = 20.;
+const float maxWmunuCombRelIso = 0.15;
+
+const float minWenuEt = 20.;
+const float maxWenuTrkRelIso[]    = {0.30 ,0.20}; //1.70, 1.01
+const float maxWenuECalRelIso[]   = {0.20 ,0.15}; //0.49, 0.24
+const float maxWenuHCalRelIso[]   = {0.15 ,0.12}; //0.21, 0.12
 
 // +++++++++++++++++++Z Cuts
 const float minZpt = 90;
 const float minZmass = 60;
 const float maxZmass = 120;
+
+const float minZmumuMuonPt = 20.;
+const float minZeeEt = 20;
 
 // +++++++++++++++++++Electron General Cuts
 const float maxElecEtaBarrel = 1.4442;
@@ -55,24 +67,6 @@ const int minMuonNTrkHit = 12;
 const int minMuonStations = 1;
 const int minMuonHitsUsed = 4;
 
-// +++++++++++++++++++Wmunu
-const int cutWmunuIsGlobal = true;
-const int cutWmunuIsTracker= true;
-
-const float minWmunuMuonPt = 20.;
-const float maxWmunuCombRelIso = 0.15;
-
-const float minZmumuMuonPt = 20.;
-
-// +++++++++++++++++++Wenu
-
-const float minWenuEt = 20;
-const float maxWenuTrkRelIso[]    = {0.30 ,0.20}; //1.70, 1.01
-const float maxWenuECalRelIso[]   = {0.20 ,0.15}; //0.49, 0.24
-const float maxWenuHCalRelIso[]   = {0.15 ,0.12}; //0.21, 0.12
-
-const float minZeeEt = 20;
-
 //methods for the cuts
 bool PassTriggersCut();
 bool PassMuonTriggerCut();
@@ -89,6 +83,7 @@ bool PassWDecayCut();
 bool PassZDecayCut();
 bool PassWenuCut();
 bool PassWmunuCut();
+bool PassWtransMassCut();
 bool PassZeeCut();
 bool PassZmumuCut();
 bool PassZmassCut();

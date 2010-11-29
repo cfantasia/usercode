@@ -84,12 +84,16 @@ Int_t pass_HLT_Ele12_SW_TightEleIdIsol_L1R;
 Int_t pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1;
 Int_t pass_HLT_Ele15_LW_L1R;
 Int_t pass_HLT_Ele15_SW_L1R;
+Int_t pass_HLT_Ele15_SW_CaloEleId_L1R;
+Int_t pass_HLT_Ele17_SW_CaloEleId_L1R;
+Int_t pass_HLT_Ele17_SW_TightEleId_L1R;
 Int_t pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2;
-Int_t pass_HLT_Mu11;
-Int_t pass_HLT_Mu15_v1;
+Int_t pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3;
 Int_t pass_HLT_Mu3;
 Int_t pass_HLT_Mu5;
 Int_t pass_HLT_Mu9;
+Int_t pass_HLT_Mu11;
+Int_t pass_HLT_Mu15_v1;
 
 Int_t prescale_HLT_Photon10_Cleaned_L1R;
 Int_t prescale_HLT_Photon10_L1R;
@@ -103,12 +107,17 @@ Int_t prescale_HLT_Ele12_SW_TightEleIdIsol_L1R;
 Int_t prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1;
 Int_t prescale_HLT_Ele15_LW_L1R;
 Int_t prescale_HLT_Ele15_SW_L1R;
+Int_t prescale_HLT_Ele15_SW_CaloEleId_L1R;
+Int_t prescale_HLT_Ele17_SW_CaloEleId_L1R;
+Int_t prescale_HLT_Ele17_SW_TightEleId_L1R;
 Int_t prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2;
-Int_t prescale_HLT_Mu11;
-Int_t prescale_HLT_Mu15_v1;
+Int_t prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3;
+
 Int_t prescale_HLT_Mu3;
 Int_t prescale_HLT_Mu5;
 Int_t prescale_HLT_Mu9;
+Int_t prescale_HLT_Mu11;
+Int_t prescale_HLT_Mu15_v1;
 
 Int_t           W_flavor;
 Int_t           Z_flavor;

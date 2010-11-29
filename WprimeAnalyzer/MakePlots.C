@@ -50,12 +50,12 @@ bool Straddles(float a, float b, float num);
 
 void
 MakePlots(){  
-    TFile *fin = TFile::Open("Wprime_analysis.root");
-
-    samples.push_back(Sample("EGSep17ReReco", 1, 1, 0));
-    samples.push_back(Sample("MuSep17ReReco", 2, 1, 0));
-    samples.push_back(Sample("ElectronPromptReco", 3, 1, 0));
-    samples.push_back(Sample("MuPromptReco", 4, 1, 0));
+  TFile *fin = TFile::Open("Wprime_analysis.root", "read");
+  
+  samples.push_back(Sample("EGSep17ReReco", 1, 1, 0));
+  samples.push_back(Sample("MuSep17ReReco", 2, 1, 0));
+  samples.push_back(Sample("ElectronPromptReco", 3, 1, 0));
+  samples.push_back(Sample("MuPromptReco", 4, 1, 0));
 
 
 /*    
@@ -130,7 +130,7 @@ MakePlots(){
 
     int size = variable.size();
     for(int i=0;i<size;++i){
-        for(int j=0;j<Num_histo_sets;++j){
+        for(int j=0;j<NCuts;++j){
             string title = variable[i] + "_" + Cut_Name[j];
             DrawandSave(fin,title,i>=13,0, 0);
         }
@@ -261,7 +261,7 @@ PlotEff(TFile* fin, string title){
     h2->SetStats(kFALSE);
 
     TAxis* axis = h1->GetXaxis();
-    for(int i=0; i<Num_histo_sets; ++i) axis->SetBinLabel(i+1,Cut_Name[i].c_str());
+    for(int i=0; i<NCuts; ++i) axis->SetBinLabel(i+1,Cut_Name[i].c_str());
 
     h1->SetLineColor(kRed);  h1->Draw();
     h2->SetLineColor(kBlue); h2->Draw("same");
@@ -313,7 +313,7 @@ DrawSelection(TFile* fin, string title, bool mincut){
     }
 
     string fulltitle;
-    for(int cut=0; cut!= Num_histo_sets; ++cut){
+    for(int cut=0; cut!= NCuts; ++cut){
         string title_match = "h" + Cut_Name[cut];
         if(!title_match.compare(title)){
             fulltitle = title + "_" + Cut_Name[cut-1];

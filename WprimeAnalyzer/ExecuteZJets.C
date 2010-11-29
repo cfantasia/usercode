@@ -23,7 +23,7 @@ void Declare_Histos()
   int WZinvMin = 0;
   int WZinvMax = 1500;
   int WZbin = 150;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hWZInvMass_" + Cut_Name[i];
       string title = "Reconstructed WZ Invariant Mass (After "+Cut_Name[i]+" Cut);m_{WZ} (GeV);";
       hWZInvMass[i] = new TH1F(name.c_str(),title.c_str(),WZbin,WZinvMin,WZinvMax);
@@ -33,7 +33,7 @@ void Declare_Histos()
   int WZtransMin = 0;
   int WZtransMax = 1500;
   int WZtransbin = 100;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hWZTransMass_" + Cut_Name[i];
       string title = "Reconstructed WZ Transverse Mass (After "+Cut_Name[i]+" Cut);m_{WZ} (GeV);";
       hWZTransMass[i] = new TH1F(name.c_str(),title.c_str(),WZtransbin,WZtransMin,WZtransMax);
@@ -43,7 +43,7 @@ void Declare_Histos()
   float HtMin = 0.;
   float HtMax = 1000.;
   int Htbin = 50;
-    for(int i=0; i<Num_histo_sets; ++i){
+    for(int i=0; i<NCuts; ++i){
       string name = "hHt_" + Cut_Name[i];
       string title = "H_{T} (After "+Cut_Name[i]+" Cut);Lepton Pt Sum: H_{T} (GeV);";
       hHt[i] = new TH1F(name.c_str(),title.c_str(),Htbin,HtMin,HtMax);
@@ -53,7 +53,7 @@ void Declare_Histos()
   float WptMin = 0.;
   float WptMax = 400.;
   int Wptbin = 80;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hWpt_" + Cut_Name[i];
       string title = "p_{T}^{W} (After "+Cut_Name[i]+" Cut);p_{T} of W (GeV);";
       hWpt[i] = new TH1F(name.c_str(),title.c_str(),Wptbin,WptMin,WptMax);
@@ -63,7 +63,7 @@ void Declare_Histos()
   float ZptMin = 0.;
   float ZptMax = 400.;
   int Zptbin = 80;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hZpt_" + Cut_Name[i];
       string title = "p_{T}^{Z} (After "+Cut_Name[i]+" Cut);p_{T} of Z (GeV);";
       hZpt[i] = new TH1F(name.c_str(),title.c_str(),Zptbin,ZptMin,ZptMax);
@@ -73,7 +73,7 @@ void Declare_Histos()
   float METMin = 0.;
   float METMax = 500.;
   int METbin = 100;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMET_" + Cut_Name[i];
       string title = "MET (After "+Cut_Name[i]+" Cut);MET (GeV);";
       hMET[i] = new TH1F(name.c_str(),title.c_str(),METbin,METMin,METMax);
@@ -83,49 +83,49 @@ void Declare_Histos()
   float ZmassMin = 50.;
   float ZmassMax = 130.;
   int Zmassbin = 80;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hZmass_" + Cut_Name[i];
       string title = "Reconstructed Mass of Z (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
       hZmass[i] = new TH1F(name.c_str(),title.c_str(),Zmassbin,ZmassMin,ZmassMax);
   }
 
   //Zee Mass Histos
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hZeemass_" + Cut_Name[i];
       string title = "Reconstructed Mass of Zee (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
       hZeemass[i] = new TH1F(name.c_str(),title.c_str(),Zmassbin,ZmassMin,ZmassMax);
   }
 
   //ZeeTT Mass Histos
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hZeemassTT_" + Cut_Name[i];
       string title = "Reconstructed Mass of ZeeTT (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
       hZeemassTT[i] = new TH1F(name.c_str(),title.c_str(),Zmassbin,ZmassMin,ZmassMax);
   }
 
   //ZeeTF Mass Histos
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hZeemassTF_" + Cut_Name[i];
       string title = "Reconstructed Mass of ZeeTF (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
       hZeemassTF[i] = new TH1F(name.c_str(),title.c_str(),Zmassbin,ZmassMin,ZmassMax);
   }
 
   //Zmumu Mass Histos
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hZmumumass_" + Cut_Name[i];
       string title = "Reconstructed Mass of Zmumu (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
       hZmumumass[i] = new TH1F(name.c_str(),title.c_str(),Zmassbin,ZmassMin,ZmassMax);
   }
 
   //ZmumuTT Mass Histos
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hZmumumassTT_" + Cut_Name[i];
       string title = "Reconstructed Mass of ZmumuTT (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
       hZmumumassTT[i] = new TH1F(name.c_str(),title.c_str(),Zmassbin,ZmassMin,ZmassMax);
   }
 
   //ZmumuTF Mass Histos
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hZmumumassTF_" + Cut_Name[i];
       string title = "Reconstructed Mass of ZmumuTF (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
       hZmumumassTF[i] = new TH1F(name.c_str(),title.c_str(),Zmassbin,ZmassMin,ZmassMax);
@@ -135,7 +135,7 @@ void Declare_Histos()
   float WTransmassMin = 0.;
   float WTransmassMax = 100.;
   int WTransmassbin = 10;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hWTransmass_" + Cut_Name[i];
       string title = "Reconstructed Transmass of W (After "+Cut_Name[i]+" Cut);m_{T W}^{Reco} (GeV);";
       hWTransmass[i] = new TH1F(name.c_str(),title.c_str(),WTransmassbin,WTransmassMin,WTransmassMax);
@@ -145,7 +145,7 @@ void Declare_Histos()
   float WenuTransmassMin = 0.;
   float WenuTransmassMax = 100.;
   int WenuTransmassbin = 10;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hWenuTransmass_" + Cut_Name[i];
       string title = "Reconstructed Transmass of Wenu (After "+Cut_Name[i]+" Cut);m_{T W}^{Reco} (GeV);";
       hWenuTransmass[i] = new TH1F(name.c_str(),title.c_str(),WenuTransmassbin,WenuTransmassMin,WenuTransmassMax);
@@ -155,7 +155,7 @@ void Declare_Histos()
   float WmunuTransmassMin = 0.;
   float WmunuTransmassMax = 100.;
   int WmunuTransmassbin = 10;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hWmunuTransmass_" + Cut_Name[i];
       string title = "Reconstructed Transmass of Wmunu (After "+Cut_Name[i]+" Cut);m_{T W}^{Reco} (GeV);";
       hWmunuTransmass[i] = new TH1F(name.c_str(),title.c_str(),WmunuTransmassbin,WmunuTransmassMin,WmunuTransmassMax);
@@ -166,7 +166,7 @@ void Declare_Histos()
   int ElecPtbin = 500;
   float ElecPtMin = 0.;
   float ElecPtMax = 500.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecPt_" + Cut_Name[i];
       string title = "Electron Pt (After "+Cut_Name[i]+" Cut);Pt;";
       hElecPt[i] = new TH1F(name.c_str(),title.c_str(),ElecPtbin,ElecPtMin,ElecPtMax);
@@ -175,7 +175,7 @@ void Declare_Histos()
   int ElecEtbin = 500;
   float ElecEtMin = 0.;
   float ElecEtMax = 500.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecEt_" + Cut_Name[i];
       string title = "Electron Et (After "+Cut_Name[i]+" Cut);Et;";
       hElecEt[i] = new TH1F(name.c_str(),title.c_str(),ElecEtbin,ElecEtMin,ElecEtMax);
@@ -184,7 +184,7 @@ void Declare_Histos()
   int ElecdEtabin = 1000;
   float ElecdEtaMin = 0.;
   float ElecdEtaMax = 1.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecDEta_" + Cut_Name[i];
       string title = "Electron Delta Eta (After "+Cut_Name[i]+" Cut);dEta;";
       hElecdEta[i] = new TH1F(name.c_str(),title.c_str(),ElecdEtabin,ElecdEtaMin,ElecdEtaMax);
@@ -193,7 +193,7 @@ void Declare_Histos()
   int ElecdPhibin = 1000;
   float ElecdPhiMin = 0.;
   float ElecdPhiMax = 1.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecDPhi_" + Cut_Name[i];
       string title = "Electron Delta Phi (After "+Cut_Name[i]+" Cut);dPhi;";
       hElecdPhi[i] = new TH1F(name.c_str(),title.c_str(),ElecdPhibin,ElecdPhiMin,ElecdPhiMax);
@@ -202,7 +202,7 @@ void Declare_Histos()
   int ElecSigmannbin = 1000;
   float ElecSigmannMin = 0.;
   float ElecSigmannMax = 1.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecSigmaEtaEta_" + Cut_Name[i];
       string title = "Electron Sigma Eta Eta (After "+Cut_Name[i]+" Cut);Sigma Eta Eta;";
       hElecSigmann[i] = new TH1F(name.c_str(),title.c_str(),ElecSigmannbin,ElecSigmannMin,ElecSigmannMax);
@@ -211,7 +211,7 @@ void Declare_Histos()
   int ElecEPbin = 1000;
   float ElecEPMin = 0.;
   float ElecEPMax = 2.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecEP_" + Cut_Name[i];
       string title = "Electron E Over P (After "+Cut_Name[i]+" Cut);E/P;";
       hElecEP[i] = new TH1F(name.c_str(),title.c_str(),ElecEPbin,ElecEPMin,ElecEPMax);
@@ -220,7 +220,7 @@ void Declare_Histos()
   int ElecHEbin = 2000;
   float ElecHEMin = 0.;
   float ElecHEMax = 2.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecHOverE_" + Cut_Name[i];
       string title = "Electron H over E (After "+Cut_Name[i]+" Cut);H/E;";
       hElecHE[i] = new TH1F(name.c_str(),title.c_str(),ElecHEbin,ElecHEMin,ElecHEMax);
@@ -229,7 +229,7 @@ void Declare_Histos()
   int ElecTrkRelIsobin = 1000;
   float ElecTrkRelIsoMin = 0.;
   float ElecTrkRelIsoMax = 2.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecTrkRelIso_" + Cut_Name[i];
       string title = "Electron Relative Track Iso (After "+Cut_Name[i]+" Cut);TrkRelIso;";
       hElecTrkRelIso[i] = new TH1F(name.c_str(),title.c_str(),ElecTrkRelIsobin,ElecTrkRelIsoMin,ElecTrkRelIsoMax);
@@ -238,7 +238,7 @@ void Declare_Histos()
   int ElecECalRelIsobin = 1000;
   float ElecECalRelIsoMin = 0.;
   float ElecECalRelIsoMax = 2.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecECalRelIso_" + Cut_Name[i];
       string title = "Electron Relative ECal Iso (After "+Cut_Name[i]+" Cut);ECalRelIso;";
       hElecECalRelIso[i] = new TH1F(name.c_str(),title.c_str(),ElecECalRelIsobin,ElecECalRelIsoMin,ElecECalRelIsoMax);
@@ -247,7 +247,7 @@ void Declare_Histos()
   int ElecHCalRelIsobin = 1000;
   float ElecHCalRelIsoMin = 0.;
   float ElecHCalRelIsoMax = 2.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hElecHCalRelIso_" + Cut_Name[i];
       string title = "Electron Relative HCal Iso (After "+Cut_Name[i]+" Cut);HCalRelIso;";
       hElecHCalRelIso[i] = new TH1F(name.c_str(),title.c_str(),ElecHCalRelIsobin,ElecHCalRelIsoMin,ElecHCalRelIsoMax);
@@ -257,7 +257,7 @@ void Declare_Histos()
   int MuonPtbin = 500;
   float MuonPtMin = 0.;
   float MuonPtMax = 500.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMuonPt_" + Cut_Name[i];
       string title = "Muon Pt (After "+Cut_Name[i]+" Cut);Pt;";
       hMuonPt[i] = new TH1F(name.c_str(),title.c_str(),MuonPtbin,MuonPtMin,MuonPtMax);
@@ -266,7 +266,7 @@ void Declare_Histos()
   int MuonDxybin = 500;
   float MuonDxyMin = 0.;
   float MuonDxyMax = 1.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMuonDxy_" + Cut_Name[i];
       string title = "Muon Dxy (After "+Cut_Name[i]+" Cut);Dxy;";
       hMuonDxy[i] = new TH1F(name.c_str(),title.c_str(),MuonDxybin,MuonDxyMin,MuonDxyMax);
@@ -275,7 +275,7 @@ void Declare_Histos()
   int MuonNormChi2bin = 50;
   float MuonNormChi2Min = 0.;
   float MuonNormChi2Max = 50.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMuonNormChi2_" + Cut_Name[i];
       string title = "Muon NormChi2 (After "+Cut_Name[i]+" Cut);NormChi2;";
       hMuonNormChi2[i] = new TH1F(name.c_str(),title.c_str(),MuonNormChi2bin,MuonNormChi2Min,MuonNormChi2Max);
@@ -284,7 +284,7 @@ void Declare_Histos()
   int MuonNPixbin = 50;
   float MuonNPixMin = 0.;
   float MuonNPixMax = 50.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMuonNPix_" + Cut_Name[i];
       string title = "Muon NPix (After "+Cut_Name[i]+" Cut);NPix;";
       hMuonNPix[i] = new TH1F(name.c_str(),title.c_str(),MuonNPixbin,MuonNPixMin,MuonNPixMax);
@@ -293,13 +293,13 @@ void Declare_Histos()
   int MuonNTrkbin = 50;
   float MuonNTrkMin = 0.;
   float MuonNTrkMax = 50.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMuonNTrk_" + Cut_Name[i];
       string title = "Muon NTrk (After "+Cut_Name[i]+" Cut);NTrk;";
       hMuonNTrk[i] = new TH1F(name.c_str(),title.c_str(),MuonNTrkbin,MuonNTrkMin,MuonNTrkMax);
   }
 
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMuonRelIso_" + Cut_Name[i];
       string title = "Muon Rel Iso (After "+Cut_Name[i]+" Cut);Rel Iso;";
       hMuonRelIso[i] = new TH1F(name.c_str(),title.c_str(),100,0,0.2);
@@ -308,7 +308,7 @@ void Declare_Histos()
   int MuonStationbin = 50;
   float MuonStationMin = 0.;
   float MuonStationMax = 50.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMuonStation_" + Cut_Name[i];
       string title = "Muon Station (After "+Cut_Name[i]+" Cut);Station;";
       hMuonStation[i] = new TH1F(name.c_str(),title.c_str(),MuonStationbin,MuonStationMin,MuonStationMax);
@@ -317,7 +317,7 @@ void Declare_Histos()
   int MuonSipbin = 1000;
   float MuonSipMin = 0.;
   float MuonSipMax = 50.;
-  for(int i=0; i<Num_histo_sets; ++i){
+  for(int i=0; i<NCuts; ++i){
       string name = "hMuonSip_" + Cut_Name[i];
       string title = "Muon Sip (After "+Cut_Name[i]+" Cut);Sip;";
       hMuonSip[i] = new TH1F(name.c_str(),title.c_str(),MuonSipbin,MuonSipMin,MuonSipMax);
@@ -326,12 +326,12 @@ void Declare_Histos()
 
 ///Eff Plots///////
   string title = "Expected # of Events / " + convertFloatToStr(lumiPb) + " pb^{-1}";
-  hNumEvts = new TH1F("hNumEvts",title.c_str(),Num_histo_sets,0,Num_histo_sets);
-  hEffRel = new TH1F("hEffRel","Relative Efficiency",Num_histo_sets,0,Num_histo_sets);
-  hEffAbs = new TH1F("hEffAbs","Absolute Efficiency",Num_histo_sets,0,Num_histo_sets);
-  for(int i=0; i<Num_histo_sets; ++i) hNumEvts->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
-  for(int i=0; i<Num_histo_sets; ++i) hEffRel ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
-  for(int i=0; i<Num_histo_sets; ++i) hEffAbs ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
+  hNumEvts = new TH1F("hNumEvts",title.c_str(),NCuts,0,NCuts);
+  hEffRel = new TH1F("hEffRel","Relative Efficiency",NCuts,0,NCuts);
+  hEffAbs = new TH1F("hEffAbs","Absolute Efficiency",NCuts,0,NCuts);
+  for(int i=0; i<NCuts; ++i) hNumEvts->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
+  for(int i=0; i<NCuts; ++i) hEffRel ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
+  for(int i=0; i<NCuts; ++i) hEffAbs ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
 
   
 
@@ -420,7 +420,7 @@ void saveHistos(TFile * fout, string dir)
   fout->mkdir(dir.c_str()); 
   fout->cd(dir.c_str());
 
-  for(int i = 0; i != Num_histo_sets; ++i){
+  for(int i = 0; i != NCuts; ++i){
       hWZInvMass[i]->Write();   
       hWZTransMass[i]->Write();
       hHt[i]->Write();
@@ -479,7 +479,7 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
     out << " Total # of Theoretical expected events = " << Nthe_evt << endl;
     out << " Total # of expected events = " << Nexp_evt << endl;
         
-    for(int i = 0; i < Num_histo_sets; ++i){
+    for(int i = 0; i < NCuts; ++i){
         
         out <<"Cut # "<<i<<"("<<Cut_Name[i]<<"): expected evts = " << Nexp_evt_cut[i];
 	hNumEvts->Fill(i,Nexp_evt_cut[i]);
@@ -525,7 +525,7 @@ void Get_Distributions(vector<InputFile>& files,
   //total, and after each cut.
   float Nthe_evt = 0;
   float Nexp_evt = 0;
-  float Nexp_evt_cut[Num_histo_sets] = {0};
+  float Nexp_evt_cut[NCuts] = {0};
   
   //loop over files
   for(int tr = 0; tr != Nfiles; ++tr){
@@ -546,7 +546,7 @@ void Get_Distributions(vector<InputFile>& files,
     Set_Branch_Addresses(WZtree);
 
     //counter (unweighted) events that pass each cut
-    int Num_surv_cut[Num_histo_sets] = {0};
+    int Num_surv_cut[NCuts] = {0};
     
     
     //Loop over events:
@@ -692,7 +692,7 @@ void Get_Distributions(vector<InputFile>& files,
     Nthe_evt += lumiPb * x_sect;
 
     //Number of expected events for each cut (weighted)
-    for(int ii = 0; ii < Num_histo_sets; ++ii){
+    for(int ii = 0; ii < NCuts; ++ii){
       if(debugme) cout<<"Num_surv_cut["<<ii<<"] = "<<
         Num_surv_cut[ii]<<endl;
       Nexp_evt_cut[ii] += Num_surv_cut[ii] * weight;

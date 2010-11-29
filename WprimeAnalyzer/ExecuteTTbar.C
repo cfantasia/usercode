@@ -20,12 +20,12 @@ void Declare_Histos()
   if (debugme) cout<<"Declare histos"<<endl;
 ///Eff Plots///////
   string title = "Expected # of Events / " + convertFloatToStr(lumiPb) + " pb^{-1}";
-  hNumEvts = new TH1F("hNumEvts",title.c_str(),Num_histo_sets,0,Num_histo_sets);
-  hEffRel = new TH1F("hEffRel","Relative Efficiency",Num_histo_sets,0,Num_histo_sets);
-  hEffAbs = new TH1F("hEffAbs","Absolute Efficiency",Num_histo_sets,0,Num_histo_sets);
-  for(int i=0; i<Num_histo_sets; ++i) hNumEvts->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
-  for(int i=0; i<Num_histo_sets; ++i) hEffRel ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
-  for(int i=0; i<Num_histo_sets; ++i) hEffAbs ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
+  hNumEvts = new TH1F("hNumEvts",title.c_str(),NCuts,0,NCuts);
+  hEffRel = new TH1F("hEffRel","Relative Efficiency",NCuts,0,NCuts);
+  hEffAbs = new TH1F("hEffAbs","Absolute Efficiency",NCuts,0,NCuts);
+  for(int i=0; i<NCuts; ++i) hNumEvts->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
+  for(int i=0; i<NCuts; ++i) hEffRel ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
+  for(int i=0; i<NCuts; ++i) hEffAbs ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
 
 }//Declare_Histos
 
@@ -67,7 +67,7 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
     out << " Total # of Theoretical expected events = " << Nthe_evt << endl;
     out << " Total # of expected events = " << Nexp_evt << endl;
         
-    for(int i = 0; i < Num_histo_sets; ++i){
+    for(int i = 0; i < NCuts; ++i){
         
         out <<"Cut # "<<i<<"("<<Cut_Name[i]<<"): expected evts = " << Nexp_evt_cut[i];
 	hNumEvts->Fill(i,Nexp_evt_cut[i]);
@@ -113,7 +113,7 @@ void Get_Distributions(vector<InputFile>& files,
   //total, and after each cut.
   float Nthe_evt = 0;
   float Nexp_evt = 0;
-  float Nexp_evt_cut[Num_histo_sets] = {0};
+  float Nexp_evt_cut[NCuts] = {0};
   
   //loop over files
   for(int tr = 0; tr != Nfiles; ++tr){
@@ -134,7 +134,7 @@ void Get_Distributions(vector<InputFile>& files,
     Set_Branch_Addresses(WZtree);
 
     //counter (unweighted) events that pass each cut
-    int Num_surv_cut[Num_histo_sets] = {0};
+    int Num_surv_cut[NCuts] = {0};
     
     
     //Loop over events:
@@ -169,7 +169,7 @@ void Get_Distributions(vector<InputFile>& files,
     Nthe_evt += lumiPb * x_sect;
 
     //Number of expected events for each cut (weighted)
-    for(int ii = 0; ii < Num_histo_sets; ++ii){
+    for(int ii = 0; ii < NCuts; ++ii){
       if(debugme) cout<<"Num_surv_cut["<<ii<<"] = "<<
         Num_surv_cut[ii]<<endl;
       Nexp_evt_cut[ii] += Num_surv_cut[ii] * weight;

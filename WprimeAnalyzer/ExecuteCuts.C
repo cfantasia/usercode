@@ -9,32 +9,36 @@
 bool PassTriggersCut()
 {
 //-----------------------------------------------------------
-    if(debugme) cout<<"Trigger requirements"<<endl;
-
-    return ( PassMuonTriggerCut() || PassElecTriggerCut() );
-
+  if(debugme) cout<<"Trigger requirements"<<endl;
+  
+  return ( PassMuonTriggerCut() || PassElecTriggerCut() );
+  
 }//--- PassTriggersCut()
 
 bool PassElecTriggerCut()
 {
 //-----------------------------------------------------------
-    if(debugme) cout<<"Electron Trigger requirements"<<endl;
-
-    return ((prescale_HLT_Photon10_L1R == 1                     && pass_HLT_Photon10_L1R) ||
-            (prescale_HLT_Photon10_Cleaned_L1R == 1             && pass_HLT_Photon10_Cleaned_L1R) ||
-            (prescale_HLT_Photon15_L1R == 1                     && pass_HLT_Photon15_L1R) ||
-            (prescale_HLT_Photon15_Cleaned_L1R == 1             && pass_HLT_Photon15_Cleaned_L1R) ||
-            (prescale_HLT_Ele10_LW_EleId_L1R == 1               && pass_HLT_Ele10_LW_EleId_L1R ) ||
-            (prescale_HLT_Ele10_SW_EleId_L1R == 1               && pass_HLT_Ele10_SW_EleId_L1R) ||
-            (prescale_HLT_Ele10_SW_L1R == 1                     && pass_HLT_Ele10_SW_L1R) ||
-            (prescale_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R == 1 && pass_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R ) ||
-            (prescale_HLT_Ele12_SW_TightEleIdIsol_L1R == 1      && pass_HLT_Ele12_SW_TightEleIdIsol_L1R ) ||
-            (prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1 == 1    && pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1  ) ||
-            (prescale_HLT_Ele15_LW_L1R == 1                     && pass_HLT_Ele15_LW_L1R ) ||
-            (prescale_HLT_Ele15_SW_L1R == 1                     && pass_HLT_Ele15_SW_L1R ) ||
-            (prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2 == 1    && pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2 )
-        );
-
+  if(debugme) cout<<"Electron Trigger requirements"<<endl;
+  
+  return ((prescale_HLT_Photon10_L1R <= 1                     && pass_HLT_Photon10_L1R) ||
+          (prescale_HLT_Photon10_Cleaned_L1R <= 1             && pass_HLT_Photon10_Cleaned_L1R) ||
+          (prescale_HLT_Photon15_L1R <= 1                     && pass_HLT_Photon15_L1R) ||
+          (prescale_HLT_Photon15_Cleaned_L1R <= 1             && pass_HLT_Photon15_Cleaned_L1R) ||
+          (prescale_HLT_Ele10_LW_EleId_L1R <= 1               && pass_HLT_Ele10_LW_EleId_L1R ) ||
+          (prescale_HLT_Ele10_SW_EleId_L1R <= 1               && pass_HLT_Ele10_SW_EleId_L1R) ||
+          (prescale_HLT_Ele10_SW_L1R <= 1                     && pass_HLT_Ele10_SW_L1R) ||
+          (prescale_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R <= 1 && pass_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R ) ||
+          (prescale_HLT_Ele12_SW_TightEleIdIsol_L1R <= 1      && pass_HLT_Ele12_SW_TightEleIdIsol_L1R ) ||
+          (prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1 <= 1 && pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1  ) ||
+          (prescale_HLT_Ele15_LW_L1R <= 1                     && pass_HLT_Ele15_LW_L1R ) ||
+          (prescale_HLT_Ele15_SW_L1R <= 1                     && pass_HLT_Ele15_SW_L1R ) ||
+          (prescale_HLT_Ele15_SW_CaloEleId_L1R <= 1           && pass_HLT_Ele15_SW_CaloEleId_L1R ) ||
+          (prescale_HLT_Ele17_SW_CaloEleId_L1R <= 1           && pass_HLT_Ele17_SW_CaloEleId_L1R ) ||
+          (prescale_HLT_Ele17_SW_TightEleId_L1R <= 1          && pass_HLT_Ele17_SW_TightEleId_L1R ) ||
+          (prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2 <= 1 && pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2 ) ||
+          (prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3 <= 1 && pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3 )
+    );
+    
 
 }//--- PassElecTriggersCut()
 
@@ -43,9 +47,9 @@ bool PassMuonTriggerCut()
 //-----------------------------------------------------------
     if(debugme) cout<<"Muon Trigger requirements"<<endl;
 
-    return ((prescale_HLT_Mu9     == 1 && pass_HLT_Mu9)     ||
-            (prescale_HLT_Mu11    == 1 && pass_HLT_Mu11)    ||
-            (prescale_HLT_Mu15_v1 == 1 && pass_HLT_Mu15_v1)
+    return ((prescale_HLT_Mu9     <= 1 && pass_HLT_Mu9)     ||
+            (prescale_HLT_Mu11    <= 1 && pass_HLT_Mu11)    ||
+            (prescale_HLT_Mu15_v1 <= 1 && pass_HLT_Mu15_v1)
         );
 
 }//--- PassMuonTriggersCut
@@ -57,10 +61,7 @@ bool PassValidWandZCut()
 //-----------------------------------------------------------
     if(debugme) cout<<"Check if there are valid W and Z particles in the event"
                     <<endl;
-//Cory: We can expand this (maybe in lepton cuts)
-//Cory: Should this be here?
-    bool has_valid_W_and_Z = Z_flavor 
-        && W_flavor;
+    bool has_valid_W_and_Z = Z_flavor && W_flavor;
 //        && WZ_invMassMinPz>0; 
     return has_valid_W_and_Z;
     
@@ -73,27 +74,27 @@ bool PassNumberOfZsCut()
 //-----------------------------------------------------------
     if(debugme) cout<<"Check if there is more Zs than required"<<endl;
 
-    bool passnumZs = maxNumZs >= numberOfZs;
-    return passnumZs;
-
+    return (maxNumZs >= numberOfZs);
 }//--- NumberOfZsCut
 
 //Check W decay Properties
 //-----------------------------------------------------------
 bool 
 PassWDecayCut(){
-    switch(W_flavor){
-    case PDGMUON:
-        return PassWmunuCut();
-        break;
-    case PDGELEC:
-        return PassWenuCut();
-        break;
-    default:
-        cout<<"W Didn't decay to electron or muon!"<<endl;
-        break;
-    }
-    return false;
+  if(!PassWtransMassCut()) return false;
+
+  switch(W_flavor){
+  case PDGMUON:
+    return PassWmunuCut();
+    break;
+  case PDGELEC:
+    return PassWenuCut();
+    break;
+  default:
+    cout<<"W Didn't decay to electron or muon!"<<endl;
+    break;
+  }
+  return false;
 }
 
 //Check Z decay Properties
@@ -290,35 +291,33 @@ bool PassMuonPtCut(int idx,int parent){
 
 bool PassMuonCombRelIsoCut(int idx){
     if(debugme) cout<<"Check Muon CombRelIso Cut"<<endl;
-    return ( Calc_MuonRelIso(idx) < maxWmunuCombRelIso);
+    return (Calc_MuonRelIso(idx) < maxWmunuCombRelIso);
 }//--- PassMuonCombRelIsoCut
 
 float 
 Calc_MuonRelIso(int idx){
-
-    if(muon_trackIso == 0 || muon_caloIso == 0) return 999;
-
-    return (muon_trackIso->at(idx) + 
-            muon_caloIso->at(idx) ) /
-        muon_pt->at(idx);
+  if(muon_trackIso == 0 || muon_caloIso == 0) return 999;
+  
+  return (muon_trackIso->at(idx) + 
+          muon_caloIso->at(idx) ) /
+    muon_pt->at(idx);
 }//--- Calc_MuonRelIso
 
 bool PassMuonDxyCut(int idx){
-    //Use: muon_globalD0
     if(debugme) cout<<"Check Muon Dxy Cut"<<endl;
-    return (muon_globalD0->at(idx) < maxMuonDxy);
+    return (fabs(muon_globalD0->at(idx)) < maxMuonDxy);
 }//--- PassMuonDxyCut
 
 ////////////////////////////////
+/////////Check Z Properties/////
+////////////////////////////////
 
-//Check Z Properties
-
+//Check Z Mass
+//-----------------------------------------------------------
 bool PassZmassCut(){
     if(debugme) cout<<"Check Zmass Cut"<<endl;
     return (Z_mass > minZmass && Z_mass < maxZmass);
 }//--- PassZmassCut
-
-
 
 //Check Z pt
 //-----------------------------------------------------------
@@ -326,25 +325,32 @@ bool PassZptCut()
 {
 //-----------------------------------------------------------
     if(debugme) cout<<"Check Z pt"<<endl;
-    
-    if(Z_pt < minZpt) return false;
-    
-    return true;
-
+    return (Z_pt > minZpt);
 }//--- PassZptCut
+
+////////////////////////////////
+/////////Check W Properties/////
+////////////////////////////////
+
+//Check W Transverse Mass
+//-----------------------------------------------------------
+bool PassWtransMassCut(){
+    if(debugme) cout<<"Check W Transverse Mass Cut"<<endl;
+    return (W_transMass > minWtransMass);
+}//--- PassWtransMassCut
 
 //Check W pt
 //-----------------------------------------------------------
 bool PassWptCut()
 {
 //-----------------------------------------------------------
-    if(debugme) cout<<"Check W pt"<<endl;
-
-    if(W_pt < minWpt) return false;
-    
-    return true;
-
+  if(debugme) cout<<"Check W pt"<<endl;
+  return (W_pt > minWpt);
 }//--- PassWptCut
+
+////////////////////////////////
+/////////Check Other Properties/////
+////////////////////////////////
 
 //Check Ht Properties
 //-----------------------------------------------------------
@@ -361,22 +367,22 @@ bool PassHtCut()
 //-----------------------------------------------------------
 float Calc_Ht()
 {
-    float Ht=0;
+  float Ht=0;
   
-    if     (W_flavor == PDGELEC) Ht += electron_pt->at(W_leptonIndex);
-    else if(W_flavor == PDGMUON) Ht += muon_pt->at(W_leptonIndex);
-    //else                         cout<<"W didn't decay into e,mu"<<endl;
-
-    if     (Z_flavor == PDGELEC){
-		Ht += electron_pt->at(Z_leptonIndex1);
+  if     (W_flavor == PDGELEC) Ht += electron_pt->at(W_leptonIndex);
+  else if(W_flavor == PDGMUON) Ht += muon_pt->at(W_leptonIndex);
+  //else                         cout<<"W didn't decay into e,mu"<<endl;
+  
+  if     (Z_flavor == PDGELEC){
+    Ht += electron_pt->at(Z_leptonIndex1);
 		Ht += electron_pt->at(Z_leptonIndex2);
-    }else if(Z_flavor == PDGMUON){
+  }else if(Z_flavor == PDGMUON){
 		Ht += muon_pt->at(Z_leptonIndex1);
 		Ht += muon_pt->at(Z_leptonIndex2);
-    }//else                         cout<<"Z didn't decay into e,mu"<<endl;
-
-    return Ht;
-
+  }//else                         cout<<"Z didn't decay into e,mu"<<endl;
+  
+  return Ht;
+  
 }//--- CalcHt
 
 //Check Ht Met Properties
@@ -409,25 +415,25 @@ bool PassHtMetCut()
 //-----------------------------------------------------------
 bool PassMETCut()
 {
-    return pfMet_et > minMET;
+  return (pfMet_et > minMET);
 }//--- MET Cut
 
 //Pass Tight Cut
 //-----------------------------------------------------------
 bool PassTightCut(int idx, int flavor)
 {
-    if(flavor == 11){
-        bool inEC = inEndCap(electron_ScEta->at(idx));
-        if(!PassElecEtCut         (idx,PDGW)) return false;
-        if(!PassElecTrkRelIsoCut  (idx,inEC)) return false;
-        if(!PassElecECalRelIsoCut (idx,inEC)) return false;
-        if(!PassElecHCalRelIsoCut (idx,inEC)) return false;
+  if(flavor == 11){
+    bool inEC = inEndCap(electron_ScEta->at(idx));
+    if(!PassElecEtCut         (idx,PDGW)) return false;
+    if(!PassElecTrkRelIsoCut  (idx,inEC)) return false;
+    if(!PassElecECalRelIsoCut (idx,inEC)) return false;
+    if(!PassElecHCalRelIsoCut (idx,inEC)) return false;
 
-    }else if (flavor == 13){
-        if(!PassMuonPtCut(idx, PDGW)) return false;
-        if(!PassMuonCombRelIsoCut(idx)) return false;
-    }
-    return true;
+  }else if (flavor == 13){
+    if(!PassMuonPtCut(idx, PDGW)) return false;
+    if(!PassMuonCombRelIsoCut(idx)) return false;
+  }
+  return true;
 }//--- Tight Cut
 
 float Calc_GenWZInvMass()

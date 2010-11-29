@@ -14,7 +14,7 @@
 
 // +++++++++++++++++++Variables to store Branch Addresses:
 
-const int Num_histo_sets = 26; //matches the number of cuts
+//matches the number of cuts
 const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs", 
                            "ElecEta","ElecEt", 
                            "ElecSigmaEtaEta", "ElecDPhi",
@@ -27,39 +27,42 @@ const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs",
                            "Zdecay", "Wdecay", 
                            "Ht", "Zpt", "Wpt", "MET",
                            "AllCuts"};
+const vector<string> Cut(Cut_Name, Cut_Name + sizeof(Cut_Name) / sizeof(string) );
+const int NCuts = sizeof(Cut_Name) / sizeof(string);//works
+//const int NCuts = Cut.size();//Doesn't work
 
-TH1F * hWZInvMass[Num_histo_sets];
-TH1F * hWZTransMass[Num_histo_sets];
-TH1F * hHt[Num_histo_sets];
-TH1F * hWpt[Num_histo_sets];
-TH1F * hZpt[Num_histo_sets];
-TH1F * hMET[Num_histo_sets];
-TH1F * hZmass[Num_histo_sets];
-TH1F * hZeemass[Num_histo_sets];
-TH1F * hZmumumass[Num_histo_sets];
-TH1F * hWTransmass[Num_histo_sets];
-TH1F * hWenuTransmass[Num_histo_sets];
-TH1F * hWmunuTransmass[Num_histo_sets];
+TH1F * hWZInvMass[NCuts];
+TH1F * hWZTransMass[NCuts];
+TH1F * hHt[NCuts];
+TH1F * hWpt[NCuts];
+TH1F * hZpt[NCuts];
+TH1F * hMET[NCuts];
+TH1F * hZmass[NCuts];
+TH1F * hZeemass[NCuts];
+TH1F * hZmumumass[NCuts];
+TH1F * hWTransmass[NCuts];
+TH1F * hWenuTransmass[NCuts];
+TH1F * hWmunuTransmass[NCuts];
 
-TH1F * hElecPt[Num_histo_sets];
-TH1F * hElecEt[Num_histo_sets];
-TH1F * hElecdEta[Num_histo_sets];
-TH1F * hElecdPhi[Num_histo_sets];
-TH1F * hElecSigmann[Num_histo_sets];
-TH1F * hElecEP[Num_histo_sets];
-TH1F * hElecHE[Num_histo_sets];
-TH1F * hElecTrkRelIso[Num_histo_sets];
-TH1F * hElecECalRelIso[Num_histo_sets];
-TH1F * hElecHCalRelIso[Num_histo_sets];
+TH1F * hElecPt[NCuts];
+TH1F * hElecEt[NCuts];
+TH1F * hElecdEta[NCuts];
+TH1F * hElecdPhi[NCuts];
+TH1F * hElecSigmann[NCuts];
+TH1F * hElecEP[NCuts];
+TH1F * hElecHE[NCuts];
+TH1F * hElecTrkRelIso[NCuts];
+TH1F * hElecECalRelIso[NCuts];
+TH1F * hElecHCalRelIso[NCuts];
 
-TH1F * hMuonPt[Num_histo_sets];
-TH1F * hMuonDxy[Num_histo_sets];
-TH1F * hMuonNormChi2[Num_histo_sets];
-TH1F * hMuonNPix[Num_histo_sets];
-TH1F * hMuonNTrk[Num_histo_sets];
-TH1F * hMuonRelIso[Num_histo_sets];
-TH1F * hMuonStation[Num_histo_sets];
-TH1F * hMuonSip[Num_histo_sets];
+TH1F * hMuonPt[NCuts];
+TH1F * hMuonDxy[NCuts];
+TH1F * hMuonNormChi2[NCuts];
+TH1F * hMuonNPix[NCuts];
+TH1F * hMuonNTrk[NCuts];
+TH1F * hMuonRelIso[NCuts];
+TH1F * hMuonStation[NCuts];
+TH1F * hMuonSip[NCuts];
 
 void ExecuteAnalysis();
 
