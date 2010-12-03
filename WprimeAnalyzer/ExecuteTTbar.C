@@ -34,7 +34,7 @@ void Declare_Histos()
 void Fill_Histos(int index, float weight)
 {
 //-----------------------------------------------------------
-    if(debugme) cout<<"Filling Histos"<<endl;
+  if(debugme) cout<<"Filling Histos"<<endl;
         
 }//Fill_Histos
 
@@ -61,36 +61,36 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
                   const float& Nexp_evt, float Nexp_evt_cut[]) 
 { 
 //------------------------------------------------------------------------
-    if(debugme) cout<<"Writing results to a txt file"<<endl;
+  if(debugme) cout<<"Writing results to a txt file"<<endl;
 
-    out<<"$$$$$$$$$$$$$$$$$$$$$$$ Type of sample: "<<dir<<endl;
-    out << " Total # of Theoretical expected events = " << Nthe_evt << endl;
-    out << " Total # of expected events = " << Nexp_evt << endl;
+  out<<"$$$$$$$$$$$$$$$$$$$$$$$ Type of sample: "<<dir<<endl;
+  out << " Total # of Theoretical expected events = " << Nthe_evt << endl;
+  out << " Total # of expected events = " << Nexp_evt << endl;
         
-    for(int i = 0; i < NCuts; ++i){
+  for(int i = 0; i < NCuts; ++i){
         
-        out <<"Cut # "<<i<<"("<<Cut_Name[i]<<"): expected evts = " << Nexp_evt_cut[i];
-	hNumEvts->Fill(i,Nexp_evt_cut[i]);
+    out <<"Cut # "<<i<<"("<<Cut_Name[i]<<"): expected evts = " << Nexp_evt_cut[i];
+    hNumEvts->Fill(i,Nexp_evt_cut[i]);
 
-        //calculate efficiencies
-        float eff, deff;
-        if(i == 0){
-            getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
+    //calculate efficiencies
+    float eff, deff;
+    if(i == 0){
+      getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
 	    hEffRel->Fill(i,eff*100);	
-	}else{
-            getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt_cut[i-1]);
+    }else{
+      getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt_cut[i-1]);
 	    hEffRel->Fill(i,eff*100);
-	}
-        out << ", Relative eff = "<<eff*100 << " +/- " << deff*100 << "%";
+    }
+    out << ", Relative eff = "<<eff*100 << " +/- " << deff*100 << "%";
         
-	getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
-        hEffAbs->Fill(i,eff*100);
-	out << ", Absolute eff = "<< eff*100 << " +/- " << deff*100 << "%"
-             << endl;
+    getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
+    hEffAbs->Fill(i,eff*100);
+    out << ", Absolute eff = "<< eff*100 << " +/- " << deff*100 << "%"
+        << endl;
         
-        //to do: put these results in a file
+    //to do: put these results in a file
         
-    } // loop over different cuts
+  } // loop over different cuts
     
     
 }//printSummary
@@ -118,8 +118,8 @@ void Get_Distributions(vector<InputFile>& files,
   //loop over files
   for(int tr = 0; tr != Nfiles; ++tr){
     if(!files[tr].tree){
-        cout<<"Tree doesn't exist!!!!"<<endl;
-        continue;
+      cout<<"Tree doesn't exist!!!!"<<endl;
+      continue;
     }
   
     cout << "Processing file "<<files[tr].pathname<<endl;
@@ -188,22 +188,22 @@ void Get_Distributions(vector<InputFile>& files,
 //-----------------------------------------------------------
 bool PassFakeLeptonTagCut()
 {
-    if( !W_flavor ) return false;
-    if( W_transMass < 20 ) return false;
-    if( pfMet_et < 20) return false;
+  if( !W_flavor ) return false;
+  if( W_transMass < 20 ) return false;
+  if( pfMet_et < 20) return false;
 
-    if(electron_pdgId->size() != 1)          return false;
-    if(muon_pdgId->size() != 1)              return false;
-    /*
+  if(electron_pdgId->size() != 1)          return false;
+  if(muon_pdgId->size() != 1)              return false;
+  /*
     cout<<"There are "<<electron_pdgId->size()<<" electrons and "
-        <<muon_pdgId->size()<<" muons and "
-        <<W_flavor<<" is W_flavor!!!"<<endl;
-    */
-    if(muon_pdgId->at(0) * electron_pdgId->at(0) < 0.0) return false;
+    <<muon_pdgId->size()<<" muons and "
+    <<W_flavor<<" is W_flavor!!!"<<endl;
+  */
+  if(muon_pdgId->at(0) * electron_pdgId->at(0) < 0.0) return false;
     
-    if( !PassTightCut(W_leptonIndex, W_flavor)) return false;
+  if( !PassTightCut(W_leptonIndex, W_flavor)) return false;
 
-    return true;
+  return true;
 }//--- Tag Cut
 
 //Pass Fake Lepton Probe Cut
@@ -211,14 +211,14 @@ bool PassFakeLeptonTagCut()
 bool PassFakeLeptonProbeCut()
 {
     
-    if(W_flavor == PDGELEC){
-        return PassTightCut(0, PDGMUON); //Check the other lepton
-    }else if(W_flavor == PDGMUON){
-        return PassTightCut(0, PDGELEC);
-    }
+  if(W_flavor == PDGELEC){
+    return PassTightCut(0, PDGMUON); //Check the other lepton
+  }else if(W_flavor == PDGMUON){
+    return PassTightCut(0, PDGELEC);
+  }
     
 
-    return true;
+  return true;
 }//--- Probe Cut
 
 //-----------------------------------------------------------

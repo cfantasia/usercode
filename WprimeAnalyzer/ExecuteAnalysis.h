@@ -44,6 +44,10 @@ TH1F * hWTransmass[NCuts];
 TH1F * hWenuTransmass[NCuts];
 TH1F * hWmunuTransmass[NCuts];
 
+TH1F * hLeadPt[NCuts];
+TH1F * hLeadElecPt[NCuts];
+TH1F * hLeadMuonPt[NCuts];
+
 TH1F * hElecPt[NCuts];
 TH1F * hElecEt[NCuts];
 TH1F * hElecdEta[NCuts];

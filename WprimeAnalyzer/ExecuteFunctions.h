@@ -67,6 +67,7 @@ void UseSample(string dir, vector<InputFile> & files,
                TFile * fout, ofstream & out);
 
 void PrintEvent();
+float CalcLeadPt(int type=0);
 
 Int_t           eventID;
 Int_t           runNumber;
@@ -228,10 +229,10 @@ const bool debugme = false; //print stuff if active
 // +++++++++++++++++++
 //value of lumi to be used in the analysis
 //the weights will scale accordingly.
-const float lumiPb = 1000;
+const float lumiPb = 35;
 
 // +++++++++++++++++++location of data files and samples info
-string top_level_dir;
+const string top_level_dir = "/uscms_data/d2/fantasia/38X/";
 
 // +++++++++++++++++++ Histogram Definitions
 TH1F * hEffRel;
@@ -240,5 +241,8 @@ TH1F * hNumEvts;
 
 ///My calculated qualities//////////////////
 float Ht;
+float LeadPt;
+float LeadElecPt;
+float LeadMuonPt;
 
 #endif//#define _ExecuteFunctions_h_
