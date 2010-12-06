@@ -93,63 +93,14 @@ TF1* shape_allfunc(TH1F* myh, Double_t polpars[]){
 
 }
 
-
-
-
-//---------------------------------------------------------------
-TH1F* get_sum_of_hists(vector<string> samples,bool weighted=true,
-                       string level){
-//--------------------------------------------------------------
-    int rebinme = 2;
-    TH1F* hall;
-    const int dim = samples.size();
-    TFile *f = TFile::Open("../WprimeAnalyzer/Wprime_analysis.root");
-
-    TH1F* h[dim];
-    for (int j = 0;j<dim;++j){
-        if (weighted) {
-            string histname = samples[j]+"/hZmass"+level;
-            h[j] = (TH1F*)f->Get(histname.c_str());
-            //cout<<histname<<" status: "<<h[j]<<endl;
-        }
-        else {
-            string histname = samples[j]+"/hZmass"+level;
-            h[j] = (TH1F*)f->Get(histname.c_str());
-        }
-        
-        //char result[40];   
-        //sprintf( result, "%d", j );
-        //string myhname = "h"+result;
-        //h[j]->SetName(myhname.c_str());
-      
-        //cout<<"Sample: "<<j<<" = "<<samples[j]<<endl;
-
-        h[j]->SetDirectory(0);
-        h[j]->Sumw2();
-        if (rebinme) h[j]->Rebin(rebinme);
-
-        
-    }
-
-    hall = (TH1F*)h[0]->Clone();
-    string hallname = "hall";
-    hall->SetName(hallname.c_str());
-    for (int k =1;k<dim;++k){
-        hall->Add(h[k]);
-    }
-    cout<<"Done with adding histograms...."<<endl;
-    return hall;
-
-}
-
-
-
 //----------------------------------------------------------
 void fit_sideband() {
 //----------------------------------------------------------
     //gROOT->ProcessLine(".L tdrstyle.C");
     //gROOT->ProcessLine("setTDRStyle()");
     gROOT->ProcessLine("gStyle->SetOptStat(0)");
+    
+    TFile *f = TFile::Open("../WprimeAnalyzer/Wprime_analysis.root", "read");
     
     cout<<"$$$$$$$$$$$$$$$$$$  get Z mass template function"<<endl;
     TCanvas *c1 = new TCanvas("c1");
@@ -183,7 +134,7 @@ void fit_sideband() {
     vector<string> nozshapefiles;
     nozshapefiles.push_back("ttbarfast");
     nozshapefiles.push_back("wjets");
-    TH1F* nozpeakhist = get_sum_of_hists(nozshapefiles,true,"_AllCuts");//""
+    TH1F* nozpeakhist = get_sum_of_hists(f, nozshapefiles, weights, "hZmass_AllCuts", 4);
 
     //2.shape the function
     TF1* nozpeakfunc;
@@ -210,7 +161,7 @@ void fit_sideband() {
     allshapefiles.push_back("zgamma");
     allshapefiles.push_back("zjets");
     allshapefiles.push_back("wjets");
-    TH1F* allhist = get_sum_of_hists(allshapefiles,true,"_AllCuts");//_mw
+    TH1F* allhist = get_sum_of_hists(f, allshapefiles, weights, "hZmass_AllCuts", 4);
 
     //2.shape the function
 
