@@ -4,12 +4,6 @@ root -l CalcSig.C
 */
 int
 CalcSig(){
-  ////////
-  //Cory: Fix the number of events, should be read in from output of ExpectedEvts (these are from 357)
-  //Cory: Fix error on number of events (systematics, stat, lumi?)
-  //    steal Edgars add in quad fn for this.
-  //Cory: make fn that plots significance vs lumi for each massOB
-
   gROOT->ProcessLine(".L nSigma.cc++");
 
   TTree* tree = new TTree("tree", "Number of Events");
@@ -29,45 +23,43 @@ CalcSig(){
   out<<"Mass:"
      <<"Lumi:"
      <<"nObs:"
-     <<"normEvts:"
-     <<"snormEvts:"
-     <<"snormFrac:"
-     <<"nSig"
+     <<"nBkgEvts:"
+     <<"snBkgEvts:"
+     <<"sNormFrac:"
+     <<"nSigma"
      <<endl;
     
   for(int i=0; i<NLumi; ++i){
     for(int j=0; j<NMass; ++j){
-      tree->Draw("nTotEvts:nBkgEvts:snBkgEvts", Form("Mass==%f",mass[j]), "goff");
+      tree->Draw("nTotEvts:nBkgEvts:snBkgEvts", 
+                 Form("Mass==%f && Lumi==%f",mass[j], lumi[i]), "goff");
       float n = tree->GetSelectedRows();
       if( n != 1) cout<<"Something went wrong "<<n<<endl;
       Double_t* nTotEvts  = tree->GetV1();
       Double_t* nBkgEvts  = tree->GetV2();
       Double_t* snBkgEvts = tree->GetV3();
 
-      float nObs = floor(nTotEvts[0] * lumi[i] / LumiUsed);
-      float normEvts  =  nBkgEvts[0] * lumi[i] / LumiUsed; 
-      float snormEvts = snBkgEvts[0] * lumi[i] / LumiUsed; //Cory: not right
+      float nObs = floor(nTotEvts[0]);
+      float sNormFrac = snBkgEvts[0] / nBkgEvts[0];
 
-      //nSig = nSigma(evts, nObs, sBfrac);
-      float nSig= nSigma(normEvts, nObs, snormEvts/normEvts);
+      //nSigma = nSigma(evts, nObs, sBfrac);
+      float nSig = nSigma(nBkgEvts[0], nObs, sNormFrac);
       
       out<<mass[j]<<"\t"
          <<lumi[i]<<"\t"
          <<nObs<<"\t"
-         <<normEvts<<"\t"
-         <<snormEvts<<"\t"
-         <<snormEvts/normEvts<<"\t"
+         <<nBkgEvts[0]<<"\t"
+         <<snBkgEvts[0]<<"\t"
+         <<sNormFrac<<"\t"
          <<nSig<<"\t"
          <<endl;
-
-      ++nObs;
       
       cout<<mass[j]<<"\t"
           <<lumi[i]<<"\t"
           <<nObs<<"\t"
-          <<normEvts<<"\t"
-          <<snormEvts<<"\t"
-          <<snormEvts/normEvts<<"\t"
+          <<nBkgEvts[0]<<"\t"
+          <<snBkgEvts[0]<<"\t"
+          <<sNormFrac<<"\t"
           <<nSig<<"\t"
           <<endl;
     }//Mass Loop

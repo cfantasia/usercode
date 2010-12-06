@@ -41,20 +41,19 @@ void
 Est_Zjets(bool useElec=false){  
     TFile *f = TFile::Open("../WprimeAnalyzer/ZJets_analysis.root", "read");
 
-    vector<string> allfiles;  //Cory: Need Weights!!!!
-    allfiles.push_back("ttbarfast");
-    allfiles.push_back("wjets");
-    allfiles.push_back("zjets");
-    allfiles.push_back("wprime400");
-
-    vector<float> weights;
+    map<string,float> allsamples;
+    allsamples["TTbar2l"]=1;
+    allsamples["WenuJets"]=1;
+    allsamples["WmunuJets"]=1;
+    allsamples["ZJetsBinned"]=1;
+    allsamples["Wprime400"]=1;
 
     if(useElec){
-      TH1F* allTThist = get_sum_of_hists(f, allfiles, weights,"hZeemassTT_MuonHitsCuts", 0);
-      TH1F* allTFhist = get_sum_of_hists(f, allfiles, weights,"hZeemassTF_MuonHitsCuts", 0);
+      TH1F* allTThist = get_sum_of_hists(f, allsamples,"hZeemassTT_MuonHitsCuts", 0);
+      TH1F* allTFhist = get_sum_of_hists(f, allsamples,"hZeemassTF_MuonHitsCuts", 0);
     }else{
-      TH1F* allTThist = get_sum_of_hists(f, allfiles, weights,"hZmumumassTT_MuonHitsCuts", 0);
-      TH1F* allTFhist = get_sum_of_hists(f, allfiles, weights,"hZmumumassTF_MuonHitsCuts", 0);
+      TH1F* allTThist = get_sum_of_hists(f, allsamples,"hZmumumassTT_MuonHitsCuts", 0);
+      TH1F* allTFhist = get_sum_of_hists(f, allsamples,"hZmumumassTF_MuonHitsCuts", 0);
     }
 
     TF1* linearTT = new TF1("linearTT", fline, 60, 120, 2);

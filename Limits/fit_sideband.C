@@ -106,14 +106,14 @@ void fit_sideband() {
     TCanvas *c1 = new TCanvas("c1");
     c1->cd();
     //1.get the samples to shape the Z
-    vector<string> zshapefiles;
-    zshapefiles.push_back("wprime400");
-    zshapefiles.push_back("wz");
-    zshapefiles.push_back("zgamma");
-    zshapefiles.push_back("zjets");
-    zshapefiles.push_back("zz");
+    vector<string> zshapesamples;
+    zshapesamples["Wprime400"]=1;
+    zshapesamples["WZ"]=1;
+    zshapesamples["ZGamma"]=1;
+    zshapesamples["ZJetsBinned"]=1;
+    zshapesamples["ZZ4l"]=1;
 
-    TH1F* zpeakhist = get_sum_of_hists(zshapefiles,true,"_AllCuts");//_Zcut  
+    TH1F* zpeakhist = get_sum_of_hists(f, zshapesamples, "hZmass_AllCuts", 4);//_Zcut  
     //2.shape the function
     TF1* zpeakfunc;
     zpeakfunc = shape_zpeakfunc(zpeakhist);
@@ -131,10 +131,11 @@ void fit_sideband() {
     TCanvas *c2 = new TCanvas("c2");
     c2->cd();
     //1.get the samples to shape the non-genuine Z background
-    vector<string> nozshapefiles;
-    nozshapefiles.push_back("ttbarfast");
-    nozshapefiles.push_back("wjets");
-    TH1F* nozpeakhist = get_sum_of_hists(f, nozshapefiles, weights, "hZmass_AllCuts", 4);
+    vector<string> nozshapesamples;
+    nozshapesamples["TTbar2l"]=1;
+    nozshapesamples["WenuJets"]=1;
+    nozshapesamples["WmunuJets"]=1;
+    TH1F* nozpeakhist = get_sum_of_hists(f, nozshapesamples, "hZmass_AllCuts", 4);
 
     //2.shape the function
     TF1* nozpeakfunc;
@@ -152,16 +153,17 @@ void fit_sideband() {
    
    
     //1.get the samples
-    vector<string> allshapefiles;
-    allshapefiles.push_back("wprime400"); cout<<"Using W' in signal"<<endl;
-    //allshapefiles.push_back("TC400");  cout<<"Using TC in signal"<<endl;
-    allshapefiles.push_back("wz");
-    allshapefiles.push_back("ttbarfast");
-    allshapefiles.push_back("zz");
-    allshapefiles.push_back("zgamma");
-    allshapefiles.push_back("zjets");
-    allshapefiles.push_back("wjets");
-    TH1F* allhist = get_sum_of_hists(f, allshapefiles, weights, "hZmass_AllCuts", 4);
+    vector<string> allshapesamples;
+    allshapesamples["Wprime400"]=1; cout<<"Using W' in signal"<<endl;
+    //allshapesamples["TC400"]=1;  cout<<"Using TC in signal"<<endl;
+    allshapesamples["WZ"]=1;
+    allshapesamples["TTbar2l"]=1;
+    allshapesamples["ZZ4l"]=1;
+    allshapesamples["ZGamma"]=1;
+    allshapesamples["ZJetsBinned"]=1;
+    allshapesamples["Wenuets"]=1;
+    allshapesamples["Wmunuets"]=1;
+    TH1F* allhist = get_sum_of_hists(f, allshapesamples, "hZmass_AllCuts", 4);
 
     //2.shape the function
 

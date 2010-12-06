@@ -19,7 +19,7 @@ PlotSig(){
   TLegend *legend = new TLegend(0.15,0.60,0.25,0.89,"");
 
   for(int j=0; j<NMass; ++j){
-    tree1->Draw("Lumi:nSig", Form("Mass==%f",mass[j]), "goff");
+    tree1->Draw("Lumi:nSigma", Form("Mass==%f",mass[j]), "goff");
     n = tree1->GetSelectedRows();
     x = tree1->GetV1();
     y = tree1->GetV2();

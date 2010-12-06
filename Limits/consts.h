@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string>
+#include <map>
 #include "TFile.h"
 #include "TTree.h" 
 #include "TH1F.h"
@@ -16,6 +17,7 @@
 const float nGenerated = 10000; //Number of MC Sig Evts Gen
 const float LumiUsed = 1000; //inv pb
 const float sLumiFrac = 0.1;
+const float sysEff = 0.05;//Guess?
 
 const int NLumi = 9;
 const float lumi[NLumi] = {200,400,600,800,1000,2000,3000,4000,5000};//inv pb
@@ -36,29 +38,41 @@ const float xsec_TC[NMass_TC] = {K_TC*0.148066, K_TC*0.0448773,
                                  K_TC*0.0129922, K_TC*0.00522783}; 
 
 //---------------------------------------------------------------
-TH1F* get_sum_of_hists(vector<string> samples,string level){
+TH1F* get_sum_of_hists(TFile* f, map<string,float> & samples,
+                       string level, int rebinme=0){
 //--------------------------------------------------------------
-  int rebinme = 1;
-  TH1F* hall;
+  TH1F* hall=NULL;
   const int dim = samples.size();
-  TFile *f = TFile::Open("../WprimeAnalyzer/Wprime_analysis.root", "read");
-
-  TH1F* h[dim];
-  for (int j = 0;j<dim;++j){
-    string histname = samples[j]+"/hWZInvMass"+level;
-    h[j] = (TH1F*)f->Get(histname.c_str());
-    h[j]->Sumw2();
-    if (rebinme) h[j]->Rebin(rebinme);
-    //cout<<"Done with adding this histo"<<endl;
-  }
-  hall = (TH1F*)h[0]->Clone();
-  string hallname = "hall";
-  hall->SetName(hallname.c_str());
   
-  for (int k =1;k<dim;++k){
-    hall->Add(h[k]);
-  }
+  TH1F* h[dim];
+
+  int j=0;
+  map<string, float>::iterator iter;
+  for (iter=samples.begin(),j=0; iter != samples.end(); ++iter, ++j) {
+    
+    string histname = iter->first + "/" + level;
+    h[j] = (TH1F*)f->Get(histname.c_str());
+
+    if(h[j] == NULL) cout<<"Failed Getting "<<histname<<endl;
+
+    //h[j]->Sumw2();
+    if (rebinme) h[j]->Rebin(rebinme);
+    if(j==0){
+      hall = (TH1F*)h[0]->Clone("hall");
+      hall->Sumw2();
+      hall->Scale(iter->second);
+    }else{
+      hall->Add(h[j], iter->second);
+    }
+
+  }if(j != dim) cout<<"Something went wrong with map!!!!\n\n\n";
+  
   //cout<<"Done with adding histograms...."<<endl;
   return hall;
 
+}
+
+float
+AddInQuad(float a, float b){
+  return sqrt(a*a + b*b);
 }
