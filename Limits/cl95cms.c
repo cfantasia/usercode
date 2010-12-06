@@ -173,8 +173,8 @@ Double_t CL95(Double_t ilum, Double_t slum, Double_t eff, Double_t seff, Double_
 	xmax = (x1 + x2)/2.;
 	delta = like.Integral(0,xmax,p,epsilon)/Norm - 0.95;
 	//
-	while (fabs(delta) > epsilon) 
-	{
+	while (fabs(delta) > epsilon && fabs(x1-x2)>1.e-5) 
+	{ 
 		if (delta < 0) x1 = xmax;
 		else x2 = xmax;
 		xmax = (x1 + x2)/2.;
@@ -456,7 +456,7 @@ Double_t CLA(Double_t ilum, Double_t slum, Double_t eff, Double_t seff, Double_t
 	cout << "Lower bound on n has been found at " << i+1 << endl;
 	//
 	for (i = bck+1; ; i++)
-	{
+	{ 
 		Double_t s95 = CL95(ilum, slum, eff, seff, bck, sbck, i, kFALSE, bckint);
 		Double_t s95w =s95*Poisson(bck,i);
 		CL95A += s95w;
@@ -469,3 +469,4 @@ Double_t CLA(Double_t ilum, Double_t slum, Double_t eff, Double_t seff, Double_t
 	cout << "Average upper 95% C.L. limit = " << CL95A << " pb" << endl;
 	return CL95A;
 }
+
