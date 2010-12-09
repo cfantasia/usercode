@@ -1,66 +1,38 @@
-/*
-Usage: root -b -q "Est_Zjets.C+(1)" //For Electrons
-Usage: root -b -q "Est_Zjets.C+(0)" //For Muons
-*/
+//Usage: root -b -q "Est_Zjets.C+(useElec, useData)"
 
-#include <stdio.h>
-#include <math.h>
-#include <string>
-#include <iostream>
-#include "TFile.h"
-#include "TTree.h" 
-#include "TH1.h"
-#include "TMultiGraph.h"
-#include "TGraph.h"
-#include "TCanvas.h"
-#include "TRandom.h"
-#include "TMath.h"
-#include "TEntryList.h"
-#include "TLegend.h"
-#include "THStack.h"
 #include <vector>
-#include "TROOT.h"
+#include "THStack.h"
 #include "TStyle.h"
 #include "TLine.h"
-//#include <ExecuteAnalysis.h>
-
-const double ZWind_low = 80;
-const double ZWind_high = 100;
-
-Bool_t reject;
-Double_t fline(Double_t *x, Double_t *par)
-{
-    if (reject && x[0] > ZWind_low && x[0] < ZWind_high) {
-      TF1::RejectPoint();
-      return 0;
-   }
-   return par[0] + par[1]*x[0];
-}
+#include "consts.h"
 
 void
-Est_Zjets(bool useElec=false){  
+Est_Zjets(bool useElec=false, bool useData=false){  
     TFile *f = TFile::Open("../WprimeAnalyzer/ZJets_analysis.root", "read");
 
     map<string,float> allsamples;
-    allsamples["TTbar2l"]=1;
-    allsamples["WenuJets"]=1;
-    allsamples["WmunuJets"]=1;
-    allsamples["ZJetsBinned"]=1;
-    allsamples["Wprime400"]=1;
-
-    if(useElec){
-      TH1F* allTThist = get_sum_of_hists(f, allsamples,"hZeemassTT_MuonHitsCuts", 0);
-      TH1F* allTFhist = get_sum_of_hists(f, allsamples,"hZeemassTF_MuonHitsCuts", 0);
+    if(!useData){
+      allsamples["TTbar2l"]=KFactor("TTbar2l");
+      allsamples["WenuJets"]=KFactor("WmunuJets");
+      allsamples["WmunuJets"]=KFactor("WmunuJets");
+      allsamples["ZJetsBinned"]=KFactor("ZJetsBinned");
+      allsamples["Wprime400"]=KFactor("Wprime400");
     }else{
-      TH1F* allTThist = get_sum_of_hists(f, allsamples,"hZmumumassTT_MuonHitsCuts", 0);
-      TH1F* allTFhist = get_sum_of_hists(f, allsamples,"hZmumumassTF_MuonHitsCuts", 0);
+      allsamples["Data"]=1.;
+    }
+    if(useElec){
+      TH1F* allTThist = get_sum_of_hists(f, allsamples,"hZeemassTT_AllCuts", 0);
+      TH1F* allTFhist = get_sum_of_hists(f, allsamples,"hZeemassTF_AllCuts", 0);
+    }else{
+      TH1F* allTThist = get_sum_of_hists(f, allsamples,"hZmumumassTT_AllCuts", 0);
+      TH1F* allTFhist = get_sum_of_hists(f, allsamples,"hZmumumassTF_AllCuts", 0);
     }
 
     TF1* linearTT = new TF1("linearTT", fline, 60, 120, 2);
     TF1* linearTF = new TF1("linearTF", fline, 60, 120, 2);
 
     cout<<"Fitting Background TT"<<endl;
-    TCanvas* c1 = new TCanvas("c1");
+    TCanvas* c1 = new TCanvas("c1", "Z Mass TT");
     reject = true;
     allTThist->Fit(linearTT, "MRELL");
     reject = false;
@@ -70,7 +42,7 @@ Est_Zjets(bool useElec=false){
     c1->Print("fit_zjets_BTT.gif");
 
     cout<<"Fitting Background TF"<<endl;
-    TCanvas* c2 = new TCanvas("c2");
+    TCanvas* c2 = new TCanvas("c2", "Z Mass TF");
     reject = true;
     allTFhist->Fit(linearTF, "MRELL");
     reject = false;
@@ -82,28 +54,13 @@ Est_Zjets(bool useElec=false){
     lowBin = allTThist->FindBin(ZWind_low);  
     highBin = allTThist->FindBin(ZWind_high);
 
-    double sigma_N_TT=0, sigma_N_TF=0;
     //double N_TT = allTThist->IntegralAndError(low,high,sigma_N_TT);
     //double N_TF = allTFhist->IntegralAndError(low,high,sigma_N_TF);
     double N_TT = allTThist->Integral(lowBin,highBin);
     double N_TF = allTFhist->Integral(lowBin,highBin);
 
-    sigma_N_TT = 0;
-    for(int bin=lowBin;bin<=highBin;bin++) {
-        //sum_N_TT += allTThist->GetBinContent(bin);
-        sigma_N_TT += TMath::Power( allTThist->GetBinError(bin),2 );
-    }
-    sigma_N_TT = sqrt(sigma_N_TT);
-    //cout<<"N_TT: "<<N_TT<<" vs "<<sum_N_TT<<endl;
-
-    sigma_N_TF = 0;
-    for(int bin=lowBin;bin<=highBin;bin++) {
-        //sum_N_TF += allTFhist->GetBinContent(bin);
-        sigma_N_TF += TMath::Power( allTFhist->GetBinError(bin),2 );
-    }
-    sigma_N_TF = sqrt(sigma_N_TF);
-    //cout<<"N_TF: "<<N_TF<<" vs "<<sum_N_TF<<endl;
-
+    double sigma_N_TT = IntegralError(allTThist, lowBin, highBin);
+    double sigma_N_TF = IntegralError(allTFhist, lowBin, highBin);
     ///////////////////////
 
     double num = 2*(N_TT - B_TT);
@@ -117,8 +74,7 @@ Est_Zjets(bool useElec=false){
     double term2 = 4 * pow(N_TT-B_TT,2) * sigma2_TF;
     double sigma_e = sqrt(term1 + term2) / (denom*denom);
 
-    cout<<endl;
-    cout<<"Using ";
+    cout<<"\n\nUsing ";
     if(useElec) cout<<"Electrons"<<endl;
     else        cout<<"Muons"<<endl;
     cout<<"  B_TT:"<<B_TT<<" +/- " <<sigma_B_TT<<endl

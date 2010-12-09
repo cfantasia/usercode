@@ -18,308 +18,125 @@ void Declare_Histos()
 //--------------------------------------------------------------
 
   if (debugme) cout<<"Declare histos"<<endl;
-  float Min, Max, binWidth;
-  int Nbin;
-  string name, title;
+  listOfHists.clear();
+
+  DeclareHistoSet("hWZInvMass", "Reconstructed WZ Invariant Mass",
+                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZInvMass);
+  DeclareHistoSet("hWZTransMass", "Reconstructed WZ Transverse Mass",
+                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZTransMass);
+  //Ht Histos
+  DeclareHistoSet("hHt", "H_{T}", 
+                  "Lepton Pt Sum: H_{T} (GeV)", 50, 0, 1000, Cut, hHt);
+  //Wpt Histos
+  DeclareHistoSet("hWpt", "p_{T} of W", 
+                  "p_{T}^{W} (GeV)", 80, 0, 400, Cut, hWpt);
+  //Zpt Histos
+  DeclareHistoSet("hZpt", "p_{T} of Z", 
+                  "p_{T}^{Z} (GeV)", 80, 0, 400, Cut, hZpt);
+  //MET Histos
+  DeclareHistoSet("hMET", "MET",
+                  "MET (GeV)", 50, 0, 500, Cut, hMET);
+
+  //Z Mass Histos
+  DeclareHistoSet("hZmass" , "Reconstructed Mass of Z",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZmass);
   
-  for(int i=0; i<NCuts; ++i){
-    //InvMass histos
-    Min = 0;
-    Max = 1100;
-    Nbin = 110;
-    binWidth = (Max-Min)/Nbin;
-    name = "hWZInvMass_" + Cut_Name[i];
-    title = "Reconstructed WZ Invariant Mass (After "+Cut_Name[i]+" Cut);m_{WZ} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hWZInvMass[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hZeemass","Reconstructed Mass of Zee",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZeemass);
+
+  DeclareHistoSet("hZmumumass","Reconstructed Mass of Zmumu",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZmumumass);
+
+  //W Trans Mass Histos
+  DeclareHistoSet("hWTransmass", "Reconstructed Transmass of W",
+                  "m_{T W}^{Reco} (GeV)", 10, 0, 100, Cut, hWTransmass);
   
-    //TransMass histos
-    Min = 0;
-    Max = 1100;
-    Nbin = 110;
-    binWidth = (Max-Min)/Nbin;
-    name = "hWZTransMass_" + Cut_Name[i];
-    title = "Reconstructed WZ Transverse Mass (After "+Cut_Name[i]+" Cut);m_{WZ} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hWZTransMass[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
- 
-    //Ht Histos
-    Min = 0.;
-    Max = 1000.;
-    Nbin = 50;
-    binWidth = (Max-Min)/Nbin;
-    name = "hHt_" + Cut_Name[i];
-    title = "H_{T} (After "+Cut_Name[i]+" Cut);Lepton Pt Sum: H_{T} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hHt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
- 
-    //Wpt Histos
-    Min = 0.;
-    Max = 400.;
-    Nbin = 80;
-    binWidth = (Max-Min)/Nbin;
-    name = "hWpt_" + Cut_Name[i];
-    title = "p_{T}^{W} (After "+Cut_Name[i]+" Cut);p_{T} of W (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hWpt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  //Wenu Trans Mass Histos
+  DeclareHistoSet("hWenuTransmass", "Reconstructed Transmass of Wenu",
+                  "m_{T W}^{Reco} (GeV)", 10, 0, 100, Cut, hWenuTransmass);
 
-    //Zpt Histos
-    Min = 0.;
-    Max = 400.;
-    Nbin = 80;
-    binWidth = (Max-Min)/Nbin;
-    name = "hZpt_" + Cut_Name[i];
-    title = "p_{T}^{Z} (After "+Cut_Name[i]+" Cut);p_{T} of Z (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hZpt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  //Wmunu Trans Mass Histos
+  DeclareHistoSet("hWmunuTransmass", "Reconstructed Transmass of Wmunu",
+                  "m_{T W}^{Reco} (GeV)", 10, 0, 100, Cut, hWmunuTransmass);
   
-    //MET Histos
-    Min = 0.;
-    Max = 500.;
-    Nbin = 50;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMET_" + Cut_Name[i];
-    title = "MET (After "+Cut_Name[i]+" Cut);MET (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMET[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  //Leading Lepton Pt
+  DeclareHistoSet("hLeadPt", "Leading Lepton Pt",
+                  "P_{T} (GeV)", 30, 0, 300, Cut, hLeadPt);
 
-    //Z Mass Histos
-    Min = 50.;
-    Max = 130.;
-    Nbin = 40;
-    binWidth = (Max-Min)/Nbin;
-    name = "hZmass_" + Cut_Name[i];
-    title = "Reconstructed Mass of Z (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hZmass[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hLeadElecPt", "Leading Electron Pt",
+                  "P_{T} (GeV)", 30, 0, 300, Cut, hLeadElecPt);
 
-    //Zee Mass Histos
-    name = "hZeemass_" + Cut_Name[i];
-    title = "Reconstructed Mass of Zee (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hZeemass[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hLeadMuonPt", "Leading Muon Pt",
+                  "P_{T} (GeV)", 30, 0, 300, Cut, hLeadMuonPt);
+
+  //Electron Properties
+  DeclareHistoSet("hElecPt", "Electron Pt",
+                  "Pt", 50, 0, 500, Cut, hElecPt);
+
+  DeclareHistoSet("hElecEt", "Electron Et",
+                  "Et", 50, 0, 500, Cut, hElecEt);
   
-    //Zmumu Mass Histos
-    name = "hZmumumass_" + Cut_Name[i];
-    title = "Reconstructed Mass of Zmumu (After "+Cut_Name[i]+" Cut);m_{Z}^{Reco} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hZmumumass[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hElecDEta", "Electron Delta Eta",
+                  "dEta", 100, 0, 1, Cut, hElecdEta);
   
-    //W Trans Mass Histos
-    Min = 0.;
-    Max = 100.;
-    Nbin = 10;
-    binWidth = (Max-Min)/Nbin;
-    name = "hWTransmass_" + Cut_Name[i];
-    title = "Reconstructed Transmass of W (After "+Cut_Name[i]+" Cut);m_{T W}^{Reco} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hWTransmass[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hElecDPhi","Electron Delta Phi",
+                  "dPhi", 100, 0, 1, Cut, hElecdPhi);
+
+  DeclareHistoSet("hElecSigmaEtaEta", "Electron Sigma Eta Eta",
+                  "Sigma Eta Eta", 100, 0, 1, Cut, hElecSigmann);
+
+  DeclareHistoSet("hElecEP", "Electron E Over P",
+                  "E/P", 100, 0, 2, Cut, hElecEP);
+
+  DeclareHistoSet("hElecHOverE","Electron H over E",
+                  "H/E", 200, 0, 2, Cut, hElecHE);
+
+  DeclareHistoSet("hElecTrkRelIso", "Electron Relative Track Iso",
+                  "TrkRelIso", 100, 0, 2, Cut, hElecTrkRelIso);
+
+  DeclareHistoSet("hElecECalRelIso", "Electron Relative ECal Iso",
+                  "ECalRelIso", 100, 0, 2, Cut, hElecECalRelIso);
+
+  DeclareHistoSet("hElecHCalRelIso", "Electron Relative HCal Iso",
+                  "HCalRelIso", 100, 0, 2, Cut, hElecHCalRelIso);
+
+  //Muon Histograms
+  DeclareHistoSet("hMuonPt", "Muon Pt",
+                  "Pt", 50, 0, 500, Cut, hMuonPt);
+
+  DeclareHistoSet("hMuonDxy", "Muon Dxy",
+                  "Dxy", 100, 0, 1, Cut, hMuonDxy);
+
+  DeclareHistoSet("hMuonNormChi2", "Muon NormChi2",
+                  "NormChi2", 50, 0, 50, Cut, hMuonNormChi2);
   
-    //Wenu Trans Mass Histos
-    name = "hWenuTransmass_" + Cut_Name[i];
-    title = "Reconstructed Transmass of Wenu (After "+Cut_Name[i]+" Cut);m_{T W}^{Reco} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hWenuTransmass[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    //Wmunu Trans Mass Histos
-    name = "hWmunuTransmass_" + Cut_Name[i];
-    title = "Reconstructed Transmass of Wmunu (After "+Cut_Name[i]+" Cut);m_{T W}^{Reco} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hWmunuTransmass[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-  
-    //Leading Lepton Pt
-    Min = 0.;
-    Max = 300.;
-    Nbin = 30;
-    binWidth = (Max-Min)/Nbin;
-    name = "hLeadPt_" + Cut_Name[i];
-    title = "Leading Lepton Pt (After "+Cut_Name[i]+" Cut);P_{T} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hLeadPt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    name = "hLeadElecPt_" + Cut_Name[i];
-    title = "Leading Electron Pt (After "+Cut_Name[i]+" Cut);P_{T} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hLeadElecPt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    name = "hLeadMuonPt_" + Cut_Name[i];
-    title = "Leading Muon Pt (After "+Cut_Name[i]+" Cut);P_{T} (GeV);";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hLeadMuonPt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    //Electron Properties
-    Nbin = 50;
-    Min = 0.;
-    Max = 500.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecPt_" + Cut_Name[i];
-    title = "Electron Pt (After "+Cut_Name[i]+" Cut);Pt;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecPt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 50;
-    Min = 0.;
-    Max = 500.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecEt_" + Cut_Name[i];
-    title = "Electron Et (After "+Cut_Name[i]+" Cut);Et;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecEt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-  
-    Nbin = 100;
-    Min = 0.;
-    Max = 1.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecDEta_" + Cut_Name[i];
-    title = "Electron Delta Eta (After "+Cut_Name[i]+" Cut);dEta;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecdEta[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-  
-    Nbin = 100;
-    Min = 0.;
-    Max = 1.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecDPhi_" + Cut_Name[i];
-    title = "Electron Delta Phi (After "+Cut_Name[i]+" Cut);dPhi;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecdPhi[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 100;
-    Min = 0.;
-    Max = 1.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecSigmaEtaEta_" + Cut_Name[i];
-    title = "Electron Sigma Eta Eta (After "+Cut_Name[i]+" Cut);Sigma Eta Eta;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecSigmann[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 100;
-    Min = 0.;
-    Max = 2.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecEP_" + Cut_Name[i];
-    title = "Electron E Over P (After "+Cut_Name[i]+" Cut);E/P;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecEP[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 200;
-    Min = 0.;
-    Max = 2.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecHOverE_" + Cut_Name[i];
-    title = "Electron H over E (After "+Cut_Name[i]+" Cut);H/E;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecHE[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 100;
-    Min = 0.;
-    Max = 2.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecTrkRelIso_" + Cut_Name[i];
-    title = "Electron Relative Track Iso (After "+Cut_Name[i]+" Cut);TrkRelIso;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecTrkRelIso[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 100;
-    Min = 0.;
-    Max = 2.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecECalRelIso_" + Cut_Name[i];
-    title = "Electron Relative ECal Iso (After "+Cut_Name[i]+" Cut);ECalRelIso;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecECalRelIso[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 100;
-    Min = 0.;
-    Max = 2.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hElecHCalRelIso_" + Cut_Name[i];
-    title = "Electron Relative HCal Iso (After "+Cut_Name[i]+" Cut);HCalRelIso;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hElecHCalRelIso[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    //Muon Histograms
-    Nbin = 50;
-    Min = 0.;
-    Max = 500.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMuonPt_" + Cut_Name[i];
-    title = "Muon Pt (After "+Cut_Name[i]+" Cut);Pt;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMuonPt[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 100;
-    Min = 0.;
-    Max = 1.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMuonDxy_" + Cut_Name[i];
-    title = "Muon Dxy (After "+Cut_Name[i]+" Cut);Dxy;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMuonDxy[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-
-    Nbin = 50;
-    Min = 0.;
-    Max = 50.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMuonNormChi2_" + Cut_Name[i];
-    title = "Muon NormChi2 (After "+Cut_Name[i]+" Cut);NormChi2;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMuonNormChi2[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-  
-    Nbin = 50;
-    Min = 0.;
-    Max = 50.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMuonNPix_" + Cut_Name[i];
-    title = "Muon NPix (After "+Cut_Name[i]+" Cut);NPix;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMuonNPix[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hMuonNPix", "Muon NPix",
+                  "NPix", 50, 0, 50, Cut, hMuonNPix);
     
-    Nbin = 50;
-    Min = 0.;
-    Max = 50.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMuonNTrk_" + Cut_Name[i];
-    title = "Muon NTrk (After "+Cut_Name[i]+" Cut);NTrk;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMuonNTrk[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hMuonNTrk", "Muon NTrk",
+                  "NTrk", 50, 0, 50, Cut, hMuonNTrk);
 
-    Nbin = 100;
-    Min = 0;
-    Max = 1.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMuonRelIso_" + Cut_Name[i];
-    title = "Muon Rel Iso (After "+Cut_Name[i]+" Cut);Rel Iso;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMuonRelIso[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hMuonRelIso", "Muon Rel Iso",
+                  "Rel Iso", 100, 0, 1, Cut, hMuonRelIso);
 
-    Nbin = 50;
-    Min = 0.;
-    Max = 50.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMuonStation_" + Cut_Name[i];
-    title = "Muon Station (After "+Cut_Name[i]+" Cut);Station;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMuonStation[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
+  DeclareHistoSet("hMuonStation", "Muon Station",
+                  "Station", 50, 0, 50, Cut, hMuonStation);
 
-    Nbin = 100;
-    Min = 0.;
-    Max = 50.;
-    binWidth = (Max-Min)/Nbin;
-    name = "hMuonSip_" + Cut_Name[i];
-    title = "Muon Sip (After "+Cut_Name[i]+" Cut);Sip;";
-    title += "Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    hMuonSip[i] = new TH1F(name.c_str(),title.c_str(),Nbin,Min,Max);
-  }  
+  DeclareHistoSet("hMuonSip", "Muon Sip",
+                  "Sip", 100, 0, 50, Cut, hMuonSip);
 
   ///Eff Plots///////
-  title = "Expected # of Events / " + convertFloatToStr(lumiPb) + " pb^{-1}";
+  string title = "Expected # of Events / " + convertFloatToStr(lumiPb) + " pb^{-1}";
   hNumEvts = new TH1F("hNumEvts",title.c_str(),NCuts,0,NCuts);
   hEffRel = new TH1F("hEffRel","Relative Efficiency",NCuts,0,NCuts);
   hEffAbs = new TH1F("hEffAbs","Absolute Efficiency",NCuts,0,NCuts);
   for(int i=0; i<NCuts; ++i) hNumEvts->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
   for(int i=0; i<NCuts; ++i) hEffRel ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
   for(int i=0; i<NCuts; ++i) hEffAbs ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
+
+  listOfHists.push_back(hNumEvts);
+  listOfHists.push_back(hEffRel);
+  listOfHists.push_back(hEffAbs);
 
 }//Declare_Histos
 
@@ -394,100 +211,6 @@ void Fill_Histos(int index, float weight)
   }
     
 }//Fill_Histos
-
-//------------------------------------------------------------------------
-void saveHistos(TFile * fout, string dir)
-{
-//------------------------------------------------------------------------
-  if (debugme) cout<<"Save Histos....."<<endl;
-  fout->cd(); 
-  fout->mkdir(dir.c_str()); 
-  fout->cd(dir.c_str());
-
-  for(int i = 0; i != NCuts; ++i){
-    hWZInvMass[i]->Write();   
-    hWZTransMass[i]->Write();
-    hHt[i]->Write();
-    hWpt[i]->Write();
-    hZpt[i]->Write();
-    hMET[i]->Write();
-    hZmass[i]->Write();
-    hZeemass[i]->Write();
-    hZmumumass[i]->Write();
-    hWTransmass[i]->Write();
-    hWenuTransmass[i]->Write();
-    hWmunuTransmass[i]->Write();
-    hLeadPt[i]->Write();
-    hLeadElecPt[i]->Write();
-    hLeadMuonPt[i]->Write();
-      
-    hElecPt[i]->Write();
-    hElecEt[i]->Write();
-    hElecdEta[i]->Write();
-    hElecdPhi[i]->Write();
-    hElecSigmann[i]->Write();
-    hElecEP[i]->Write();
-    hElecHE[i]->Write();
-    hElecTrkRelIso[i]->Write();
-    hElecECalRelIso[i]->Write();
-    hElecHCalRelIso[i]->Write();
-    
-    hMuonPt[i]->Write();
-    hMuonDxy[i]->Write();
-    hMuonNormChi2[i]->Write();
-    hMuonNPix[i]->Write();
-    hMuonNTrk[i]->Write();
-    hMuonRelIso[i]->Write();
-    hMuonStation[i]->Write();
-    hMuonSip[i]->Write();
-  }
-  hNumEvts->Write();
-  hEffRel->Write();
-  hEffAbs->Write();
-  
-  return;
-
-}//saveHistos
-
-//Writing results to a txt file
-//--------------------------------------------------------------------------
-void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
-                  const float& Nexp_evt, float Nexp_evt_cut[]) 
-{ 
-//------------------------------------------------------------------------
-  if(debugme) cout<<"Writing results to a txt file"<<endl;
-
-  out<<"$$$$$$$$$$$$$$$$$$$$$$$ Type of sample: "<<dir<<endl;
-  out << " Total # of Theoretical expected events = " << Nthe_evt << endl;
-  out << " Total # of expected events = " << Nexp_evt << endl;
-        
-  for(int i = 0; i < NCuts; ++i){
-        
-    out <<"Cut # "<<i<<"("<<Cut_Name[i]<<"): expected evts = " << Nexp_evt_cut[i];
-    hNumEvts->Fill(i,Nexp_evt_cut[i]);
-
-    //calculate efficiencies
-    float eff, deff;
-    if(i == 0){
-      getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
-	    hEffRel->Fill(i,eff*100);	
-    }else{
-      getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt_cut[i-1]);
-	    hEffRel->Fill(i,eff*100);
-    }
-    out << ", Relative eff = "<<eff*100 << " +/- " << deff*100 << "%";
-        
-    getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
-    hEffAbs->Fill(i,eff*100);
-    out << ", Absolute eff = "<< eff*100 << " +/- " << deff*100 << "%"
-        << endl;
-        
-    //to do: put these results in a file
-        
-  } // loop over different cuts
-    
-    
-}//printSummary
 
 //Get different types of distribution
 //-----------------------------------------------------------
@@ -708,8 +431,9 @@ void Get_Distributions(vector<InputFile>& files,
 
   }//loop over files
   
-  printSummary(out, dir, Nthe_evt, Nexp_evt, Nexp_evt_cut);
+  printSummary(out, dir, Nthe_evt, Nexp_evt, Nexp_evt_cut, Cut);
   saveHistos(fout, dir);
+  deleteHistos();
   
 }//Get_Distributions
 
@@ -741,6 +465,8 @@ void ExecuteAnalysis()
   //the results will be written under respective directories
   //Add as many as you need:
   
+  vector<InputFile> Wprime300_files;
+  UseSample("Wprime300",Wprime300_files, fout, out);
   vector<InputFile> Wprime400_files;
   UseSample("Wprime400",Wprime400_files, fout, out);
   vector<InputFile> Wprime500_files;
@@ -754,7 +480,6 @@ void ExecuteAnalysis()
   vector<InputFile> Wprime900_files;
   UseSample("Wprime900",Wprime900_files, fout, out);
   
-  
   vector<InputFile> TC225_files;
   UseSample("TC225", TC225_files, fout, out);
   vector<InputFile> TC300_files;
@@ -764,32 +489,45 @@ void ExecuteAnalysis()
   vector<InputFile> TC500_files;
   UseSample("TC500", TC500_files, fout, out);
   
-  
   vector<InputFile> WZ_files;
   UseSample("WZ",WZ_files, fout, out);
   vector<InputFile> TTbar_files;
   UseSample("TTbar",TTbar_files, fout, out);
-  //vector<InputFile> TTbarfast_files;
-  //UseSample("TTbarfast",TTbarfast_files, fout, out);
+  vector<InputFile> TTbar2l_files;
+  UseSample("TTbar2l",TTbar2l_files, fout, out);
   vector<InputFile> ZZ_files;
   UseSample("ZZ",ZZ_files, fout, out);
+  vector<InputFile> ZZ4l_files;
+  UseSample("ZZ4l",ZZ4l_files, fout, out);
   vector<InputFile> ZGamma_files;
   UseSample("ZGamma",ZGamma_files, fout, out);
+
+  vector<InputFile> ZJetsBinned_files;
+  UseSample("ZJetsBinned",ZJetsBinned_files, fout, out);
   vector<InputFile> ZeeJets_files;
   UseSample("ZeeJets",ZeeJets_files, fout, out);
   vector<InputFile> ZmumuJets_files;
   UseSample("ZmumuJets",ZmumuJets_files, fout, out);
+  vector<InputFile> ZeeJetsPowheg_files;
+  UseSample("ZeeJetsPowheg",ZeeJetsPowheg_files, fout, out);
+  vector<InputFile> ZmumuJetsPowheg_files;
+  UseSample("ZmumuJetsPowheg",ZmumuJetsPowheg_files, fout, out);
+  vector<InputFile> ZllJetsMadgraph_files;
+  UseSample("ZllJetsMadgraph",ZllJetsMadgraph_files, fout, out);
+
   vector<InputFile> WenuJets_files;
   UseSample("WenuJets",WenuJets_files, fout, out);
   vector<InputFile> WmunuJets_files;
   UseSample("WmunuJets",WmunuJets_files, fout, out);
-    
-  vector<InputFile> Run2010_Nov4ReReco_files;
-  UseSample("Run2010-Nov4ReReco",Run2010_Nov4ReReco_files, fout, out);
-
+  vector<InputFile> WlnuJetsMadgraph_files;
+  UseSample("WlnuJetsMadgraph",WlnuJetsMadgraph_files, fout, out);
+  
+  vector<InputFile> Run2010_files;
+  UseSample("Run2010",Run2010_files, fout, out);
+  
   //vector<InputFile> Interesting_files;
   //UseSample("interesting",Interesting_files, fout, out);
-
+    
   out.close(); 
   fout->Close();
 

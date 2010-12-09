@@ -1,12 +1,11 @@
+//Usage: root -l PlotLumi.C++
+
 #include "consts.h"
 
 int
 PlotLumi(){
-  /*
-    Decide where Xsec info should come from!!!!
-  */
   ////Load Trees////////
-  TTree* tree1 = new TTree("tree1", "Significance");
+  TTree* tree1 = new TTree("tree1", "Limits");
   tree1->ReadFile("lumiNeeded.txt");
 
   TTree* tXsec = new TTree("tXsec", "W' Cross Sections");
@@ -16,24 +15,13 @@ PlotLumi(){
   tXsec_TC->ReadFile("xSec_TC.txt");
 
   //////Now Plot Limit vs Mass//////////////////////
-  TCanvas* c1 = new TCanvas("c1", "Limit vs Mass");
+  TCanvas* c1 = new TCanvas("c1", "Exclusion Limit vs Mass");
   TMultiGraph *mg = new TMultiGraph("mg", "Exclusion Limits vs Mass;M_{WZ} (GeV);\\sigma*BR (pb)");
   TLegend *legend = new TLegend(0.70,0.50,0.95,0.89,"");
   c1->SetLogy();
-  float n=0;
-  
-  tXsec->Draw("Mass:Xsec", "", "goff"); //Sel on W'
-  n = tXsec->GetSelectedRows();
-  TGraph* gxsec = new TGraph(n, tXsec->GetV1(), tXsec->GetV2());
-  mg->Add(gxsec,"lp");
-  legend->AddEntry(gxsec,"W' \\sigma", "L");
-
-  tXsec_TC->Draw("Rho:Xsec", "Pi==Rho - 100", "goff");//which pi mass? Sel on TC
-  n = tXsec_TC->GetSelectedRows();
-  TGraph* gxsec_TC = new TGraph(n, tXsec_TC->GetV1(), tXsec_TC->GetV2());
-  gxsec_TC->SetLineStyle(2);
-  mg->Add(gxsec_TC,"lp");
-  legend->AddEntry(gxsec_TC,"\\rho_{TC} \\sigma", "L");
+  int n=0;
+  float* x; 
+  float* y;
 
   TGraph* glumi[NLumi];
   for(int i=0; i<NLumi; ++i){
@@ -42,9 +30,47 @@ PlotLumi(){
     glumi[i] = new TGraph(n, tree1->GetV1(), tree1->GetV2());
     if(i+2 <10) glumi[i]->SetLineColor(i+2);
     else        glumi[i]->SetLineColor(i+3);   
-    mg->Add(glumi[i], "l*");
+    mg->Add(glumi[i], "L");
     legend->AddEntry(glumi[i],Form("%4.0f pb^{-1}",lumi[i]), "L");
   }
+
+  tXsec->Draw("Mass:Xsec", "", "goff"); //Sel on W'
+  n = tXsec->GetSelectedRows();
+  x = new float[n]; y = new float[n];
+  for(int i=0; i<n; ++i){
+    x[i] = tXsec->GetV1()[i];
+    y[i] = tXsec->GetV2()[i]*KFactor("Wprime");
+  }
+  TGraph* gxsec = new TGraph(n, x, y);
+  mg->Add(gxsec,"lp");
+  legend->AddEntry(gxsec,"W' \\sigma", "L");
+  delete x; delete y;
+
+  tXsec_TC->Draw("Rho:Xsec", "Rho>200 && Pi==Rho-100", "goff");//which pi mass? Sel on TC
+  n = tXsec_TC->GetSelectedRows();
+  x = new float[n]; y = new float[n];
+  for(int i=0; i<n; ++i){
+    x[i] = tXsec_TC->GetV1()[i];
+    y[i] = tXsec_TC->GetV2()[i]*KFactor("TC");
+  }
+  TGraph* gxsec_TC_Low = new TGraph(n, x, y);
+  gxsec_TC_Low->SetLineStyle(2);
+  mg->Add(gxsec_TC_Low,"lp");
+  legend->AddEntry(gxsec_TC_Low,"\\rho_{TC}^{Low}\\sigma", "L");
+  delete x; delete y;
+
+  tXsec_TC->Draw("Rho:Xsec", "Rho>200 && Pi==Rho-50", "goff");//which pi mass? Sel on TC
+  n = tXsec_TC->GetSelectedRows();
+  x = new float[n]; y = new float[n];
+  for(int i=0; i<n; ++i){
+    x[i] = tXsec_TC->GetV1()[i];
+    y[i] = tXsec_TC->GetV2()[i]*KFactor("TC");
+  }
+  TGraph* gxsec_TC_High = new TGraph(n, x, y);
+  gxsec_TC_High->SetLineStyle(3);
+  mg->Add(gxsec_TC_High,"lp");
+  legend->AddEntry(gxsec_TC_High,"\\rho_{TC}^{High} \\sigma", "L");
+  delete x; delete y;
   
   mg->Draw("a");
 
@@ -52,11 +78,7 @@ PlotLumi(){
   legend->SetBorderSize(0);
   legend->SetFillStyle(0);
   legend->Draw();
-  /*
-  mg->GetXaxis()->SetLimits(200,900);
-  mg->SetMinimum(xsec[NMass-1]);
-  mg->SetMaximum(xsec_TC[0]);
-  */
+
   c1->SaveAs("limitvsMass.gif");
   c1->SaveAs("limitvsMass.eps");
   return 0;

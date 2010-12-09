@@ -16,7 +16,7 @@
 #include "TROOT.h"
 #include "TStyle.h"
 #include "TLine.h"
-#include <ExecuteAnalysis.h>
+//#include <ExecuteAnalysis.h>
 #include <ExecuteAnalysis.C>
 
 struct Sample{
@@ -54,29 +54,34 @@ MakePlots(){
   gStyle->SetOptStat(0);
   TFile *fin = TFile::Open("Wprime_analysis.root", "read");
 
-  Data.push_back(Sample("Run2010-Nov4ReReco"));
+  Data.push_back(Sample("Run2010"));
   CheckSamples(fin,Data);
   
   Bkg.push_back(Sample("WZ"       , 3, 1, 3));
-  Bkg.push_back(Sample("TTbar"    , 4, 1, 4));
-  Bkg.push_back(Sample("ZZ"       , 5, 1, 5));
+  //Bkg.push_back(Sample("TTbar"  , 4, 1, 4));
+  Bkg.push_back(Sample("TTbar2l"  , 4, 1, 4));
+  Bkg.push_back(Sample("ZZ4l"     , 5, 1, 5));
   Bkg.push_back(Sample("ZGamma"   , 6, 1, 6));
-  Bkg.push_back(Sample("ZeeJets"  , 7, 1, 7));
-  Bkg.push_back(Sample("ZmumuJets", 7, 1, 7));
+  Bkg.push_back(Sample("ZJetsBinned", 7, 1, 7));
+  //Bkg.push_back(Sample("ZeeJets"  , 7, 1, 7));
+  //Bkg.push_back(Sample("ZmumuJets", 7, 1, 7));
   Bkg.push_back(Sample("WenuJets" , 8, 1, 8));
   Bkg.push_back(Sample("WmunuJets", 8, 1, 8));
+  //Bkg.push_back(Sample("WlnuJetsMadgraph", 8, 1, 8));
   CheckSamples(fin,Bkg);
   
+  Sig.push_back(Sample("Wprime300", 1, 1, 10));
   Sig.push_back(Sample("Wprime400", 1, 1, 10));
-  Sig.push_back(Sample("Wprime500", 1, 2, 10));
-  Sig.push_back(Sample("Wprime600", 1, 3, 10));
-  Sig.push_back(Sample("Wprime700", 1, 4, 10));
-  Sig.push_back(Sample("Wprime800", 1, 5, 10));
-  Sig.push_back(Sample("Wprime900", 1, 6, 10));
+  Sig.push_back(Sample("Wprime500", 1, 1, 10));
+  Sig.push_back(Sample("Wprime600", 1, 1, 10));
+  Sig.push_back(Sample("Wprime700", 1, 1, 10));
+  Sig.push_back(Sample("Wprime800", 1, 1, 10));
+  Sig.push_back(Sample("Wprime900", 1, 1, 10));
+
   Sig.push_back(Sample("TC225",     2, 1, 10));
-  Sig.push_back(Sample("TC300",     2, 2, 10));
-  Sig.push_back(Sample("TC400",     2, 3, 10));
-  Sig.push_back(Sample("TC500",     2, 4, 10));
+  Sig.push_back(Sample("TC300",     2, 1, 10));
+  Sig.push_back(Sample("TC400",     2, 1, 10));
+  Sig.push_back(Sample("TC500",     2, 1, 10));
   CheckSamples(fin,Sig);
 
   samples.push_back(&Data);
@@ -92,7 +97,7 @@ MakePlots(){
   vector<string> variable; 
     
   variable.push_back("hWZInvMass");
-  variable.push_back("hWZTransMass");
+  //variable.push_back("hWZTransMass");
   variable.push_back("hHt");       //2
   variable.push_back("hWpt");      
   variable.push_back("hZpt");      //4
@@ -154,7 +159,7 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
   TCanvas c1;
   if(logy) c1.SetLogy();
 
-  TH1F* hData = (TH1F*) samples[0]->at(0).hist->Clone();
+  TH1F* hData = samples[0]->at(0).hist;
   hData->SetMarkerSize(5);
   string title =  hData->GetTitle();
   if(!eff){
@@ -184,7 +189,6 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
     for(unsigned int i=0; i<Sig.size(); ++i){
       hs->Add(Sig[i].hist);
     }
-    //hs->GetXaxis()->SetLabelSize(0.05);
     hs->Draw("nostack");
   }
   if(debug) cout<<"Title: "<<title<<endl;

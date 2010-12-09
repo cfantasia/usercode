@@ -1,7 +1,9 @@
+//Usage: root -b -q Expected_Evts.C
+
 #include "consts.h"
 
 void
-Expected_Evts(){
+Expected_Evts(bool useData=false){
 
   TFile *f = TFile::Open("../WprimeAnalyzer/Wprime_analysis.root", "read");
   TCanvas* c1 = new TCanvas("c1", "Number of Events");
@@ -15,35 +17,43 @@ Expected_Evts(){
   out<<"Mass/F:"
      <<"Lumi/F:"
      <<"nTotEvts/F:"
+     <<"statnTotEvts/F:"
+     <<"sysnTotEvts/F:"
      <<"snTotEvts/F:"
      <<"nBkgEvts/F:"
+     <<"statnBkgEvts/F:"
+     <<"sysnBkgEvts/F:"
      <<"snBkgEvts/F:"
      <<"Eff/F:"
+     <<"statEff/F:"
+     <<"sysEff/F:"
      <<"sEff/F"
      <<endl;
-  out  << setiosflags(ios::fixed) << setprecision(4) << setiosflags(ios::left);
+  out  << setiosflags(ios::fixed) << setprecision(4);;
 
   for(int i=0; i<NLumi; ++i){
     for(int j=0; j<NMass; ++j){
-      float weight=lumi[i]/LumiUsed;
-      map<string,float> bkgsamples;
-    
-      bkgsamples["TTbar2l"]    =weight;
-      bkgsamples["WenuJets"]   =weight;
-      bkgsamples["WmunuJets"]  =weight;
-      bkgsamples["ZJetsBinned"]=weight;
-      bkgsamples["WZ"]         =weight;
-      bkgsamples["ZZ4l"]       =weight;
-      bkgsamples["ZGamma"]     =weight;
 
+      float weight=lumi[i]/LumiUsed;
+      map<string,float> bkgsamples;   
+      bkgsamples["TTbar2l"]    =weight*KFactor("TTbar2l");
+      bkgsamples["WenuJets"]   =weight*KFactor("WenuJets");
+      bkgsamples["WmunuJets"]  =weight*KFactor("WmunuJets");
+      bkgsamples["ZJetsBinned"]=weight*KFactor("ZJetsBinned");
+      bkgsamples["WZ"]         =weight*KFactor("WZ");
+      bkgsamples["ZZ4l"]       =weight*KFactor("ZZ4l");
+      bkgsamples["ZGamma"]     =weight*KFactor("ZGamma");
       TH1F* bkghist = get_sum_of_hists(f, bkgsamples, "hWZInvMass_AllCuts", 0);
 
       map<string,float> allsamples(bkgsamples);  
-      if( mass[j] < 400 ) allsamples[Form("TC%i"    ,(int)mass[j])]=weight;
-      else                allsamples[Form("Wprime%i",(int)mass[j])]=weight;
+      string signalName = Form("Wprime%i",(int)mass[j]);
+      cout<<"signalName: "<<signalName<<endl;
+      allsamples[signalName]=weight*KFactor(signalName);
       TH1F* hist = get_sum_of_hists(f, allsamples, "hWZInvMass_AllCuts", 0);
 
-      hist->Fit("gaus", "", "", mass[j] - 25, mass[j] + 25);
+      float fitWindowLow  = mass[j] - 25;
+      float fitWindowHigh = mass[j] + 25;
+      hist->Fit("gaus", "", "", fitWindowLow, fitWindowHigh);
       TF1 *fit = hist->GetFunction("gaus");
     
       double mean = fit->GetParameter(1);
@@ -51,128 +61,75 @@ Expected_Evts(){
       cout<<"Peak at "<<mean<<" +/- "<<gaus_sig<<endl;
 
       double lowx = mean - 0.7*gaus_sig;
-      double highx = 2000;//mean + 0.7*gaus_sig;//Cory: Trying something new
+      double highx = mean + 0.7*gaus_sig;//Cory: Mass Window Method
+      //double highx = 2000;//Cory: Trying something new (seems to increase bkg x5.0, signal x0.5)
       int lowbin = hist->FindBin(lowx);
       int highbin = hist->FindBin(highx);
     
-      //cout<<"Max at "<<hist->GetMaximumBin()<<endl;
-      //cout<<"Max at "<<hist->GetBinCenter(hist->GetMaximumBin())<<endl;
       cout<<"Integral from mass "<<lowx<<" to "<<highx<<" GeV."<<endl;
       cout<<"Integral from bins "<<lowbin<<" to "<<highbin<<endl;  
     
-      double  nTotEvts = hist->Integral(lowbin, highbin);
-      double snTotEvts = 0;
-      cout<<"# of All Evts in Mass Window is "<<nTotEvts<<" per inv fb "<<endl;
-      cout<<"Total # of All Evts is "<<hist->Integral()<<" per inv fb "<<endl;
-      for(int bin=lowbin;bin<=highbin;bin++) {
-        snTotEvts += TMath::Power( hist->GetBinError(bin),2 );
-      }
-      snTotEvts = sqrt(snTotEvts);
+      double     nTotEvts = hist->Integral     (lowbin, highbin);
+      double statnTotEvts = IntegralError(hist, lowbin, highbin);
+      cout<<"# of All Evts in Mass Window is "<<nTotEvts<<" +/- "<<statnTotEvts<<" per "<<lumi[i]<<" inv pb "<<endl;
+      cout<<"Total # of All Evts is "<<hist->Integral()<<endl;
 
-      double  nBkgEvts = bkghist->Integral(lowbin, highbin);
-      double snBkgEvts = 0;
-      cout<<"# of Bkg Evts in Mass Window is "<<nBkgEvts<<" per inv fb "<<endl;
-      cout<<"Total # of Bkg Evts is "<<bkghist->Integral()<<" per inv fb "<<endl;
-      for(int bin=lowbin;bin<=highbin;bin++) {
-        snBkgEvts += TMath::Power( bkghist->GetBinError(bin),2 );
-      }
-      snBkgEvts = sqrt(snBkgEvts);
+      double     nBkgEvts = bkghist->Integral     (lowbin, highbin);
+      double statnBkgEvts = IntegralError(bkghist, lowbin, highbin);
+      cout<<"# of Bkg Evts in Mass Window is "<<nBkgEvts<<" +/- "<<statnBkgEvts<<" per "<<lumi[i]<<" inv pb "<<endl;
+      cout<<"Total # of Bkg Evts is "<<bkghist->Integral()<<endl;
 
       float nSigEvts = nTotEvts - nBkgEvts;
-      cout<<"# of Sig Evts in Mass Window is "<<nSigEvts<<" per inv fb "<<endl;
+      cout<<"# of Sig Evts in Mass Window is "<<nSigEvts<<" per "<<lumi[i]<<" inv pb "<<endl;
     
+
       //Cory: Don't use this xsec, pull from txt file
-      float nGeneratedNorm = lumi[i]*xsec[j];
-      float  Eff = nSigEvts / nGeneratedNorm;
-      //Cory:Need to adjust this for different lumis and NLO cross sections
-      float statEff = TMath::Sqrt(Eff * (1-Eff)/nGeneratedNorm); 
-      float sEff = AddInQuad(statEff, sysEff);
+      float nGeneratedNorm = lumi[i]*xsec[j]*KFactor(signalName);
+      float     Eff = nSigEvts / nGeneratedNorm;
+      float statEff = TMath::Sqrt(Eff * (1-Eff)/nGenerated); 
+      //float statEff = TMath::Sqrt(Eff * (1-Eff)/nGeneratedNorm); 
+      //cout<<"nGenNorm: "<<nGeneratedNorm<<endl;
 
-      out<<mass[j]<<"\t"
-         <<lumi[i]<<"\t"
-         <<nTotEvts<<"\t"
-         <<snTotEvts<<"\t"
-         <<nBkgEvts<<"\t"
-         <<snBkgEvts<<"\t"
-         <<Eff<<"\t"    
-         <<sEff<<"\t"
+      //Add in systematic errors
+      //Cory: Don't think sys errors are right
+      float sysnTotEvts = nTotEvts*sysEvtFrac;
+      float sysnBkgEvts = nBkgEvts*sysEvtFrac;
+      float sysEff      = Eff*sysEffFrac;
+
+      float snTotEvts = AddInQuad(statnTotEvts, nTotEvts*sysEvtFrac);
+      float snBkgEvts = AddInQuad(statnBkgEvts, nBkgEvts*sysEvtFrac);
+      float sEff      = AddInQuad(statEff,           Eff*sysEffFrac);
+
+      out<<setprecision(1)
+         <<setw(6)<<mass[j]<<"   "
+         <<setw(6)<<lumi[i]<<"   "
+         <<setprecision(4)
+         <<setw(8)<<    nTotEvts<<"   "
+         <<setw(8)<<statnTotEvts<<"   "
+         <<setw(8)<< sysnTotEvts<<"   "
+         <<setw(8)<<   snTotEvts<<"   "
+         <<setw(8)<<    nBkgEvts<<"   "
+         <<setw(8)<<statnBkgEvts<<"   "
+         <<setw(8)<< sysnBkgEvts<<"   "
+         <<setw(8)<<   snBkgEvts<<"   "
+         <<setw(6)<<    Eff<<"   "    
+         <<setw(6)<<statEff<<"   "
+         <<setw(6)<< sysEff<<"   "
+         <<setw(6)<<   sEff<<"   "
          <<endl;
+      c1->SaveAs((signalName + ".eps").c_str());
+
+      map<string, float>::iterator iter;
+      for (iter=allsamples.begin(); iter != allsamples.end(); ++iter) {
+        map<string, float> persample;
+        persample[iter->first]=iter->second;
+        TH1F* perhist = get_sum_of_hists(f, persample, "hWZInvMass_AllCuts", 0);
+        float n = perhist->Integral(lowbin, highbin);
+        cout<<iter->first<<": # of Evts in Mass Window is "<<n<<" per "<<lumi[i]<<" inv pb "<<endl;
+              
+      }
     }
-    c1->SaveAs(Form("Wprime%i.eps",(int)mass[j]));
   }
-
-
-  /////////////////////////////////////
-  /*
-    vector<string> persamplefiles;  
-    double evts=0, sigma=0;
-   
-    persamplefiles.push_back("ttbarfast");
-    TH1F* persamplehist = get_sum_of_hists(persamplefiles,"_AllCuts");
-    evts = persamplehist->Integral(lowbin, highbin);
-    sigma = 0;
-    for(int bin=lowbin;bin<=highbin;bin++) {
-    sigma += TMath::Power( persamplehist->GetBinError(bin),2 );
-    }
-    sigma = sqrt(sigma);
-    cout<<"# of ttbar Evts in Mass Window is "<<evts<<" +/- "<<sigma<<" per inv fb "<<endl;
-    persamplefiles.clear();
-
-    persamplefiles.push_back("wjets");
-    TH1F* persamplehist = get_sum_of_hists(persamplefiles,"_AllCuts");
-    evts = persamplehist->Integral(lowbin, highbin);
-    sigma = 0;
-    for(int bin=lowbin;bin<=highbin;bin++) {
-    sigma += TMath::Power( persamplehist->GetBinError(bin),2 );
-    }
-    sigma = sqrt(sigma);
-    cout<<"# of wjets Evts in Mass Window is "<<evts<<" +/- "<<sigma<<" per inv fb "<<endl;
-    persamplefiles.clear();
-
-    persamplefiles.push_back("zjets");
-    TH1F* persamplehist = get_sum_of_hists(persamplefiles,"_AllCuts");
-    evts = persamplehist->Integral(lowbin, highbin);
-    sigma = 0;
-    for(int bin=lowbin;bin<=highbin;bin++) {
-    sigma += TMath::Power( persamplehist->GetBinError(bin),2 );
-    }
-    sigma = sqrt(sigma);
-    cout<<"# of zjets Evts in Mass Window is "<<evts<<" +/- "<<sigma<<" per inv fb "<<endl;
-    persamplefiles.clear();
-
-    persamplefiles.push_back("wz");
-    TH1F* persamplehist = get_sum_of_hists(persamplefiles,"_AllCuts");
-    evts = persamplehist->Integral(lowbin, highbin);
-    sigma = 0;
-    for(int bin=lowbin;bin<=highbin;bin++) {
-    sigma += TMath::Power( persamplehist->GetBinError(bin),2 );
-    }
-    sigma = sqrt(sigma);
-    cout<<"# of wz Evts in Mass Window is "<<evts<<" +/- "<<sigma<<" per inv fb "<<endl;
-    persamplefiles.clear();
-
-    persamplefiles.push_back("zz");
-    TH1F* persamplehist = get_sum_of_hists(persamplefiles,"_AllCuts");
-    evts = persamplehist->Integral(lowbin, highbin);
-    sigma = 0;
-    for(int bin=lowbin;bin<=highbin;bin++) {
-    sigma += TMath::Power( persamplehist->GetBinError(bin),2 );
-    }
-    sigma = sqrt(sigma);
-    cout<<"# of zz Evts in Mass Window is "<<evts<<" +/- "<<sigma<<" per inv fb "<<endl;
-    persamplefiles.clear();
-
-    persamplefiles.push_back("zgamma");
-    TH1F* persamplehist = get_sum_of_hists(persamplefiles,"_AllCuts");
-    evts = persamplehist->Integral(lowbin, highbin);
-    sigma = 0;
-    for(int bin=lowbin;bin<=highbin;bin++) {
-    sigma += TMath::Power( persamplehist->GetBinError(bin),2 );
-    }
-    sigma = sqrt(sigma);
-    cout<<"# of zgamma Evts in Mass Window is "<<evts<<" +/- "<<sigma<<" per inv fb "<<endl;
-    persamplefiles.clear();
-  */
   return;
 }
 

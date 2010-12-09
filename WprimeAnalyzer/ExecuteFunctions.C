@@ -52,12 +52,6 @@ double deltaEta(double eta1, double eta2)
   return eta;
 }
 
-TH1F*
-Declare_Histo(string name, string title, int nbins, float min, float max){
-  TH1F* hist = new TH1F(name.c_str(),title.c_str(),nbins,min,max);
-  return hist;
-}
-
 //Just a function to calculate DeltaR
 //--------------------------------------------------------------
 double deltaR(double eta1, double phi1, double eta2, double phi2)
@@ -165,129 +159,163 @@ bool Load_Input_Files(string file_desc,
   //switch between different sample cases and
   //recruit the files. 
   bool binned = false;
-  int Nfiles = -1;
-  if (!strcmp(file_desc.c_str(),"Wprime400")){
-    Nfiles = 1;
-    binned = false;
+  int Nfiles = 1;
+  if (!strcmp(file_desc.c_str(),"Wprime300")){
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-Wprime300_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  }
+  else if (!strcmp(file_desc.c_str(),"Wprime400")){
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-Wprime400_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
   else if (!strcmp(file_desc.c_str(),"Wprime500")){
-    Nfiles = 1;
-    binned = false;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-Wprime500_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
   else if (!strcmp(file_desc.c_str(),"Wprime600")){
-    Nfiles = 1;
-    binned = false;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-Wprime600_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
   else if (!strcmp(file_desc.c_str(),"Wprime700")){
-    Nfiles = 1;
-    binned = false;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-Wprime700_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
   else if (!strcmp(file_desc.c_str(),"Wprime800")){
-    Nfiles = 1;
-    binned = false;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-Wprime800_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename, "",file_desc);
   }
   else if (!strcmp(file_desc.c_str(),"Wprime900")){
-    Nfiles = 1;
-    binned = false;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-Wprime900_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename, "",file_desc);
   }
   else if (!strcmp(file_desc.c_str(),"TC225")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-TC225_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
   else if (!strcmp(file_desc.c_str(),"TC300")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-TC300_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
   else if (!strcmp(file_desc.c_str(),"TC400")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-TC400_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
   else if (!strcmp(file_desc.c_str(),"TC500")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-TC500_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
   else if (!strcmp(file_desc.c_str(),"WZ")){
-    Nfiles = 1;
-    binned = false;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-WZ3l_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"WZ_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-WZ3l_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"TTbar")){
-    Nfiles = 1;
-    binned = false;
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-TTbar_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"TTbar_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-TTbar_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"TTbar2l")){
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-TTbar2l_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"TTbar2l_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-TTbar2l_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"TTbarfast")){
-    Nfiles = 1;
-    binned = false;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-TTbarFast_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"TTbarfast_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-TTbarFast_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"ZZ")){
-    Nfiles = 1;
-    binned = false;
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-ZZ_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  }
+  else if (!strcmp(file_desc.c_str(),"ZZ_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-ZZ_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  }
+  else if (!strcmp(file_desc.c_str(),"ZZ4l")){
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-ZZ4l_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
+  else if (!strcmp(file_desc.c_str(),"ZZ4l_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-ZZ4l_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  }
   else if (!strcmp(file_desc.c_str(),"ZGamma")){
-    Nfiles = 1;
-    binned = false;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-Zgamma2l_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
-  else if (!strcmp(file_desc.c_str(),"ZJetsbinned")){
+  else if (!strcmp(file_desc.c_str(),"ZGamma_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-Zgamma2l_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  }
+  else if (!strcmp(file_desc.c_str(),"ZJetsBinned")){
     vector<string> dirs;
     vector<string> bins;
-      
-    dirs.push_back("ZeejetsPt");
-    dirs.push_back("ZmumujetsPt");
+
+    dirs.push_back("EE_Pt_");
+    dirs.push_back("MuMu_Pt_");
       
     bins.push_back("0to15");
     bins.push_back("15to20");
@@ -298,7 +326,7 @@ bool Load_Input_Files(string file_desc,
     bins.push_back("120to170");
     bins.push_back("170to230");
     bins.push_back("230to300");
-    bins.push_back("300toInf");
+    bins.push_back("300");
 
     Nfiles = dirs.size()*bins.size();
     binned = true;
@@ -307,110 +335,152 @@ bool Load_Input_Files(string file_desc,
     }
 
     RecruitBinnedFiles(files,Nfiles,dirs,bins,
-                       "","_outputTree.root",file_desc);
+                       "TrileptonPatTupleMC-ZJetTo","_WZ.root",file_desc);
+  }
+  else if (!strcmp(file_desc.c_str(),"ZJetsBinned_Dilepton")){
+    vector<string> dirs;
+    vector<string> bins;
+
+    dirs.push_back("EE_Pt_");
+    dirs.push_back("MuMu_Pt_");
+      
+    bins.push_back("0to15");
+    bins.push_back("15to20");
+    bins.push_back("20to30");
+    bins.push_back("30to50");
+    bins.push_back("50to80");
+    bins.push_back("80to120");
+    bins.push_back("120to170");
+    bins.push_back("170to230");
+    bins.push_back("230to300");
+    bins.push_back("300");
+
+    Nfiles = dirs.size()*bins.size();
+    binned = true;
+    for(int i=0; i!=Nfiles; ++i){
+      files.push_back(InputFile());
+    }
+
+    RecruitBinnedFiles(files,Nfiles,dirs,bins,
+                       "DileptonPatTupleMC-ZJetTo","_WZ.root",file_desc);
   }
   else if (!strcmp(file_desc.c_str(),"WenuJets")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-WenuJets_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"WenuJets_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-WenuJets_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"WmunuJets")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-WmunuJets_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"WmunuJets_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-WmunuJets_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"WlnuJetsMadgraph")){
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-WlnuJetsMadgraph_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"WlnuJetsMadgraph_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-WlnuJetsMadgraph_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"ZeeJets")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-ZeeJets_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"ZeeJets_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-ZeeJets_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"ZmumuJets")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "TrileptonPatTupleMC-ZmumuJets_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"ZmumuJets_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-ZmumuJets_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"ZeeJetsPowheg")){
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-ZeeJetsPowheg_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"ZeeJetsPowheg_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-ZeeJetsPowheg_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"ZmumuJetsPowheg")){
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-ZmumuJetsPowheg_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"ZmumuJetsPowheg_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-ZmumuJetsPowheg_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"ZllJetsMadgraph")){
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-ZllJetsMadgraph_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"ZllJetsMadgraph_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "DileptonPatTupleMC-ZllJetsMadgraph_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"test")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "test_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
   else if (!strcmp(file_desc.c_str(),"interesting")){
-    Nfiles = 1;
     files.push_back(InputFile()); 
     const string filename = "Interesting_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
-  else if (!strcmp(file_desc.c_str(),"EGSep17ReReco")){
-    Nfiles = 1;
+  else if (!strcmp(file_desc.c_str(),"Run2010")){
     files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTuple-EGSep17ReReco-v02_WZ.root";
+    const string filename = "TrileptonPatTuple-2010_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
-  else if (!strcmp(file_desc.c_str(),"MuSep17ReReco")){
-    Nfiles = 1;
+  else if (!strcmp(file_desc.c_str(),"Run2010_Dilepton")){
     files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTuple-MuSep17ReReco-v02_WZ.root";
-    RecruitOrderedFiles(files,Nfiles,0,0,
-                        filename,"",file_desc);
-  } 
-  else if (!strcmp(file_desc.c_str(),"ElectronPromptReco")){
-    Nfiles = 1;
-    files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTuple-ElectronPromptReco_WZ.root";
-    RecruitOrderedFiles(files,Nfiles,0,0,
-                        filename,"",file_desc);
-  } 
-  else if (!strcmp(file_desc.c_str(),"MuPromptReco")){
-    Nfiles = 1;
-    files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTuple-MuPromptReco_WZ.root";
-    RecruitOrderedFiles(files,Nfiles,0,0,
-                        filename,"",file_desc);
-  } 
-  else if (!strcmp(file_desc.c_str(),"EGSep17ReReco_Dilepton")){
-    Nfiles = 1;
-    files.push_back(InputFile()); 
-    const string filename = "DileptonPatTuple-EGSep17ReReco-v02_WZ.root";
-    RecruitOrderedFiles(files,Nfiles,0,0,
-                        filename,"",file_desc);
-  } 
-  else if (!strcmp(file_desc.c_str(),"MuSep17ReReco_Dilepton")){
-    Nfiles = 1;
-    files.push_back(InputFile()); 
-    const string filename = "DileptonPatTuple-MuSep17ReReco-v02_WZ.root";
-    RecruitOrderedFiles(files,Nfiles,0,0,
-                        filename,"",file_desc);
-  } 
-  else if (!strcmp(file_desc.c_str(),"ElectronPromptReco_Dilepton")){
-    Nfiles = 1;
-    files.push_back(InputFile()); 
-    const string filename = "DileptonPatTuple-ElectronPromptReco-v02_WZ.root";
-    RecruitOrderedFiles(files,Nfiles,0,0,
-                        filename,"",file_desc);
-  } 
-  else if (!strcmp(file_desc.c_str(),"Run2010-Nov4ReReco")){
-    Nfiles = 1;
-    files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTuple-2010-Nov4ReReco_WZ.root";
-    RecruitOrderedFiles(files,Nfiles,0,0,
-                        filename,"",file_desc);
-  } 
-  else if (!strcmp(file_desc.c_str(),"MuPromptReco_Dilepton")){
-    Nfiles = 1;
-    files.push_back(InputFile()); 
-    const string filename = "DileptonPatTuple-MuPromptReco-v02_WZ.root";
+    const string filename = "DileptonPatTuple-2010_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
@@ -469,7 +539,6 @@ bool Load_Input_Files(string file_desc,
   
   return true;
 }
-
 
 //Set the branch addresses that we need for the analysis
 //-----------------------------------------------------------
@@ -634,6 +703,51 @@ void Set_Branch_Addresses(TTree* WZtree)
   WZtree->SetBranchAddress("muonGenMother_pz", &muonGenMother_pz);
 }//Set_Branch_Addresses
 
+void
+DeclareHistoSet(string n, string t, string xtitle,
+                int nbins, float min, float max,
+                const vector<string> & Cuts, TH1F** h){
+  float binWidth = (max-min)/nbins;
+  for(unsigned int i=0; i<Cuts.size(); ++i){
+    
+    string name = n + "_" + Cuts[i];
+    string title = t + " (After " + Cuts[i] + " Cut);" 
+      + xtitle
+      + ";Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
+    h[i] = new TH1F(name.c_str(),title.c_str(),nbins,min,max);
+    listOfHists.push_back(h[i]);
+  }
+}
+
+//------------------------------------------------------------------------
+void saveHistos(TFile * fout, string dir)
+{
+//------------------------------------------------------------------------
+  if (debugme) cout<<"Save Histos....."<<endl;
+  fout->cd(); 
+  fout->mkdir(dir.c_str()); 
+  fout->cd(dir.c_str());
+
+  for(unsigned int i = 0; i != listOfHists.size(); ++i){
+    listOfHists[i]->Write();
+  }  
+  return;
+
+}//saveHistos
+
+//------------------------------------------------------------------------
+void deleteHistos()
+{
+//------------------------------------------------------------------------
+  if (debugme) cout<<"Delete Histos....."<<endl;
+
+  for(unsigned int i = 0; i != listOfHists.size(); ++i){
+    delete listOfHists[i];
+  }  
+  return;
+
+}//deleteHistos
+
 //Tabulate results after the cut has been passed
 //-----------------------------------------------------------
 void Tabulate_Me(int Num_surv_cut[], int& cut_index, 
@@ -654,6 +768,44 @@ void Tabulate_Me(int Num_surv_cut[], int& cut_index,
   if(debugme) cout<<"cut_index is now = "<<cut_index<<endl;
 
 }//Tabulate_Me
+
+//Writing results to a txt file
+//--------------------------------------------------------------------------
+void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
+                  const float& Nexp_evt, float Nexp_evt_cut[], const vector<string> & Cuts) 
+{ 
+//------------------------------------------------------------------------
+  if(debugme) cout<<"Writing results to a txt file"<<endl;
+
+  out << setiosflags(ios::fixed) << setprecision(2) << setiosflags(ios::left);
+  out<<"$$$$$$$$$$$$$$$$$$$$$$$ Type of sample: "<<dir<<endl;
+  out << " Total # of Theoretical expected events = " << Nthe_evt << endl;
+  out << " Total # of expected events = " << Nexp_evt << endl;
+        
+  for(unsigned int i = 0; i < Cuts.size(); ++i){
+
+    out <<"Cut " << setw(2) << i << "(" << setw(15) << Cuts[i]
+        << "): " <<"expected evts = " << setw(10) << Nexp_evt_cut[i];
+    hNumEvts->Fill(i,Nexp_evt_cut[i]);
+
+    //calculate efficiencies
+    float eff, deff;
+    if(i == 0){
+      getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
+	    hEffRel->Fill(i,eff*100);	
+    }else{
+      getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt_cut[i-1]);
+	    hEffRel->Fill(i,eff*100);
+    }
+    out << setw(15) <<"\tRelative eff = "<<setw(6)<<eff*100 << " +/- " << setw(6)<<deff*100 << "%";
+        
+    getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
+    hEffAbs->Fill(i,eff*100);
+    out << setw(15) <<"\tAbsolute eff = "<<setw(6)<<eff*100 << " +/- " << setw(6)<<deff*100 << "%"
+        << endl;
+        
+  } // loop over different cuts
+}//printSummary
 
 void 
 UseSample(string dir, vector<InputFile> & files, 

@@ -1,14 +1,17 @@
+//Usage: root -l PlotSig.C++
+
 #include "consts.h"
 
 void
-PlotSig(){
+PlotSig(bool useTC=0){
   /*
     Plot for each mass: significance vs lumi
     Read in expected number of evts for each mass and lumi (compare? NO)
   */
   TTree* tree1 = new TTree("tree1", "Significance");
-  tree1->ReadFile("nSigma.txt");
- 
+  if(!useTC) tree1->ReadFile("nSigma.txt");
+  else tree1->ReadFile("nSigma_TC.txt");
+
   int n=0;
   Double_t* x=NULL;
   Double_t* y=NULL;
@@ -25,7 +28,8 @@ PlotSig(){
     y = tree1->GetV2();
     gr[j] = new TGraph(n, x, y);
     gr[j]->SetLineColor(j+2);
-    legend->AddEntry(gr[j], Form("W' %.0f GeV",mass[j]), "L");
+    if(!useTC) legend->AddEntry(gr[j], Form("W' %.0f GeV",mass[j]), "L");
+    else       legend->AddEntry(gr[j], Form("\\rho_{TC} %.0f GeV",mass[j]), "L");
     mg->Add(gr[j],"l");
   }
   mg->Draw("a");
@@ -43,7 +47,10 @@ PlotSig(){
   l5sigma->SetLineStyle(9);
   l5sigma->Draw();
 
-  c1->SaveAs("SignificancevsLumi.gif");
-  c1->SaveAs("SignificancevsLumi.eps");
+  mg->SetMaximum(6.);
+
+  
+  if(!useTC) c1->SaveAs("SignificancevsLumi.eps");
+  else       c1->SaveAs("SignificancevsLumi_TC.eps");
 
 }

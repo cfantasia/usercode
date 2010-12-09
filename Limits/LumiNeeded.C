@@ -44,7 +44,6 @@ LumiNeeded(){
       Double_t* sEff = tree->GetV4();
       
       float sLumi = sLumiFrac*lumi[i];
-
       printf("Mass: %i CLA(%4.2f,%4.2f,%4.4f,%4.4f,%4.2f,%4.2f)\n",
              mass[j],
              lumi[i], sLumi,

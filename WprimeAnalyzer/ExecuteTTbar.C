@@ -18,7 +18,9 @@ void Declare_Histos()
 //--------------------------------------------------------------
 
   if (debugme) cout<<"Declare histos"<<endl;
-///Eff Plots///////
+  listOfHists.clear();
+
+  ///Eff Plots///////
   string title = "Expected # of Events / " + convertFloatToStr(lumiPb) + " pb^{-1}";
   hNumEvts = new TH1F("hNumEvts",title.c_str(),NCuts,0,NCuts);
   hEffRel = new TH1F("hEffRel","Relative Efficiency",NCuts,0,NCuts);
@@ -26,6 +28,10 @@ void Declare_Histos()
   for(int i=0; i<NCuts; ++i) hNumEvts->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
   for(int i=0; i<NCuts; ++i) hEffRel ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
   for(int i=0; i<NCuts; ++i) hEffAbs ->GetXaxis()->SetBinLabel(i+1,Cut_Name[i].c_str());
+
+  listOfHists.push_back(hNumEvts);
+  listOfHists.push_back(hEffRel);
+  listOfHists.push_back(hEffAbs);
 
 }//Declare_Histos
 
@@ -37,63 +43,6 @@ void Fill_Histos(int index, float weight)
   if(debugme) cout<<"Filling Histos"<<endl;
         
 }//Fill_Histos
-
-//------------------------------------------------------------------------
-void saveHistos(TFile * fout, string dir)
-{
-//------------------------------------------------------------------------
-  if (debugme) cout<<"Save Histos....."<<endl;
-  fout->cd(); 
-  fout->mkdir(dir.c_str()); 
-  fout->cd(dir.c_str());
-
-  hNumEvts->Write();
-  hEffRel->Write();
-  hEffAbs->Write();
-  
-  return;
-
-}//saveHistos
-
-//Writing results to a txt file
-//--------------------------------------------------------------------------
-void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
-                  const float& Nexp_evt, float Nexp_evt_cut[]) 
-{ 
-//------------------------------------------------------------------------
-  if(debugme) cout<<"Writing results to a txt file"<<endl;
-
-  out<<"$$$$$$$$$$$$$$$$$$$$$$$ Type of sample: "<<dir<<endl;
-  out << " Total # of Theoretical expected events = " << Nthe_evt << endl;
-  out << " Total # of expected events = " << Nexp_evt << endl;
-        
-  for(int i = 0; i < NCuts; ++i){
-        
-    out <<"Cut # "<<i<<"("<<Cut_Name[i]<<"): expected evts = " << Nexp_evt_cut[i];
-    hNumEvts->Fill(i,Nexp_evt_cut[i]);
-
-    //calculate efficiencies
-    float eff, deff;
-    if(i == 0){
-      getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
-	    hEffRel->Fill(i,eff*100);	
-    }else{
-      getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt_cut[i-1]);
-	    hEffRel->Fill(i,eff*100);
-    }
-    out << ", Relative eff = "<<eff*100 << " +/- " << deff*100 << "%";
-        
-    getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
-    hEffAbs->Fill(i,eff*100);
-    out << ", Absolute eff = "<< eff*100 << " +/- " << deff*100 << "%"
-        << endl;
-        
-    //to do: put these results in a file
-        
-  } // loop over different cuts
-    
-    
-}//printSummary
 
 //Get different types of distribution
 //-----------------------------------------------------------
@@ -181,6 +130,7 @@ void Get_Distributions(vector<InputFile>& files,
   
   printSummary(out, dir, Nthe_evt, Nexp_evt, Nexp_evt_cut);
   saveHistos(fout, dir);
+  deleteHistos();
   
 }//Get_Distributions
 
@@ -239,11 +189,6 @@ void ExecuteTTbar()
   //containers to
   //include signal and background files
 
-  vector<InputFile> EGSep17_files;
-  vector<InputFile> MuSep17_files;
-  vector<InputFile> ElectronPrompt_files;
-  vector<InputFile> MuPromptReco_files;
-
   //keep account of events
   string outfile("event_counts_TTbar.txt");
   ofstream out(outfile.c_str());
@@ -257,9 +202,13 @@ void ExecuteTTbar()
   //the results will be written under respective directories
   //Add as many as you need:
 
+  vector<InputFile> EGSep17_files;
   UseSample("EGSep17ReReco_Dilepton",EGSep17_files, fout, out);
+  vector<InputFile> MuSep17_files;
   UseSample("MuSep17ReReco_Dilepton",MuSep17_files, fout, out);
+  vector<InputFile> ElectronPrompt_files;
   UseSample("ElectronPromptReco_Dilepton",ElectronPrompt_files, fout, out);
+  vector<InputFile> MuPromptReco_files;
   UseSample("MuPromptReco_Dilepton",MuPromptReco_files, fout, out);
 
   out.close(); 

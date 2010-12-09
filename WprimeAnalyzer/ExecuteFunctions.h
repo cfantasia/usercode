@@ -5,6 +5,7 @@
 #include <math.h>
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <fstream>
 #include "TFile.h"
@@ -52,14 +53,18 @@ double deltaEta(double eta1, double eta2);
 double deltaPhi(double phi1, double phi2);
 
 void Declare_Histos();
+void DeclareHistoSet(string n, string t, string xtitle,
+                     int nbins, float min, float max,
+                     const vector<string> & Cuts, TH1F** h);
 double deltaR(double eta1, double phi1, double eta2, double phi2);
 int Check_Files(unsigned Nfiles, vector<InputFile> & files);
 bool Load_Input_Files(string file_desc,vector<InputFile> & files);
 void Set_Branch_Addresses(TTree* WZtree);
 void Fill_Histos(int index, float weight);
 void saveHistos(TFile * fout, string dir);
+void deleteHistos();
 void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
-                  const float& Nexp_evt, float Nexp_evt_cut[]);
+                  const float& Nexp_evt, float Nexp_evt_cut[], const vector<string> & Cuts);
 void Tabulate_Me(int Num_surv_cut[], int& cut_index,const float& weight);
 void Get_Distributions(vector<InputFile>& files,TFile *fout, 
                        string dir, ofstream & out);
@@ -229,12 +234,14 @@ const bool debugme = false; //print stuff if active
 // +++++++++++++++++++
 //value of lumi to be used in the analysis
 //the weights will scale accordingly.
-const float lumiPb = 35;
+const float lumiPb = 1000;//36.1;
 
 // +++++++++++++++++++location of data files and samples info
 const string top_level_dir = "/uscms_data/d2/fantasia/38X/";
 
 // +++++++++++++++++++ Histogram Definitions
+vector<TH1F*> listOfHists;
+
 TH1F * hEffRel;
 TH1F * hEffAbs;
 TH1F * hNumEvts;
