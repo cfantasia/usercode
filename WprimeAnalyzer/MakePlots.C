@@ -40,6 +40,8 @@ vector< vector<Sample>* > samples;
 vector<Sample> Data;
 vector<Sample> Bkg;
 vector<Sample> Sig;
+map<string, string> SampleNames;
+
 //gROOT->SetStyle("Plain");
 //TStyle::SetOptStat(kFALSE);
 const bool debug = false;
@@ -54,10 +56,37 @@ MakePlots(){
   gStyle->SetOptStat(0);
   TFile *fin = TFile::Open("Wprime_analysis.root", "read");
 
-  Data.push_back(Sample("Run2010"));
-  CheckSamples(fin,Data);
+  SampleNames["Run2010"]="Data";
+  SampleNames["WlnuJetsMadgraph"]="W+Jets";
+  SampleNames["WenuJets"]="W+Jets";
+  SampleNames["WmunuJets"]="W+Jets";
+  SampleNames["TTbar"]="TTbar";
+  SampleNames["TTbar2l"]="TTbar2l";
+  SampleNames["ZZ"]="ZZ";
+  SampleNames["ZZ4l"]="ZZ4l";
+  SampleNames["ZGamma"]="Z\\gamma";
+  SampleNames["ZJetsBinned"]="Z+Jets";
+  SampleNames["ZeeJets"]="Z+Jets";
+  SampleNames["ZmumuJets"]="Z+Jets";
+  SampleNames["WZ"]="SM WZ";
+  SampleNames["Wprime300"]="W' 300";
+  SampleNames["Wprime400"]="W' 400";
+  SampleNames["Wprime500"]="W' 500";
+  SampleNames["Wprime600"]="W' 600";
+  SampleNames["Wprime700"]="W' 700";
+  SampleNames["Wprime800"]="W' 800";
+  SampleNames["Wprime900"]="W' 900";
+  SampleNames["TC225"]="\\rho_{TC} 225";
+  SampleNames["TC300"]="\\rho_{TC} 300";
+  SampleNames["TC400"]="\\rho_{TC} 400";
+  SampleNames["TC500"]="\\rho_{TC} 500";
+
+  //Data.push_back(Sample("Run2010"));
+  //CheckSamples(fin,Data);
   
-  Bkg.push_back(Sample("WZ"       , 3, 1, 3));
+  //Bkg.push_back(Sample("WlnuJetsMadgraph", 8, 1, 8));
+  Bkg.push_back(Sample("WenuJets" , 8, 1, 8));
+  Bkg.push_back(Sample("WmunuJets", 8, 1, 8));
   //Bkg.push_back(Sample("TTbar"  , 4, 1, 4));
   Bkg.push_back(Sample("TTbar2l"  , 4, 1, 4));
   Bkg.push_back(Sample("ZZ4l"     , 5, 1, 5));
@@ -65,11 +94,9 @@ MakePlots(){
   Bkg.push_back(Sample("ZJetsBinned", 7, 1, 7));
   //Bkg.push_back(Sample("ZeeJets"  , 7, 1, 7));
   //Bkg.push_back(Sample("ZmumuJets", 7, 1, 7));
-  Bkg.push_back(Sample("WenuJets" , 8, 1, 8));
-  Bkg.push_back(Sample("WmunuJets", 8, 1, 8));
-  //Bkg.push_back(Sample("WlnuJetsMadgraph", 8, 1, 8));
+  Bkg.push_back(Sample("WZ"       , 2, 1, 2));//Cory: Change back to 3
   CheckSamples(fin,Bkg);
-  
+/*  
   Sig.push_back(Sample("Wprime300", 1, 1, 10));
   Sig.push_back(Sample("Wprime400", 1, 1, 10));
   Sig.push_back(Sample("Wprime500", 1, 1, 10));
@@ -82,6 +109,7 @@ MakePlots(){
   Sig.push_back(Sample("TC300",     2, 1, 10));
   Sig.push_back(Sample("TC400",     2, 1, 10));
   Sig.push_back(Sample("TC500",     2, 1, 10));
+*/
   CheckSamples(fin,Sig);
 
   samples.push_back(&Data);
@@ -97,14 +125,25 @@ MakePlots(){
   vector<string> variable; 
     
   variable.push_back("hWZInvMass");
+  variable.push_back("hWZ3e0muInvMass");
+  variable.push_back("hWZ2e1muInvMass");
+  variable.push_back("hWZ1e2muInvMass");
+  variable.push_back("hWZ0e3muInvMass");
+
   //variable.push_back("hWZTransMass");
   variable.push_back("hHt");       //2
   variable.push_back("hWpt");      
   variable.push_back("hZpt");      //4
   variable.push_back("hMET");          
+
   variable.push_back("hZmass");      //6
   variable.push_back("hZeemass");      
   variable.push_back("hZmumumass");  //8    
+  variable.push_back("hZ3e0muMass");      
+  variable.push_back("hZ2e1muMass");      
+  variable.push_back("hZ1e2muMass");      
+  variable.push_back("hZ0e3muMass");      
+
   variable.push_back("hWTransmass");      
   variable.push_back("hWenuTransmass");  //10    
   variable.push_back("hWmunuTransmass");      
@@ -118,7 +157,7 @@ MakePlots(){
 
   int size = variable.size();
   for(int i=0;i<size;++i){
-    for(int j=17;j<NCuts;++j){
+    for(int j=18;j<NCuts;++j){
       string title = variable[i] + "_" + Cut_Name[j];
       DrawandSave(fin,title,i>=13,0, 0);
     }
@@ -142,8 +181,8 @@ DrawandSave(TFile* fin, string title, bool norm, bool logy, bool eff){
       samples[i]->at(j).hist->SetLineStyle(samples[i]->at(j).style);
       samples[i]->at(j).hist->SetLineColor(samples[i]->at(j).line); 
       if(!eff){
-        samples[i]->at(j).hist->SetFillColor(samples[i]->at(j).fill); 
-        samples[i]->at(j).hist->SetFillStyle(3004); 
+        samples[i]->at(j).hist->SetFillColor(samples[i]->at(j).fill); //Cory:
+        samples[i]->at(j).hist->SetFillStyle(4004); 
       }
     }
   }
@@ -159,9 +198,23 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
   TCanvas c1;
   if(logy) c1.SetLogy();
 
-  TH1F* hData = samples[0]->at(0).hist;
-  hData->SetMarkerSize(5);
-  string title =  hData->GetTitle();
+  string title;
+  TH1F* hData = NULL;
+  if(Data.size()){
+    title = Data[0].hist->GetTitle();
+    title += ";"; 
+    title += Data[0].hist->GetXaxis()->GetTitle();
+    title += ";";
+    title += Data[0].hist->GetYaxis()->GetTitle();
+    hData = Data[0].hist;
+    hData->SetMarkerSize(5);
+  }else if(Bkg.size()){
+    title = Bkg[0].hist->GetTitle();
+    title += ";"; 
+    title += Bkg[0].hist->GetXaxis()->GetTitle();
+    title += ";";
+    title += Bkg[0].hist->GetYaxis()->GetTitle();
+  }
   if(!eff){
     
     THStack* sBkg  = new THStack("sBkg",title.c_str());
@@ -175,10 +228,17 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
       sSigs[i]->Add(Sig[i].hist);
     }
     
-    hData->Draw("E1");
+    Double_t max = sBkg->GetMaximum();
+    sBkg->Draw();
+    if(hData){
+      max = TMath::Max(max, hData->GetMaximum());
+      hData->Draw("E1same");
+    }
     for(unsigned int i=0; i<Sig.size(); i++){
       sSigs[i]->Draw("same][");
+      max = TMath::Max(max, sSigs[i]->GetMaximum());
     }
+    sBkg->SetMaximum(1.1*max);
     
   }else{
     THStack* hs = new THStack("hs",title.c_str());
@@ -195,12 +255,12 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
 
   if(debug) cout<<"Creating Legend\n";
   TLegend *legend = new TLegend(0.65,0.50,0.88,0.89,"");
-  legend->AddEntry(hData, "Data", "PLE");
+  if(Data.size()) legend->AddEntry(hData, "Data", "PLE");
   for(unsigned int i=0; i<Bkg.size(); ++i){
-    legend->AddEntry(Bkg[i].hist,Bkg[i].name.c_str(), "L");
+    legend->AddEntry(Bkg[i].hist,SampleNames[Bkg[i].name].c_str(), "L");
   }
   for(unsigned int i=0; i<Sig.size(); ++i){
-    legend->AddEntry(Sig[i].hist,Sig[i].name.c_str(), "L");
+    legend->AddEntry(Sig[i].hist,SampleNames[Sig[i].name].c_str(), "L");
   }
   
   if(norm){//????
