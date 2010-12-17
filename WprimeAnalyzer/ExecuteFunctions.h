@@ -72,6 +72,9 @@ void UseSample(string dir, vector<InputFile> & files,
                TFile * fout, ofstream & out);
 
 void PrintEvent();
+void PrintEventFull();
+void PrintElectron(int idx, int parent);
+void PrintMuon(int idx, int parent);
 float CalcLeadPt(int type=0);
 
 Int_t           eventID;
@@ -166,6 +169,13 @@ vector<float>   *electron_eOverP;
 vector<float>   *electron_hOverE;
 vector<float>   *electron_sigmaEtaEta;
 
+vector<int>     *electron_simpleEleId60relIso;
+vector<int>     *electron_simpleEleId70relIso;
+vector<int>     *electron_simpleEleId80relIso;
+vector<int>     *electron_simpleEleId85relIso;
+vector<int>     *electron_simpleEleId90relIso;
+vector<int>     *electron_simpleEleId95relIso;
+
 vector<int  >   *muon_pdgId;
 vector<float>   *muon_energy;
 vector<float>   *muon_eta;
@@ -178,6 +188,7 @@ vector<float>   *muon_innerD0;
 vector<float>   *muon_innerD0Error;
 vector<float>   *muon_trackIso;
 vector<float>   *muon_caloIso;
+vector<float>   *muon_relIso;
 vector<int  >   *muon_fitType;
 vector<int  >   *muon_isGlobal;    
 vector<int  >   *muon_isTracker;    

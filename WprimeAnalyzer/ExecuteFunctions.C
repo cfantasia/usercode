@@ -638,8 +638,15 @@ void Set_Branch_Addresses(TTree* WZtree)
   WZtree->SetBranchAddress("electron_deltaPhiIn", &electron_deltaPhiIn);
   WZtree->SetBranchAddress("electron_eOverP", &electron_eOverP);
   WZtree->SetBranchAddress("electron_hOverE", &electron_hOverE);
-  WZtree->SetBranchAddress("electron_sigmaEtaEta", &electron_sigmaEtaEta);
- 
+  WZtree->SetBranchAddress("electron_sigmaIEtaIEta", &electron_sigmaEtaEta);
+
+  WZtree->SetBranchAddress("electron_simpleEleId60relIso", &electron_simpleEleId60relIso);
+  WZtree->SetBranchAddress("electron_simpleEleId70relIso", &electron_simpleEleId70relIso);
+  WZtree->SetBranchAddress("electron_simpleEleId80relIso", &electron_simpleEleId80relIso);
+  WZtree->SetBranchAddress("electron_simpleEleId85relIso", &electron_simpleEleId85relIso);
+  WZtree->SetBranchAddress("electron_simpleEleId90relIso", &electron_simpleEleId90relIso);
+  WZtree->SetBranchAddress("electron_simpleEleId95relIso", &electron_simpleEleId95relIso);
+
   WZtree->SetBranchAddress("muon_pdgId",&muon_pdgId);
   WZtree->SetBranchAddress("muon_energy",&muon_energy);
   WZtree->SetBranchAddress("muon_eta",&muon_eta);
@@ -652,6 +659,7 @@ void Set_Branch_Addresses(TTree* WZtree)
   WZtree->SetBranchAddress("muon_innerD0Error",&muon_innerD0Error);
   WZtree->SetBranchAddress("muon_trackIso",&muon_trackIso);
   WZtree->SetBranchAddress("muon_caloIso",&muon_caloIso); 
+  WZtree->SetBranchAddress("muon_relIso",&muon_relIso); 
   WZtree->SetBranchAddress("muon_fitType",&muon_fitType);
   WZtree->SetBranchAddress("muon_isGlobal",&muon_isGlobal);    
   WZtree->SetBranchAddress("muon_isTracker",&muon_isTracker);    
@@ -826,22 +834,21 @@ void PrintEvent(){
       <<" W_transMass: "<<W_transMass
       <<endl;
 
-  if(Z_flavor == 11){
+  if(Z_flavor == PDGELEC){
     cout<<" Z_electron_pt1 "<<electron_pt->at(Z_leptonIndex1)
         <<" Z_electron_pt2 "<<electron_pt->at(Z_leptonIndex2);
-  }else{
+  }else if(Z_flavor == PDGMUON){
     cout<<" Z_muon_pt1 "<<muon_pt->at(Z_leptonIndex1)
         <<" Z_muon_pt2 "<<muon_pt->at(Z_leptonIndex2);
   }
 
   cout<<endl;
 
-  if(W_flavor == 11){
+  if(W_flavor == PDGELEC){
     cout<<" W_electron_pt "<<electron_pt->at(W_leptonIndex);
-  }else{
+  }else if(W_flavor == PDGMUON){
     cout<<" W_muon_pt "<<muon_pt->at(W_leptonIndex);
   }
-    
     
   cout<<" pfMet_et: "<<pfMet_et
       <<" tcMet_et: "<<tcMet_et
@@ -854,6 +861,68 @@ void PrintEvent(){
       <<" # Muon: "<<muon_pt->size()
       <<endl<<endl;
   return;
+}
+
+void
+PrintEventFull(){
+  PrintEvent();
+  if     (Z_flavor == PDGELEC){
+    PrintElectron(Z_leptonIndex1, PDGZ);
+    PrintElectron(Z_leptonIndex2, PDGZ);
+  }else if(Z_flavor == PDGMUON){
+    PrintMuon(Z_leptonIndex1, PDGZ);
+    PrintMuon(Z_leptonIndex2, PDGZ);
+  }
+
+  if     (W_flavor == PDGELEC) PrintElectron(W_leptonIndex, PDGW);
+  else if(W_flavor == PDGMUON) PrintMuon(W_leptonIndex, PDGW);
+}
+
+void
+PrintElectron(int idx, int parent){
+  if     (parent == PDGZ) cout<<"-----Electron from Z-------------------------"<<endl;
+  else if(parent == PDGW) cout<<"-----Electron from W-------------------------"<<endl;
+  else                    cout<<"-----Electron from ?-------------------------"<<endl;
+  cout<<" Elec Pt: "<<electron_pt->at(idx)<<endl
+      <<" Elec ScEt: "<<electron_ScEt->at(idx)<<endl //ScEt
+      <<" Elec Eta: "<<electron_eta->at(idx)<<endl //Eta
+      <<" Elec SigmaNN: "<<electron_sigmaEtaEta->at(idx)<<endl //sigmaNN
+      <<" Elec dPhi: "<<electron_deltaPhiIn->at(idx)<<endl //DeltaPhi
+      <<" Elec dEta: "<<electron_deltaEtaIn->at(idx)<<endl //DeltaEta
+      <<" Elec HoverE: "<<electron_hOverE->at(idx)<<endl// H/E
+      <<" Elec EoverP: "<<electron_eOverP->at(idx)<<endl;// E/P
+  /*
+  cout<<"Elec 60%: "<<electron_simpleEleId60relIso->at(idx)<<endl
+      <<"Elec 70%: "<<electron_simpleEleId70relIso->at(idx)<<endl
+      <<"Elec 80%: "<<electron_simpleEleId80relIso->at(idx)<<endl
+      <<"Elec 85%: "<<electron_simpleEleId85relIso->at(idx)<<endl
+      <<"Elec 90%: "<<electron_simpleEleId90relIso->at(idx)<<endl
+      <<"Elec 95%: "<<electron_simpleEleId95relIso->at(idx)<<endl;
+  */
+  if(parent == PDGW){
+    cout<<" Elec RelTrkIso: "<<Calc_ElecRelTrkIso(idx)<<endl
+        <<" Elec RelECalIso: "<<Calc_ElecRelECalIso(idx)<<endl
+        <<" Elec RelHCalIso: "<<Calc_ElecRelHCalIso(idx)<<endl;
+  }
+}
+
+void
+PrintMuon(int idx, int parent){
+  if     (parent == PDGZ) cout<<"-----Muon from Z-------------------------"<<endl;
+  else if(parent == PDGW) cout<<"-----Muon from W-------------------------"<<endl;
+  else                    cout<<"-----Muon from ?-------------------------"<<endl;
+  cout<<" Muon Pt: "<<muon_pt->at(idx)<<endl
+      <<" Muon Eta: "<<muon_eta->at(idx)<<endl
+      <<" Muon Dxy: "<<muon_globalD0->at(idx)<<endl //Dxy
+      <<" Muon NormX2: "<<Calc_MuonNormChi2(idx)<<endl //NormX2
+      <<" Muon NPix: "<<muon_globalNpixelHits->at(idx)<<endl //Npixhit
+      <<" Muon NTrk: "<<muon_globalNtrackerHits->at(idx)<<endl //Ntrk hit
+      <<" Muon NMatches: "<<muon_numGlobalMatches->at(idx)<<endl //MuonStations
+      <<" Muon NValid: "<<muon_numValidMuonHits->at(idx)<<endl; //Hits Used
+  
+  if(parent == PDGW){
+    cout<<" Muon RelIso: "<<Calc_MuonRelIso(idx)<<endl;// CombRelIso
+  }
 }
 
 float
