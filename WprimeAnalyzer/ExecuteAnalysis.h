@@ -32,14 +32,25 @@ const int NCuts = sizeof(Cut_Name) / sizeof(string);//works
 //const int NCuts = Cut.size();//Doesn't work
 
 TH1F * hWZInvMass[NCuts];
+TH1F * hWZ3e0muInvMass[NCuts];
+TH1F * hWZ2e1muInvMass[NCuts];
+TH1F * hWZ1e2muInvMass[NCuts];
+TH1F * hWZ0e3muInvMass[NCuts];
+
 TH1F * hWZTransMass[NCuts];
 TH1F * hHt[NCuts];
 TH1F * hWpt[NCuts];
 TH1F * hZpt[NCuts];
 TH1F * hMET[NCuts];
+
 TH1F * hZmass[NCuts];
 TH1F * hZeemass[NCuts];
 TH1F * hZmumumass[NCuts];
+TH1F * hZ3e0muMass[NCuts];
+TH1F * hZ2e1muMass[NCuts];
+TH1F * hZ1e2muMass[NCuts];
+TH1F * hZ0e3muMass[NCuts];
+
 TH1F * hWTransmass[NCuts];
 TH1F * hWenuTransmass[NCuts];
 TH1F * hWmunuTransmass[NCuts];

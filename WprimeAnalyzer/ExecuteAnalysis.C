@@ -22,6 +22,15 @@ void Declare_Histos()
 
   DeclareHistoSet("hWZInvMass", "Reconstructed WZ Invariant Mass",
                   "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZInvMass);
+  DeclareHistoSet("hWZ3e0muInvMass", "Reconstructed WZ(3e0\\mu) Invariant Mass",
+                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZ3e0muInvMass);
+  DeclareHistoSet("hWZ2e1muInvMass", "Reconstructed WZ(2e1\\mu) Invariant Mass",
+                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZ2e1muInvMass);
+  DeclareHistoSet("hWZ1e2muInvMass", "Reconstructed WZ(1e2\\mu) Invariant Mass",
+                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZ1e2muInvMass);
+  DeclareHistoSet("hWZ0e3muInvMass", "Reconstructed WZ(0e3\\mu) Invariant Mass",
+                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZ0e3muInvMass);
+
   DeclareHistoSet("hWZTransMass", "Reconstructed WZ Transverse Mass",
                   "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZTransMass);
   //Ht Histos
@@ -40,12 +49,18 @@ void Declare_Histos()
   //Z Mass Histos
   DeclareHistoSet("hZmass" , "Reconstructed Mass of Z",
                   "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZmass);
-  
   DeclareHistoSet("hZeemass","Reconstructed Mass of Zee",
                   "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZeemass);
-
   DeclareHistoSet("hZmumumass","Reconstructed Mass of Zmumu",
                   "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZmumumass);
+  DeclareHistoSet("hZ3e0muMass" , "Reconstructed Mass of Z(3e0\\mu)",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZ3e0muMass);
+  DeclareHistoSet("hZ2e1muMass" , "Reconstructed Mass of Z(2e1\\mu)",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZ2e1muMass);
+  DeclareHistoSet("hZ1e2muMass" , "Reconstructed Mass of Z(1e2\\mu)",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZ1e2muMass);
+  DeclareHistoSet("hZ0e3muMass" , "Reconstructed Mass of Z(0e3\\mu)",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZ0e3muMass);
 
   //W Trans Mass Histos
   DeclareHistoSet("hWTransmass", "Reconstructed Transmass of W",
@@ -148,17 +163,25 @@ void Fill_Histos(int index, float weight)
   if(debugme) cout<<"Filling Histos"<<endl;
 
   hWZInvMass[index]->Fill(WZ_invMassMinPz, weight);
+  if(Z_flavor == PDGELEC && W_flavor == PDGELEC) hWZ3e0muInvMass[index]->Fill(WZ_invMassMinPz, weight);
+  if(Z_flavor == PDGELEC && W_flavor == PDGMUON) hWZ2e1muInvMass[index]->Fill(WZ_invMassMinPz, weight);
+  if(Z_flavor == PDGMUON && W_flavor == PDGELEC) hWZ1e2muInvMass[index]->Fill(WZ_invMassMinPz, weight);
+  if(Z_flavor == PDGMUON && W_flavor == PDGMUON) hWZ0e3muInvMass[index]->Fill(WZ_invMassMinPz, weight);
+
   hWZTransMass[index]->Fill(WZ_transMass, weight);
   hHt[index]->Fill(Ht,weight);
   hZpt[index]->Fill(Z_pt,weight);
   hWpt[index]->Fill(W_pt,weight);
   hMET[index]->Fill(pfMet_et, weight);
+
   hZmass[index]->Fill(Z_mass,weight);
-  if      (Z_flavor == PDGELEC){
-    hZeemass[index]->Fill(Z_mass,weight);
-  }else if (Z_flavor == PDGMUON){
-    hZmumumass[index]->Fill(Z_mass,weight);
-  }
+  if      (Z_flavor == PDGELEC)    hZeemass[index]->Fill(Z_mass,weight);
+  else if (Z_flavor == PDGMUON) hZmumumass[index]->Fill(Z_mass,weight);
+  if(Z_flavor == PDGELEC && W_flavor == PDGELEC) hZ3e0muMass[index]->Fill(Z_mass, weight);
+  if(Z_flavor == PDGELEC && W_flavor == PDGMUON) hZ2e1muMass[index]->Fill(Z_mass, weight);
+  if(Z_flavor == PDGMUON && W_flavor == PDGELEC) hZ1e2muMass[index]->Fill(Z_mass, weight);
+  if(Z_flavor == PDGMUON && W_flavor == PDGMUON) hZ0e3muMass[index]->Fill(Z_mass, weight);
+
   if(W_transMass>0){
     hWTransmass[index]->Fill(W_transMass,weight);
     if      (W_flavor == PDGELEC) hWenuTransmass[index]->Fill(W_transMass,weight);
@@ -410,10 +433,11 @@ void Get_Distributions(vector<InputFile>& files,
 
       //After All Cuts
       Tabulate_Me(Num_surv_cut,cut_index,weight); 
-      //cout<<" Passed All Cuts!!!\n\n";
-      //PrintEvent();
-      //cout<<" ------------------\n";
-      
+      if(!dir.compare("Run2010")){
+        cout<<" The following events passed All Cuts!!!\n\n";
+        PrintEventFull();
+        cout<<" ------------------\n";
+      }
     }//event loop
     
     // total # of events (before any cuts)
