@@ -112,6 +112,10 @@ bool PassMuonDxyCut(int idx);
 bool PassTightCut(int idx, int flavor);
 
 float Calc_Ht();
+float Calc_ElecRelTrkIso(int idx);
+float Calc_ElecRelECalIso(int idx);
+float Calc_ElecRelHCalIso(int idx);
+float Calc_MuonNormChi2(int idx);
 float Calc_MuonRelIso(int idx);
 float Calc_GenWZInvMass();
 

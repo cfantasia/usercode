@@ -192,24 +192,19 @@ bool PassElecEtaCut(int idx){
 bool PassElecTrkRelIsoCut(int idx,bool inEC){
 //-----------------------------------------------------------
   if(debugme) cout<<"Check Electron ElecTrkRelIso Cut"<<endl;
-  return ((electron_trackIso->at(idx)/electron_pt->at(idx))
-          < maxWenuTrkRelIso[inEC]);
-
+  return (Calc_ElecRelTrkIso(idx) < maxWenuTrkRelIso[inEC]);
 }//--- PassElecTrkRelIsoCut
 
 bool PassElecECalRelIsoCut(int idx,bool inEC){
 //-----------------------------------------------------------
   if(debugme) cout<<"Check Electron EcalRelIso Cut"<<endl;
-  return ((electron_ecaloIso->at(idx)/electron_pt->at(idx))
-          < maxWenuECalRelIso[inEC]);
-
+  return (Calc_ElecRelECalIso(idx) < maxWenuECalRelIso[inEC]);
 }//--- PassElecEcalRelIsoCut
 
 bool PassElecHCalRelIsoCut(int idx,bool inEC){
 //-----------------------------------------------------------
   if(debugme) cout<<"Check Electron HcalRelIso Cut"<<endl;
-  return ((electron_hcaloIso->at(idx)/electron_pt->at(idx))
-          < maxWenuHCalRelIso[inEC]);
+  return (Calc_ElecRelHCalIso(idx) < maxWenuHCalRelIso[inEC]);
 }//--- PassHcalRelIsoElecCut
 
 bool PassElecSigmaEtaEtaCut(int idx,bool inEC){
@@ -221,13 +216,13 @@ bool PassElecSigmaEtaEtaCut(int idx,bool inEC){
 bool PassElecDeltaPhiCut(int idx,bool inEC){
 //-----------------------------------------------------------
   if(debugme) cout<<"Check Electron dPhi Cut"<<endl;
-  return (electron_deltaPhiIn->at(idx) < maxElecDeltaPhiIn[inEC]);
+  return (fabs(electron_deltaPhiIn->at(idx)) < maxElecDeltaPhiIn[inEC]);
 }//--- PassElecDeltaPhiCut
 
 bool PassElecDeltaEtaCut(int idx,bool inEC){
 //-----------------------------------------------------------
   if(debugme) cout<<"Check Electron dEta Cut"<<endl;
-  return (electron_deltaEtaIn->at(idx) < maxElecDeltaEtaIn[inEC]);
+  return (fabs(electron_deltaEtaIn->at(idx)) < maxElecDeltaEtaIn[inEC]);
 }//--- PassElecDeltaEtaCut
 
 bool PassElecHOverECut(int idx,bool inEC){
@@ -235,6 +230,20 @@ bool PassElecHOverECut(int idx,bool inEC){
   if(debugme) cout<<"Check Electron HOverE Cut"<<endl;
   return (electron_hOverE->at(idx) < maxElecHOverE[inEC]);
 }//--- PassElecHOverECut
+
+float
+Calc_ElecRelTrkIso(int idx){
+  return electron_trackIso->at(idx)/electron_pt->at(idx);
+}
+
+float
+Calc_ElecRelECalIso(int idx){
+  return electron_ecaloIso->at(idx)/electron_pt->at(idx);
+}
+float
+Calc_ElecRelHCalIso(int idx){
+  return electron_hcaloIso->at(idx)/electron_pt->at(idx);
+}
 
 ///////////////////////////
 ////Muon Cuts//////////////
@@ -294,12 +303,16 @@ bool PassMuonCombRelIsoCut(int idx){
   return (Calc_MuonRelIso(idx) < maxWmunuCombRelIso);
 }//--- PassMuonCombRelIsoCut
 
+float
+Calc_MuonNormChi2(int idx){
+  return muon_globalChi2->at(idx)/muon_globalNdof->at(idx);
+}
+
 float 
 Calc_MuonRelIso(int idx){
   if(muon_trackIso == 0 || muon_caloIso == 0) return 999;
-  
-  return (muon_trackIso->at(idx) + 
-          muon_caloIso->at(idx) ) /
+  return muon_relIso->at(idx);
+  //return ( muon_trackIso->at(idx) +  muon_caloIso->at(idx) ) /
     muon_pt->at(idx);
 }//--- Calc_MuonRelIso
 
