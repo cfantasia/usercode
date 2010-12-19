@@ -79,14 +79,16 @@ bool PassHtCut();
 bool PassHtMetCut();
 bool PassMETCut();
 
-bool PassWDecayCut();
-bool PassZDecayCut();
-bool PassWenuCut();
-bool PassWmunuCut();
-bool PassWtransMassCut();
-bool PassZeeCut();
-bool PassZmumuCut();
 bool PassZmassCut();
+bool PassZLepPtCut();
+bool PassZeePtCut();
+bool PassZmumuPtCut();
+
+bool PassWtransMassCut();
+bool PassWLepPtCut();
+bool PassWLepIsoCut();
+bool PassWenuIsoCut();
+bool PassWmunuIsoCut();
 
 bool PassElecEtaCut(int idx);
 bool PassElecEtCut(int idx,int parent);

@@ -24,7 +24,9 @@ const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs",
                            "MuonNormChi2", "MuonNPix",
                            "MuonNTrk", "MuonStation",
                            "MuonHitsUsed",
-                           "Zdecay", "Wdecay", 
+                           "ZMass", "WTransMass", 
+                           "ZLepPt", "WLepPt", 
+                           "WLepIso", 
                            "Ht", "Zpt", "Wpt", "MET",
                            "AllCuts"};
 const vector<string> Cut(Cut_Name, Cut_Name + sizeof(Cut_Name) / sizeof(string) );

@@ -80,19 +80,21 @@ bool PassNumberOfZsCut()
 //Check W decay Properties
 //-----------------------------------------------------------
 bool 
-PassWDecayCut(){
-  if(!PassWtransMassCut()) return false;
+PassWLepPtCut(){
+  if      (W_flavor == PDGELEC){
+    return PassElecEtCut(W_leptonIndex,PDGW);
+  }else if(W_flavor == PDGMUON){
+    return PassMuonPtCut(W_leptonIndex,PDGW);
+  }  
+  return false;
+}
 
-  switch(W_flavor){
-  case PDGMUON:
-    return PassWmunuCut();
-    break;
-  case PDGELEC:
-    return PassWenuCut();
-    break;
-  default:
-    cout<<"W Didn't decay to electron or muon!"<<endl;
-    break;
+bool 
+PassWLepIsoCut(){
+  if      (W_flavor == PDGMUON){
+    return PassWmunuIsoCut();
+  }else if(W_flavor == PDGELEC){
+    return PassWenuIsoCut();
   }
   return false;
 }
@@ -100,19 +102,11 @@ PassWDecayCut(){
 //Check Z decay Properties
 //-----------------------------------------------------------
 bool 
-PassZDecayCut(){
-  if(!PassZmassCut()) return false;
-
-  switch(Z_flavor){
-  case PDGMUON:
-    return PassZmumuCut();
-    break;
-  case PDGELEC:
-    return PassZeeCut();
-    break;
-  default:
-    cout<<"Z Didn't decay to electron or muon!"<<endl;
-    break;
+PassZLepPtCut(){
+  if      (Z_flavor == PDGMUON){
+    return PassZmumuPtCut();
+  }else if(Z_flavor == PDGELEC){
+    return PassZeePtCut();
   }
   return false;
 }
@@ -120,12 +114,11 @@ PassZDecayCut(){
 //Check Wenu decay Properties
 //-----------------------------------------------------------
 bool 
-PassWenuCut(){
+PassWenuIsoCut(){
   bool inEC = inEndCap(electron_ScEta->at(W_leptonIndex));
-  if(!PassElecEtCut         (W_leptonIndex,PDGW)) return false;
-  if(!PassElecTrkRelIsoCut  (W_leptonIndex,inEC)) return false;
-  if(!PassElecECalRelIsoCut (W_leptonIndex,inEC)) return false;
-  if(!PassElecHCalRelIsoCut (W_leptonIndex,inEC)) return false;
+  if(!PassElecTrkRelIsoCut (W_leptonIndex,inEC)) return false;
+  if(!PassElecECalRelIsoCut(W_leptonIndex,inEC)) return false;
+  if(!PassElecHCalRelIsoCut(W_leptonIndex,inEC)) return false;
 
   return true;
 }
@@ -133,38 +126,26 @@ PassWenuCut(){
 //Check Wmunu decay Properties
 //-----------------------------------------------------------
 bool 
-PassWmunuCut(){
-  if(!PassMuonPtCut        (W_leptonIndex,PDGW)) return false;
-  if(!PassMuonCombRelIsoCut(W_leptonIndex)) return false;
-    
+PassWmunuIsoCut(){
+  if(!PassMuonCombRelIsoCut(W_leptonIndex)) return false;   
   return true;
 }
 
 //Check Zee decay Properties
 //-----------------------------------------------------------
 bool 
-PassZeeCut(){
-  int idx;
-  for(int i=0; i!=2; ++i){
-    if(i==0) idx = Z_leptonIndex1;
-    else     idx = Z_leptonIndex2;
-        
-    if(!PassElecEtCut         (idx,PDGZ)) return false;
-  }
+PassZeePtCut(){
+  if(!PassElecEtCut(Z_leptonIndex1,PDGZ)) return false;
+  if(!PassElecEtCut(Z_leptonIndex2,PDGZ)) return false;
   return true;
 }
 
 //Check Zmumu decay Properties
 //-----------------------------------------------------------
 bool 
-PassZmumuCut(){
-  int idx;
-  for(int i=0; i!=2; ++i){
-    if(i==0) idx = Z_leptonIndex1;
-    else     idx = Z_leptonIndex2;
-
-    if(!PassMuonPtCut       (idx,PDGZ)) return false; 
-  }
+PassZmumuPtCut(){
+  if(!PassMuonPtCut(Z_leptonIndex1,PDGZ)) return false; 
+  if(!PassMuonPtCut(Z_leptonIndex2,PDGZ)) return false; 
   return true;
 }
 
@@ -310,10 +291,9 @@ Calc_MuonNormChi2(int idx){
 
 float 
 Calc_MuonRelIso(int idx){
-  if(muon_trackIso == 0 || muon_caloIso == 0) return 999;
   return muon_relIso->at(idx);
-  //return ( muon_trackIso->at(idx) +  muon_caloIso->at(idx) ) /
-    muon_pt->at(idx);
+  //if(muon_trackIso == 0 || muon_caloIso == 0) return 999;
+  //return (muon_trackIso->at(idx) + muon_caloIso->at(idx)) / muon_pt->at(idx);
 }//--- Calc_MuonRelIso
 
 bool PassMuonDxyCut(int idx){

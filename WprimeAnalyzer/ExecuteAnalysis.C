@@ -412,10 +412,19 @@ void Get_Distributions(vector<InputFile>& files,
       Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       ////Boson Cuts/////////////
-      if(!PassZDecayCut()) continue;
+      if(!PassZmassCut()) continue;
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
+     
+      if(!PassWtransMassCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      if(!PassWDecayCut()) continue;
+      if(!PassZLepPtCut()) continue;
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+      if(!PassWLepPtCut()) continue;
+      Tabulate_Me(Num_surv_cut,cut_index,weight);      
+
+      if(!PassWLepIsoCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);      
 
       ////Other Cuts/////////////
