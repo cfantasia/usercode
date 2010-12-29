@@ -2,64 +2,87 @@
 #include "../Limits/consts.h"
 #include "MakePlots.C"
 
-void DrawSelection(TFile* fin, string title, bool mincut);
+void DrawSelection(TFile* fin, string title, string type);
 bool Straddles(float a, float b, float num);
 
 map<string,float> SigSamples;
 map<string,float> BkgSamples;
+map<string, string> var; //Name, min or max 
+map<string, string>::iterator it;
 
 void
 MakeSelection(){
+  TFile *fin = TFile::Open("Wprime_analysis.root", "read");
+  TCanvas c1;
+  c1.Print("Selection.pdf[", "pdf"); 
+
   /***********
     Note: WZ is signal and TTbar + Zjets is background
     for Lepton Cut Plots!!!!!
   ***********/
-  TFile *fin = TFile::Open("Wprime_analysis.root", "read");
+  SigSamples["WZ"]=KFactor("WZ");
 
-  SigSamples["Wprime400"]=KFactor("WZ");
+  BkgSamples["ZJetsBinned"]=KFactor("ZJetsBinned");
+  BkgSamples["TTbar2l"]=KFactor("TTbar2l");
+
+  //These need to be done for barrell/endcap 1 at a time
+  //var["hElecEt"] = "min"; 
+  /*
+  var["hElecSigmaEtaEta"] = "max";
+  var["hElecDPhi"] = "max";
+  var["hElecDEta"] = "max";
+  var["hElecHOverE"] = "max";
+  */
+  //var["hElecEP"] = "min";//Not using this cut
+
+  //var["hMuonPt" ) = "min"; 
+  /*
+  var["hMuonDxy"] = "max"; 
+  var["hMuonNormChi2"] = "max";
+  var["hMuonNPix"]  = "min";
+  var["hMuonNTrk"]  = "min";
+  var["hMuonStation"]  = "min";
+  */
+  //var["hMuonSip"]  = "max";//not using this cut
+
+  //These need to be done for barrell/endcap 1 at a time
+  //var["hElecTrkRelIso"] = "max";
+  //var["hElecECalRelIso"] = "max";
+  //var["hElecHCalRelIso"] = "max";
+  //var["hMuonRelIso"]  = "max";
+  //var["hWLepIso"]  = "max";
+
+  var["hWTransMass"] = "min";
+  var["hMET"] = "min";
+  
+  for(it=var.begin() ; it != var.end(); it++ ){
+    DrawSelection(fin, it->first, it->second);
+  }
+
+  SigSamples.clear();
+  BkgSamples.clear();
+  var.clear();
+
+  SigSamples["Wprime400"]=KFactor("Wprime400");
 
   BkgSamples["WZ"]=KFactor("WZ");
   BkgSamples["ZJetsBinned"]=KFactor("ZJetsBinned");
   BkgSamples["TTbar2l"]=KFactor("TTbar2l");
 
-  vector<string> selection_variable;  vector<bool> mincut;
-/*  selection_variable.push_back("hElecEt");          mincut.push_back(true);
-  //selection_variable.push_back("hElecTrkRelIso");   mincut.push_back(false);
-  //selection_variable.push_back("hElecECalRelIso");  mincut.push_back(false);
-  //selection_variable.push_back("hElecHCalRelIso");  mincut.push_back(false);
-  selection_variable.push_back("hElecSigmaEtaEta"); mincut.push_back(false);
-  selection_variable.push_back("hElecDPhi");        mincut.push_back(false);
-  selection_variable.push_back("hElecDEta");        mincut.push_back(false); 
-  selection_variable.push_back("hElecHOverE");      mincut.push_back(false);
-  //selection_variable.push_back("hElecEP");          mincut.push_back(true);
+  var["hHt"]  = "min";
+  var["hZpt"] = "min";
+  var["hWpt"] = "min";
 
-  selection_variable.push_back("hMuonPt" );          mincut.push_back(true);
-  selection_variable.push_back("hMuonDxy");          mincut.push_back(false);
-  selection_variable.push_back("hMuonNormChi2");     mincut.push_back(false);
-  selection_variable.push_back("hMuonNPix");         mincut.push_back(true);
-  selection_variable.push_back("hMuonNTrk");         mincut.push_back(true);
-  selection_variable.push_back("hMuonStation");      mincut.push_back(true);
-  //selection_variable.push_back("hMuonSip");          mincut.push_back(false);   
-  */
-
-  selection_variable.push_back("hHt");      mincut.push_back(true);
-  selection_variable.push_back("hZpt");      mincut.push_back(true);
-  selection_variable.push_back("hWpt");      mincut.push_back(true);
-  selection_variable.push_back("hMET");      mincut.push_back(true);
-
-  TCanvas c1;
-  c1.Print("Selection.pdf[", "pdf"); 
-
-  for(size_t i=0; i < selection_variable.size(); ++i){
-    string title = selection_variable[i];
-    DrawSelection(fin,title, mincut[i]);
+  for(it=var.begin() ; it != var.end(); it++ ){
+    DrawSelection(fin, it->first, it->second);
   }
    
   c1.Print("Selection.pdf]", "pdf"); 
 
 }
+
 void
-DrawSelection(TFile* fin, string title, bool mincut){
+DrawSelection(TFile* fin, string title, string type){
   //printf("  Draw Selection\n");
   string fulltitle;
   TH1F* hSig = NULL;
@@ -68,15 +91,18 @@ DrawSelection(TFile* fin, string title, bool mincut){
     string title_match = "h" + Cut_Name[cut];
     if(!title_match.compare(title)){
       fulltitle = title + "_" + Cut_Name[cut-1];//Look before cut is applied
-      cout<<"Using Cut: "<<Cut_Name[cut-1]<<" for histo:"<<title<<endl;
+      //cout<<"Using Cut: "<<Cut_Name[cut-1]<<" for histo:"<<title<<endl;
       hSig = get_sum_of_hists(fin, SigSamples, fulltitle, 0);
       hBkg = get_sum_of_hists(fin, BkgSamples, fulltitle, 0);
       break;
     }
   }    
 
-  if(!hSig || !hBkg) return;
-
+  if(!hSig || !hBkg){
+    cout<<"Didn't find a histogram\n";
+    cout<<"hSig: "<<hSig<<" hBkg:"<<hBkg<<endl;
+    return;
+  }
   //TAxis* axis = hists[0]->GetXaxis();
   int first = 0;//Include under/over flow
   int last  = hSig->GetNbinsX() + 1;//axis->GetLast() + 1;
@@ -85,7 +111,7 @@ DrawSelection(TFile* fin, string title, bool mincut){
   const float Nsig_tot  = hSig->Integral(first, last);
   const float Nbkg_tot  = hBkg->Integral(first, last);
 
-  printf("Tot sig:%f   Tot Bkg:%f\n", Nsig_tot, Nbkg_tot);
+  //printf("Tot sig:%f   Tot Bkg:%f\n", Nsig_tot, Nbkg_tot);
   //printf("first:%i, last:%i, nbins:%i or %i\n", first, last, nbins, hists[0]->GetNbinsX());
 
   double* Nsig = new double[nbins];
@@ -105,12 +131,15 @@ DrawSelection(TFile* fin, string title, bool mincut){
     cut[bin] = 0;
     Signif[bin] = 0;
 
-    if(mincut){
+    if(!type.compare("min")){
       Nsig[bin] = hSig->Integral(bin, last);
       Nbkg[bin] = hBkg->Integral(bin, last);
-    }else{
+    }else if(!type.compare("max")){
       Nsig[bin] = hSig->Integral(first, bin);
       Nbkg[bin] = hBkg->Integral(first, bin);
+    }else{
+      cout<<"You screwed up!\n";
+      return;
     }
     fsig[bin] = Nsig[bin] / Nsig_tot;
     fbkg[bin] = Nbkg[bin] / Nbkg_tot;
@@ -122,15 +151,16 @@ DrawSelection(TFile* fin, string title, bool mincut){
   int cutbin=-1;
   for(int bin=first; bin<last; ++bin){
     if(Straddles(fsig[bin],fsig[bin+1], 0.98)){
-      cout<<"Bin: "<<bin<<" straddles: "<<fsig[bin]<<" -> "<<fsig[bin+1]<<endl;
-      if(fsig[bin] > fsig[bin+1]) cutbin = bin;
-      else                        cutbin = bin+1;
+      //cout<<"Bin: "<<bin<<" straddles: "<<fsig[bin]<<" -> "<<fsig[bin+1]<<endl;
+      cutbin = bin+1;
+      
       cout<<title<<" cut is "
           <<hSig->GetBinLowEdge(cutbin-1)
-          <<" < "<<hSig->GetBinCenter(cutbin)
+          <<" < "<<hSig->GetBinLowEdge(cutbin)
           <<" < "<<hSig->GetBinLowEdge(cutbin+1)<<endl
           <<" With Sig Eff "<<fsig[cutbin]<<" and Bkg Eff "<<fbkg[cutbin]
           <<endl;
+      break;
     }
   }
 
@@ -154,7 +184,7 @@ DrawSelection(TFile* fin, string title, bool mincut){
   tCut.SetTextSize(0.1);
   tCut.SetTextColor(2);
   //tCut.SetTextAlign(22);
-  tCut.DrawText(0.3, 0.8, Form("Cut is %.1f GeV", hSig->GetBinCenter(cutbin)));
+  tCut.DrawText(0.3, 0.8, Form("Cut is %.1f GeV", hSig->GetBinLowEdge(cutbin)));
 
   c1.Print("Selection.pdf", "pdf");
   ////////////////////////////
@@ -181,7 +211,7 @@ DrawSelection(TFile* fin, string title, bool mincut){
   tSignifCut.SetTextSize(0.07);
   tSignifCut.SetTextColor(2);
   //tSignif.SetTextAlign(22);
-  tSignifCut.DrawText(0.3, 0.8, Form("Significance Cut is %.1f GeV", hSig->GetBinCenter(Scutbin)));
+  tSignifCut.DrawText(0.3, 0.8, Form("Significance Cut is %.1f GeV", hSig->GetBinLowEdge(Scutbin)));
 
   c2.Print("Selection.pdf", "pdf");
   
