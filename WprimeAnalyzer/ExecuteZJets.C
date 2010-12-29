@@ -10,22 +10,7 @@
 //------------------------------------------------
 
 #define ExecuteZJets_cxx
-#include <ExecuteZJets.h>
-
-void
-DeclareHistoSet(string n, string t, string xtitle,
-                int nbins, float min, float max,
-                TH1F** h){
-  float binWidth = (max-min)/nbins;
-  for(int i=0; i<NCuts; ++i){
-    
-    string name = n + "_" + Cut_Name[i];
-    string title = t + " (After " + Cut_Name[i] + " Cut);" 
-      + xtitle
-      + ";Evts/" + convertFloatToStr(binWidth) + " GeV/" + convertFloatToStr(lumiPb) + " pb^{-1}";
-    h[i] = new TH1F(name.c_str(),title.c_str(),nbins,min,max);
-  }
-}
+#include "ExecuteZJets.h"
 
 //--------------------------------------------------------------
 void Declare_Histos()
@@ -350,41 +335,73 @@ void ExecuteZJets()
   vector<InputFile> TC500_files;
   UseSample("TC500", TC500_files, fout, out);
   
+  vector<InputFile> WZ_Dilepton_files;
+  UseSample("WZ_Dilepton",WZ_Dilepton_files, fout, out);
   vector<InputFile> WZ_files;
-  UseSample("WZ_Dilepton",WZ_files, fout, out);
+  //UseSample("WZ",WZ_files, fout, out);
+  vector<InputFile> TTbar_Dilepton_files;
+  UseSample("TTbar_Dilepton",TTbar_Dilepton_files, fout, out);
   vector<InputFile> TTbar_files;
-  UseSample("TTbar_Dilepton",TTbar_files, fout, out);
+  //UseSample("TTbar",TTbar_files, fout, out);
+  vector<InputFile> TTbar2l_Dilepton_files;
+  UseSample("TTbar2l_Dilepton",TTbar2l_Dilepton_files, fout, out);
   vector<InputFile> TTbar2l_files;
-  UseSample("TTbar2l_Dilepton",TTbar2l_files, fout, out);
+  //UseSample("TTbar2l",TTbar2l_files, fout, out);
+  vector<InputFile> ZZ_Dilepton_files;
+  UseSample("ZZ_Dilepton",ZZ_Dilepton_files, fout, out);
   vector<InputFile> ZZ_files;
-  UseSample("ZZ_Dilepton",ZZ_files, fout, out);
+  //UseSample("ZZ",ZZ_files, fout, out);
+  vector<InputFile> ZZ4l_Dilepton_files;
+  UseSample("ZZ4l_Dilepton",ZZ4l_Dilepton_files, fout, out);
   vector<InputFile> ZZ4l_files;
-  UseSample("ZZ4l_Dilepton",ZZ4l_files, fout, out);
+  //UseSample("ZZ4l",ZZ4l_files, fout, out);
+  vector<InputFile> ZGamma_Dilepton_files;
+  UseSample("ZGamma_Dilepton",ZGamma_Dilepton_files, fout, out);
   vector<InputFile> ZGamma_files;
-  UseSample("ZGamma_Dilepton",ZGamma_files, fout, out);
+  //UseSample("ZGamma",ZGamma_files, fout, out);
 
+  vector<InputFile> ZJetsBinned_Dilepton_files;
+  UseSample("ZJetsBinned_Dilepton",ZJetsBinned_Dilepton_files, fout, out);
   vector<InputFile> ZJetsBinned_files;
-  UseSample("ZJetsBinned_Dilepton",ZJetsBinned_files, fout, out);
+  UseSample("ZJetsBinned",ZJetsBinned_files, fout, out);
+  vector<InputFile> ZeeJets_Dilepton_files;
+  UseSample("ZeeJets_Dilepton",ZeeJets_Dilepton_files, fout, out);
   vector<InputFile> ZeeJets_files;
-  UseSample("ZeeJets_Dilepton",ZeeJets_files, fout, out);
+  //UseSample("ZeeJets",ZeeJets_files, fout, out);
+  vector<InputFile> ZmumuJets_Dilepton_files;
+  UseSample("ZmumuJets_Dilepton",ZmumuJets_Dilepton_files, fout, out);
   vector<InputFile> ZmumuJets_files;
-  UseSample("ZmumuJets_Dilepton",ZmumuJets_files, fout, out);
+  //UseSample("ZmumuJets",ZmumuJets_files, fout, out);
+  vector<InputFile> ZeeJetsPowheg_Dilepton_files;
+  UseSample("ZeeJetsPowheg_Dilepton",ZeeJetsPowheg_Dilepton_files, fout, out);
   vector<InputFile> ZeeJetsPowheg_files;
-  UseSample("ZeeJetsPowheg_Dilepton",ZeeJetsPowheg_files, fout, out);
+  //UseSample("ZeeJetsPowheg",ZeeJetsPowheg_files, fout, out);
+  vector<InputFile> ZmumuJetsPowheg_Dilepton_files;
+  UseSample("ZmumuJetsPowheg_Dilepton",ZmumuJetsPowheg_Dilepton_files, fout, out);
   vector<InputFile> ZmumuJetsPowheg_files;
-  UseSample("ZmumuJetsPowheg_Dilepton",ZmumuJetsPowheg_files, fout, out);
+  //UseSample("ZmumuJetsPowheg",ZmumuJetsPowheg_files, fout, out);
+  vector<InputFile> ZllJetsMadgraph_Dilepton_files;
+  UseSample("ZllJetsMadgraph_Dilepton",ZllJetsMadgraph_Dilepton_files, fout, out);
   vector<InputFile> ZllJetsMadgraph_files;
-  UseSample("ZllJetsMadgraph_Dilepton",ZllJetsMadgraph_files, fout, out);
+  //UseSample("ZllJetsMadgraph",ZllJetsMadgraph_files, fout, out);
 
+  vector<InputFile> WenuJets_Dilepton_files;
+  UseSample("WenuJets_Dilepton",WenuJets_Dilepton_files, fout, out);
   vector<InputFile> WenuJets_files;
-  UseSample("WenuJets_Dilepton",WenuJets_files, fout, out);
+  //UseSample("WenuJets",WenuJets_files, fout, out);
+  vector<InputFile> WmunuJets_Dilepton_files;
+  UseSample("WmunuJets_Dilepton",WmunuJets_Dilepton_files, fout, out);
   vector<InputFile> WmunuJets_files;
-  UseSample("WmunuJets_Dilepton",WmunuJets_files, fout, out);
+  //UseSample("WmunuJets",WmunuJets_files, fout, out);
+  vector<InputFile> WlnuJetsMadgraph_Dilepton_files;
+  UseSample("WlnuJetsMadgraph_Dilepton",WlnuJetsMadgraph_Dilepton_files, fout, out);
   vector<InputFile> WlnuJetsMadgraph_files;
-  UseSample("WlnuJetsMadgraph_Dilepton",WlnuJetsMadgraph_files, fout, out);
+  //UseSample("WlnuJetsMadgraph",WlnuJetsMadgraph_files, fout, out);
   
+  vector<InputFile> Run2010_Dilepton_files;
+  UseSample("Run2010_Dilepton",Run2010_Dilepton_files, fout, out);
   vector<InputFile> Run2010_files;
-  UseSample("Run2010_Dilepton",Run2010_files, fout, out);
+  //UseSample("Run2010",Run2010_files, fout, out);
 
   out.close(); 
   fout->Close();

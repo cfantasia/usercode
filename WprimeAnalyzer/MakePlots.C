@@ -16,8 +16,7 @@
 #include "TROOT.h"
 #include "TStyle.h"
 #include "TLine.h"
-//#include <ExecuteAnalysis.h>
-#include <ExecuteAnalysis.C>
+#include "ExecuteAnalysis.C"
 
 struct Sample{
   string name;
@@ -81,12 +80,12 @@ MakePlots(){
   SampleNames["TC400"]="\\rho_{TC} 400";
   SampleNames["TC500"]="\\rho_{TC} 500";
 
-  //Data.push_back(Sample("Run2010"));
-  //CheckSamples(fin,Data);
+  Data.push_back(Sample("Run2010"));
+  CheckSamples(fin,Data);
   
-  //Bkg.push_back(Sample("WlnuJetsMadgraph", 8, 1, 8));
-  Bkg.push_back(Sample("WenuJets" , 8, 1, 8));
-  Bkg.push_back(Sample("WmunuJets", 8, 1, 8));
+  Bkg.push_back(Sample("WlnuJetsMadgraph", 8, 1, 8));
+  //Bkg.push_back(Sample("WenuJets" , 8, 1, 8));
+  //Bkg.push_back(Sample("WmunuJets", 8, 1, 8));
   //Bkg.push_back(Sample("TTbar"  , 4, 1, 4));
   Bkg.push_back(Sample("TTbar2l"  , 4, 1, 4));
   Bkg.push_back(Sample("ZZ4l"     , 5, 1, 5));
@@ -96,15 +95,15 @@ MakePlots(){
   //Bkg.push_back(Sample("ZmumuJets", 7, 1, 7));
   Bkg.push_back(Sample("WZ"       , 2, 1, 2));//Cory: Change back to 3
   CheckSamples(fin,Bkg);
-/*  
-  Sig.push_back(Sample("Wprime300", 1, 1, 10));
+  
+  //Sig.push_back(Sample("Wprime300", 1, 1, 10));
   Sig.push_back(Sample("Wprime400", 1, 1, 10));
   Sig.push_back(Sample("Wprime500", 1, 1, 10));
-  Sig.push_back(Sample("Wprime600", 1, 1, 10));
-  Sig.push_back(Sample("Wprime700", 1, 1, 10));
-  Sig.push_back(Sample("Wprime800", 1, 1, 10));
-  Sig.push_back(Sample("Wprime900", 1, 1, 10));
-
+  //Sig.push_back(Sample("Wprime600", 1, 1, 10));
+  //Sig.push_back(Sample("Wprime700", 1, 1, 10));
+  //Sig.push_back(Sample("Wprime800", 1, 1, 10));
+  //Sig.push_back(Sample("Wprime900", 1, 1, 10));
+/*
   Sig.push_back(Sample("TC225",     2, 1, 10));
   Sig.push_back(Sample("TC300",     2, 1, 10));
   Sig.push_back(Sample("TC400",     2, 1, 10));
@@ -136,17 +135,21 @@ MakePlots(){
   variable.push_back("hZpt");      //4
   variable.push_back("hMET");          
 
-  variable.push_back("hZmass");      //6
-  variable.push_back("hZeemass");      
-  variable.push_back("hZmumumass");  //8    
+  variable.push_back("hZMass");      //6
+  variable.push_back("hZeeMass");      
+  variable.push_back("hZmumuMass");  //8    
   variable.push_back("hZ3e0muMass");      
   variable.push_back("hZ2e1muMass");      
   variable.push_back("hZ1e2muMass");      
   variable.push_back("hZ0e3muMass");      
 
-  variable.push_back("hWTransmass");      
-  variable.push_back("hWenuTransmass");  //10    
-  variable.push_back("hWmunuTransmass");      
+  variable.push_back("hWTransMass");      
+  variable.push_back("hWenuTransMass");  //10    
+  variable.push_back("hWmunuTransMass");      
+  variable.push_back("hW3e0muTransMass");      
+  variable.push_back("hW2e1muTransMass");      
+  variable.push_back("hW1e2muTransMass");      
+  variable.push_back("hW0e3muTransMass");      
   variable.push_back("hLeadPt");      
   variable.push_back("hLeadElecPt");      
   variable.push_back("hLeadMuonPt");      
@@ -223,6 +226,7 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
     for(unsigned int i=0; i<Bkg.size(); i++){
       sBkg->Add(Bkg[i].hist);
     } 
+    
     for(unsigned int i=0; i<Sig.size(); i++){
       sSigs[i] = (THStack*) sBkg->Clone();
       sSigs[i]->Add(Sig[i].hist);
@@ -230,13 +234,13 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
     
     Double_t max = sBkg->GetMaximum();
     sBkg->Draw();
+    for(unsigned int i=0; i<Sig.size(); i++){
+      max = TMath::Max(max, sSigs[i]->GetMaximum());
+      sSigs[i]->Draw("same][");
+    }
     if(hData){
       max = TMath::Max(max, hData->GetMaximum());
       hData->Draw("E1same");
-    }
-    for(unsigned int i=0; i<Sig.size(); i++){
-      sSigs[i]->Draw("same][");
-      max = TMath::Max(max, sSigs[i]->GetMaximum());
     }
     sBkg->SetMaximum(1.1*max);
     

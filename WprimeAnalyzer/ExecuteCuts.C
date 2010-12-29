@@ -3,6 +3,7 @@
 
 #include "ExecuteCuts.h"
 
+using namespace std;
 /////////////////Cuts///////////////////////
 //Trigger requirements
 //-----------------------------------------------------------
@@ -378,30 +379,20 @@ float Calc_Ht()
   
 }//--- CalcHt
 
+//Calc HtMET
+//-----------------------------------------------------------
+float Calc_HtMET()
+{
+  return Calc_Ht() + pfMet_et;
+}//--- CalcHt
+
 //Check Ht Met Properties
 //-----------------------------------------------------------
 bool PassHtMetCut()
 {
 //-----------------------------------------------------------
   if(debugme) cout<<"Check Ht Cuts"<<endl;
-  float Ht=0;
-  
-  if     (W_flavor == PDGELEC) Ht += electron_pt->at(W_leptonIndex);
-  else if(W_flavor == PDGMUON) Ht += muon_pt->at(W_leptonIndex);
-  else                         cout<<"W didn't decay into e,mu"<<endl;
-
-  if     (Z_flavor == PDGELEC){
-    Ht += electron_pt->at(Z_leptonIndex1);
-    Ht += electron_pt->at(Z_leptonIndex2);
-  }else if(Z_flavor == PDGMUON){
-    Ht += muon_pt->at(Z_leptonIndex1);
-    Ht += muon_pt->at(Z_leptonIndex2);
-  }else                         cout<<"Z didn't decay into e,mu"<<endl;
-
-  Ht += pfMet_et;
-    
-  return Ht > minHtMet;
-    
+  return Calc_HtMET() > minHtMet;
 }//--- PassHtMetCut
 
 //MET Cut
@@ -436,8 +427,8 @@ float Calc_GenWZInvMass()
   int idW=-1;    
   int size = genMother_pdgId->size();
   for(int i=0; i != size; i++){
-    pdg = abs(genParticle_pdgId->at(i));
-    pdgM = abs(genMother_pdgId->at(i));
+    pdg = fabs(genParticle_pdgId->at(i));
+    pdgM = fabs(genMother_pdgId->at(i));
     if (pdgM == PDGWPRIME){
       return genMother_mass->at(i);
     }
@@ -448,7 +439,7 @@ float Calc_GenWZInvMass()
       idW = i;
     }
         
-    if( abs(genParticle_pdgId->at(i)) == PDGZ && pdg > 50){
+    if( fabs(genParticle_pdgId->at(i)) == PDGZ && pdg > 50){
       cout<<"Mother of Z is "<<pdg<<endl;
     }
   }
@@ -484,4 +475,4 @@ bool inEndCap(float eta)
   return (abs_eta > minElecEtaEndcap && abs_eta < maxElecEta);         
 }//InEndCap
 
-#endif//#define _ExecuteCuts_h_
+#endif//#define _ExecuteCuts_cxx_

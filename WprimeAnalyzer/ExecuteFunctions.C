@@ -1,7 +1,7 @@
 #ifndef _ExecuteFunctions_cxx_
 #define _ExecuteFunctions_cxx_
 
-#include <ExecuteFunctions.h>
+#include "ExecuteFunctions.h"
 
 ///////////////Utilities//////////////////
 //--------------------------------------------------------------
@@ -785,15 +785,16 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
 //------------------------------------------------------------------------
   if(debugme) cout<<"Writing results to a txt file"<<endl;
 
-  out << setiosflags(ios::fixed) << setprecision(2) << setiosflags(ios::left);
+  out << setiosflags(ios::fixed) << setprecision(2);
   out<<"$$$$$$$$$$$$$$$$$$$$$$$ Type of sample: "<<dir<<endl;
   out << " Total # of Theoretical expected events = " << Nthe_evt << endl;
   out << " Total # of expected events = " << Nexp_evt << endl;
         
   for(unsigned int i = 0; i < Cuts.size(); ++i){
-
-    out <<"Cut " << setw(2) << i << "(" << setw(15) << Cuts[i]
-        << "): " <<"expected evts = " << setw(10) << Nexp_evt_cut[i];
+    out<<setiosflags(ios::left)
+       <<"Cut " << setw(2) << i << "(" << setw(15) << Cuts[i]
+       <<setiosflags(ios::right)
+       << "): " <<"expected evts = " << setw(10) << Nexp_evt_cut[i];
     hNumEvts->Fill(i,Nexp_evt_cut[i]);
 
     //calculate efficiencies
@@ -938,4 +939,4 @@ CalcLeadPt(int type){
   }
   return leadpt;
 }
-#endif//#define _ExecuteFunctions_h_
+#endif//#define _ExecuteFunctions_cxx_

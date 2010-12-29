@@ -47,6 +47,7 @@ ComparePz(){
   TH2F* hGenVsMin = new TH2F("hGenVsMin", "Gen vs Min", 100, -500, 500, 100, -500, 500);
   TH2F* hGenVsMax = new TH2F("hGenVsMax", "Gen vs Max", 100, -500, 500, 100, -500, 500);
   TH2F* hMinVsMax = new TH2F("hMinVsMax", "Min vs Max", 100, -500, 500, 100, -500, 500);
+  TH2F* hGenVsDiff = new TH2F("hGenVsDiff", "Gen vs Diff", 100, -500, 500, 100, -500, 500);
 
   TH1F* hminpz = new TH1F("hminpz", "Delta Min PZ", 40, -20, 20);
   TH1F* hmaxpz = new TH1F("hmaxpz", "Delta Max PZ", 40, -20, 20);
@@ -267,7 +268,7 @@ ComparePz(){
       wrong++;
     }
 
-    if(fabs(W_neutrino_pzMaxPz) > 100 || fabs(W_neutrino_pzMinPz) > 100) continue;
+    //if(fabs(W_neutrino_pzMaxPz) > 100 || fabs(W_neutrino_pzMinPz) > 100) continue;
 
     float w_genpz = -1;
     float lep_genpz = -1;
@@ -331,6 +332,7 @@ ComparePz(){
     hGenVsMin->Fill(W_neutrino_pzMinPz, neu_genpz);
     hGenVsMax->Fill(W_neutrino_pzMaxPz, neu_genpz);
     if(fabs(W_neutrino_pzMinPz-neu_genpz)< range) hMinVsMax->Fill(W_neutrino_pzMaxPz, W_neutrino_pzMinPz);
+    hGenVsDiff->Fill(W_neutrino_pzMaxPz - W_neutrino_pzMinPz, neu_genpz);
 
     hminpz->Fill(W_neutrino_pzMinPz-neu_genpz);
     hmaxpz->Fill(W_neutrino_pzMaxPz-neu_genpz);
@@ -418,6 +420,11 @@ ComparePz(){
   TCanvas* c5 = new TCanvas();
   hDeltaMass->Draw("");
   c5->SaveAs("DeltaMass.eps");
+
+
+  TCanvas* c6 = new TCanvas();
+  hGenVsDiff->Draw("COLZ");
+  c6->SaveAs("GenVsDiff.eps");
 
   cout<<"Mean: "<<endl;
   cout<<" minpz : "<<hminpz->GetMean()

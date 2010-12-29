@@ -10,7 +10,7 @@
 //------------------------------------------------
 
 #define ExecuteAnalysis_cxx
-#include <ExecuteAnalysis.h>
+#include "ExecuteAnalysis.h"
 
 //--------------------------------------------------------------
 void Declare_Histos()
@@ -21,38 +21,38 @@ void Declare_Histos()
   listOfHists.clear();
 
   DeclareHistoSet("hWZInvMass", "Reconstructed WZ Invariant Mass",
-                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZInvMass);
+                  "m_{WZ} (GeV)", 25, 0, 1000, Cut, hWZInvMass);
   DeclareHistoSet("hWZ3e0muInvMass", "Reconstructed WZ(3e0\\mu) Invariant Mass",
-                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZ3e0muInvMass);
+                  "m_{WZ} (GeV)", 100, 0, 1000, Cut, hWZ3e0muInvMass);
   DeclareHistoSet("hWZ2e1muInvMass", "Reconstructed WZ(2e1\\mu) Invariant Mass",
-                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZ2e1muInvMass);
+                  "m_{WZ} (GeV)", 100, 0, 1000, Cut, hWZ2e1muInvMass);
   DeclareHistoSet("hWZ1e2muInvMass", "Reconstructed WZ(1e2\\mu) Invariant Mass",
-                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZ1e2muInvMass);
+                  "m_{WZ} (GeV)", 100, 0, 1000, Cut, hWZ1e2muInvMass);
   DeclareHistoSet("hWZ0e3muInvMass", "Reconstructed WZ(0e3\\mu) Invariant Mass",
-                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZ0e3muInvMass);
+                  "m_{WZ} (GeV)", 100, 0, 1000, Cut, hWZ0e3muInvMass);
 
   DeclareHistoSet("hWZTransMass", "Reconstructed WZ Transverse Mass",
-                  "m_{WZ} (GeV)", 110, 0, 1100, Cut, hWZTransMass);
+                  "m_{WZ} (GeV)", 100, 0, 1000, Cut, hWZTransMass);
   //Ht Histos
   DeclareHistoSet("hHt", "H_{T}", 
-                  "Lepton Pt Sum: H_{T} (GeV)", 50, 0, 1000, Cut, hHt);
+                  "Lepton Pt Sum: H_{T} (GeV)", 80, 0, 800, Cut, hHt);
   //Wpt Histos
   DeclareHistoSet("hWpt", "p_{T} of W", 
-                  "p_{T}^{W} (GeV)", 80, 0, 400, Cut, hWpt);
+                  "p_{T}^{W} (GeV)", 40, 0, 400, Cut, hWpt);
   //Zpt Histos
   DeclareHistoSet("hZpt", "p_{T} of Z", 
-                  "p_{T}^{Z} (GeV)", 80, 0, 400, Cut, hZpt);
+                  "p_{T}^{Z} (GeV)", 40, 0, 400, Cut, hZpt);
   //MET Histos
   DeclareHistoSet("hMET", "MET",
                   "MET (GeV)", 50, 0, 500, Cut, hMET);
 
   //Z Mass Histos
-  DeclareHistoSet("hZmass" , "Reconstructed Mass of Z",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZmass);
-  DeclareHistoSet("hZeemass","Reconstructed Mass of Zee",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZeemass);
-  DeclareHistoSet("hZmumumass","Reconstructed Mass of Zmumu",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZmumumass);
+  DeclareHistoSet("hZMass" , "Reconstructed Mass of Z",
+                  "m_{Z}^{Reco} (GeV)", 8, 50, 130, Cut, hZMass);
+  DeclareHistoSet("hZeeMass","Reconstructed Mass of Zee",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZeeMass);
+  DeclareHistoSet("hZmumuMass","Reconstructed Mass of Zmumu",
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZmumuMass);
   DeclareHistoSet("hZ3e0muMass" , "Reconstructed Mass of Z(3e0\\mu)",
                   "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZ3e0muMass);
   DeclareHistoSet("hZ2e1muMass" , "Reconstructed Mass of Z(2e1\\mu)",
@@ -63,16 +63,20 @@ void Declare_Histos()
                   "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZ0e3muMass);
 
   //W Trans Mass Histos
-  DeclareHistoSet("hWTransmass", "Reconstructed Transmass of W",
-                  "m_{T W}^{Reco} (GeV)", 10, 0, 100, Cut, hWTransmass);
-  
-  //Wenu Trans Mass Histos
-  DeclareHistoSet("hWenuTransmass", "Reconstructed Transmass of Wenu",
-                  "m_{T W}^{Reco} (GeV)", 10, 0, 100, Cut, hWenuTransmass);
-
-  //Wmunu Trans Mass Histos
-  DeclareHistoSet("hWmunuTransmass", "Reconstructed Transmass of Wmunu",
-                  "m_{T W}^{Reco} (GeV)", 10, 0, 100, Cut, hWmunuTransmass);
+  DeclareHistoSet("hWTransMass", "Reconstructed TransMass of W",
+                  "m_{T}^{Reco} (GeV)", 10, 0, 100, Cut, hWTransMass);
+  DeclareHistoSet("hWenuTransMass", "Reconstructed TransMass of Wenu",
+                  "m_{T}^{Reco} (GeV)", 10, 0, 100, Cut, hWenuTransMass);
+  DeclareHistoSet("hWmunuTransMass", "Reconstructed TransMass of Wmunu",
+                  "m_{T}^{Reco} (GeV)", 10, 0, 100, Cut, hWmunuTransMass);
+  DeclareHistoSet("hW3e0muTransMass", "Reconstructed TransMass of W(3e0\\mu)",
+                  "m_{T}^{Reco} (GeV)", 10, 0, 100, Cut, hW3e0muTransMass);
+  DeclareHistoSet("hW2e1muTransMass", "Reconstructed TransMass of W(2e1\\mu)",
+                  "m_{T}^{Reco} (GeV)", 10, 0, 100, Cut, hW2e1muTransMass);
+  DeclareHistoSet("hW1e2muTransMass", "Reconstructed TransMass of W(1e2\\mu)",
+                  "m_{T}^{Reco} (GeV)", 10, 0, 100, Cut, hW1e2muTransMass);
+  DeclareHistoSet("hW0e3muTransMass", "Reconstructed TransMass of W(0e3\\mu)",
+                  "m_{T}^{Reco} (GeV)", 10, 0, 100, Cut, hW0e3muTransMass);
   
   //Leading Lepton Pt
   DeclareHistoSet("hLeadPt", "Leading Lepton Pt",
@@ -131,14 +135,14 @@ void Declare_Histos()
   DeclareHistoSet("hMuonNTrk", "Muon NTrk",
                   "NTrk", 50, 0, 50, Cut, hMuonNTrk);
 
-  DeclareHistoSet("hMuonRelIso", "Muon Rel Iso",
-                  "Rel Iso", 100, 0, 1, Cut, hMuonRelIso);
-
   DeclareHistoSet("hMuonStation", "Muon Station",
                   "Station", 50, 0, 50, Cut, hMuonStation);
 
   DeclareHistoSet("hMuonSip", "Muon Sip",
                   "Sip", 100, 0, 50, Cut, hMuonSip);
+
+  DeclareHistoSet("hMuonRelIso", "Muon Rel Iso",
+                  "Rel Iso", 100, 0, 1, Cut, hMuonRelIso);
 
   ///Eff Plots///////
   string title = "Expected # of Events / " + convertFloatToStr(lumiPb) + " pb^{-1}";
@@ -174,18 +178,22 @@ void Fill_Histos(int index, float weight)
   hWpt[index]->Fill(W_pt,weight);
   hMET[index]->Fill(pfMet_et, weight);
 
-  hZmass[index]->Fill(Z_mass,weight);
-  if      (Z_flavor == PDGELEC)    hZeemass[index]->Fill(Z_mass,weight);
-  else if (Z_flavor == PDGMUON) hZmumumass[index]->Fill(Z_mass,weight);
+  hZMass[index]->Fill(Z_mass,weight);
+  if      (Z_flavor == PDGELEC) hZeeMass[index]->Fill(Z_mass,weight);
+  else if (Z_flavor == PDGMUON) hZmumuMass[index]->Fill(Z_mass,weight);
   if(Z_flavor == PDGELEC && W_flavor == PDGELEC) hZ3e0muMass[index]->Fill(Z_mass, weight);
   if(Z_flavor == PDGELEC && W_flavor == PDGMUON) hZ2e1muMass[index]->Fill(Z_mass, weight);
   if(Z_flavor == PDGMUON && W_flavor == PDGELEC) hZ1e2muMass[index]->Fill(Z_mass, weight);
   if(Z_flavor == PDGMUON && W_flavor == PDGMUON) hZ0e3muMass[index]->Fill(Z_mass, weight);
 
   if(W_transMass>0){
-    hWTransmass[index]->Fill(W_transMass,weight);
-    if      (W_flavor == PDGELEC) hWenuTransmass[index]->Fill(W_transMass,weight);
-    else if (W_flavor == PDGMUON) hWmunuTransmass[index]->Fill(W_transMass,weight);
+    hWTransMass[index]->Fill(W_transMass,weight);
+    if      (W_flavor == PDGELEC) hWenuTransMass[index]->Fill(W_transMass,weight);
+    else if (W_flavor == PDGMUON) hWmunuTransMass[index]->Fill(W_transMass,weight);
+    if(Z_flavor == PDGELEC && W_flavor == PDGELEC) hW3e0muTransMass[index]->Fill(W_transMass, weight);
+    if(Z_flavor == PDGELEC && W_flavor == PDGMUON) hW2e1muTransMass[index]->Fill(W_transMass, weight);
+    if(Z_flavor == PDGMUON && W_flavor == PDGELEC) hW1e2muTransMass[index]->Fill(W_transMass, weight);
+    if(Z_flavor == PDGMUON && W_flavor == PDGMUON) hW0e3muTransMass[index]->Fill(W_transMass, weight);
   }
   hLeadPt[index]->Fill(LeadPt,weight);
   hLeadElecPt[index]->Fill(LeadElecPt,weight);
@@ -223,14 +231,13 @@ void Fill_Histos(int index, float weight)
   for(size_t i=0; i<idxs.size(); ++i){
     hMuonPt[index]->Fill(muon_pt->at(idxs[i]), weight);
     hMuonDxy[index]->Fill(fabs(muon_globalD0->at(idxs[i])), weight);
-    hMuonNormChi2[index]->Fill(
-      muon_globalChi2->at(idxs[i])/muon_globalNdof->at(idxs[i]), weight);
+    hMuonNormChi2[index]->Fill(Calc_MuonRelIso(idxs[i]), weight);
     hMuonNPix[index]->Fill(muon_globalNpixelHits->at(idxs[i]), weight);
     hMuonNTrk[index]->Fill(muon_globalNtrackerHits->at(idxs[i]), weight);
-    hMuonRelIso[index]->Fill(Calc_MuonRelIso(idxs[i]), weight);
     hMuonStation[index]->Fill(muon_numGlobalMatches->at(idxs[i]), weight);
     hMuonSip[index]->Fill(
       muon_globalD0->at(idxs[i])/muon_globalD0Error->at(idxs[i]),weight);
+    hMuonRelIso[index]->Fill(Calc_MuonRelIso(idxs[i]), weight);
   }
     
 }//Fill_Histos
@@ -302,7 +309,7 @@ void Get_Distributions(vector<InputFile>& files,
       //No Cuts
       Tabulate_Me(Num_surv_cut,cut_index,weight); 
       
-      //if(!PassTriggersCut()) continue; //Cory
+      //if(!PassTriggersCut()) continue; //Cory fix Zjets binned trigger info
       Tabulate_Me(Num_surv_cut,cut_index,weight);
       
       if(!PassValidWandZCut()) continue;
@@ -418,6 +425,9 @@ void Get_Distributions(vector<InputFile>& files,
       if(!PassWtransMassCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);
 
+      if(!PassMETCut()) continue;
+      Tabulate_Me(Num_surv_cut,cut_index,weight);
+
       if(!PassZLepPtCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);
 
@@ -428,6 +438,12 @@ void Get_Distributions(vector<InputFile>& files,
       Tabulate_Me(Num_surv_cut,cut_index,weight);      
 
       ////Other Cuts/////////////
+      if(!dir.compare("Run2010")){
+        cout<<" The following events passed All Cuts!!!\n\n";
+        PrintEventFull();
+        cout<<" ------------------\n";
+      }
+
       if(!PassHtCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);
 
@@ -437,16 +453,8 @@ void Get_Distributions(vector<InputFile>& files,
       if(!PassWptCut()) continue;
       Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      if(!PassMETCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
       //After All Cuts
       Tabulate_Me(Num_surv_cut,cut_index,weight); 
-      if(!dir.compare("Run2010")){
-        cout<<" The following events passed All Cuts!!!\n\n";
-        PrintEventFull();
-        cout<<" ------------------\n";
-      }
     }//event loop
     
     // total # of events (before any cuts)
@@ -525,11 +533,11 @@ void ExecuteAnalysis()
   vector<InputFile> WZ_files;
   UseSample("WZ",WZ_files, fout, out);
   vector<InputFile> TTbar_files;
-  UseSample("TTbar",TTbar_files, fout, out);
+  //UseSample("TTbar",TTbar_files, fout, out);
   vector<InputFile> TTbar2l_files;
   UseSample("TTbar2l",TTbar2l_files, fout, out);
   vector<InputFile> ZZ_files;
-  UseSample("ZZ",ZZ_files, fout, out);
+  //UseSample("ZZ",ZZ_files, fout, out);
   vector<InputFile> ZZ4l_files;
   UseSample("ZZ4l",ZZ4l_files, fout, out);
   vector<InputFile> ZGamma_files;
@@ -538,20 +546,20 @@ void ExecuteAnalysis()
   vector<InputFile> ZJetsBinned_files;
   UseSample("ZJetsBinned",ZJetsBinned_files, fout, out);
   vector<InputFile> ZeeJets_files;
-  UseSample("ZeeJets",ZeeJets_files, fout, out);
+  //UseSample("ZeeJets",ZeeJets_files, fout, out);
   vector<InputFile> ZmumuJets_files;
-  UseSample("ZmumuJets",ZmumuJets_files, fout, out);
+  //UseSample("ZmumuJets",ZmumuJets_files, fout, out);
   vector<InputFile> ZeeJetsPowheg_files;
-  UseSample("ZeeJetsPowheg",ZeeJetsPowheg_files, fout, out);
+  //UseSample("ZeeJetsPowheg",ZeeJetsPowheg_files, fout, out);
   vector<InputFile> ZmumuJetsPowheg_files;
-  UseSample("ZmumuJetsPowheg",ZmumuJetsPowheg_files, fout, out);
+  //UseSample("ZmumuJetsPowheg",ZmumuJetsPowheg_files, fout, out);
   vector<InputFile> ZllJetsMadgraph_files;
-  UseSample("ZllJetsMadgraph",ZllJetsMadgraph_files, fout, out);
+  //UseSample("ZllJetsMadgraph",ZllJetsMadgraph_files, fout, out);
 
   vector<InputFile> WenuJets_files;
-  UseSample("WenuJets",WenuJets_files, fout, out);
+  //UseSample("WenuJets",WenuJets_files, fout, out);
   vector<InputFile> WmunuJets_files;
-  UseSample("WmunuJets",WmunuJets_files, fout, out);
+  //UseSample("WmunuJets",WmunuJets_files, fout, out);
   vector<InputFile> WlnuJetsMadgraph_files;
   UseSample("WlnuJetsMadgraph",WlnuJetsMadgraph_files, fout, out);
   
@@ -565,4 +573,16 @@ void ExecuteAnalysis()
   fout->Close();
 
 }//ExecuteAnalysis
+
+int 
+main(int argc, char ** argv){
+  if(argc > 1 || argv[1][1]=='?'){
+    fprintf(stderr,"%s usage: %s \n",argv[0],argv[0]);
+    exit( 1 );
+  }
+
+  ExecuteAnalysis();
+
+  return 0;
+}
 

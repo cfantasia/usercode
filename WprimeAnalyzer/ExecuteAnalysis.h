@@ -9,8 +9,8 @@
 #ifndef _ExecuteAnalysis_h_
 #define _ExecuteAnalysis_h_
 
-#include <ExecuteFunctions.C>
-#include <ExecuteCuts.C>
+#include "ExecuteFunctions.C"
+#include "ExecuteCuts.C"
 
 // +++++++++++++++++++Variables to store Branch Addresses:
 
@@ -25,9 +25,11 @@ const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs",
                            "MuonNTrk", "MuonStation",
                            "MuonHitsUsed",
                            "ZMass", "WTransMass", 
+                           "MET",
                            "ZLepPt", "WLepPt", 
-                           "WLepIso", 
-                           "Ht", "Zpt", "Wpt", "MET",
+                           "WLepIso",
+                           "Ht", 
+                           "Zpt", "Wpt",
                            "AllCuts"};
 const vector<string> Cut(Cut_Name, Cut_Name + sizeof(Cut_Name) / sizeof(string) );
 const int NCuts = sizeof(Cut_Name) / sizeof(string);//works
@@ -45,17 +47,21 @@ TH1F * hWpt[NCuts];
 TH1F * hZpt[NCuts];
 TH1F * hMET[NCuts];
 
-TH1F * hZmass[NCuts];
-TH1F * hZeemass[NCuts];
-TH1F * hZmumumass[NCuts];
+TH1F * hZMass[NCuts];
+TH1F * hZeeMass[NCuts];
+TH1F * hZmumuMass[NCuts];
 TH1F * hZ3e0muMass[NCuts];
 TH1F * hZ2e1muMass[NCuts];
 TH1F * hZ1e2muMass[NCuts];
 TH1F * hZ0e3muMass[NCuts];
 
-TH1F * hWTransmass[NCuts];
-TH1F * hWenuTransmass[NCuts];
-TH1F * hWmunuTransmass[NCuts];
+TH1F * hWTransMass[NCuts];
+TH1F * hWenuTransMass[NCuts];
+TH1F * hWmunuTransMass[NCuts];
+TH1F * hW3e0muTransMass[NCuts];
+TH1F * hW2e1muTransMass[NCuts];
+TH1F * hW1e2muTransMass[NCuts];
+TH1F * hW0e3muTransMass[NCuts];
 
 TH1F * hLeadPt[NCuts];
 TH1F * hLeadElecPt[NCuts];
@@ -81,6 +87,7 @@ TH1F * hMuonRelIso[NCuts];
 TH1F * hMuonStation[NCuts];
 TH1F * hMuonSip[NCuts];
 
+int main(int argc, char ** argv);
 void ExecuteAnalysis();
 
 #endif//#define _ExecuteAnalysis_h_
