@@ -6,8 +6,8 @@
 // It works on an root-uple of events with
 // variables created by the "official" CMS WZ code
 //---------------------------------------------
-#ifndef _ExecuteTTbar_h_
-#define _ExecuteTTbar_h_
+#ifndef _ExecuteFakeRate_h_
+#define _ExecuteFakeRate_h_
 
 #include "ExecuteFunctions.C"
 #include "ExecuteCuts.C"
@@ -21,8 +21,8 @@ const vector<string> Cut(Cut_Name, Cut_Name + sizeof(Cut_Name) / sizeof(string) 
 const int NCuts = sizeof(Cut_Name) / sizeof(string);//works
 
 // +++++++++++++++++++ Declare the methods that we use:
-void ExecuteTTbar();
+void ExecuteFakeRate();
 bool PassFakeLeptonTagCut();
 bool PassFakeLeptonProbeCut();
 
-#endif//#define _ExecuteTTbar_h_
+#endif//#define _ExecuteFakeRate_h_

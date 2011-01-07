@@ -9,8 +9,8 @@
 // 
 //------------------------------------------------
 
-#define ExecuteTTbar_cxx
-#include "ExecuteTTbar.h"
+#define ExecuteFakeRate_cxx
+#include "ExecuteFakeRate.h"
 
 //--------------------------------------------------------------
 void Declare_Histos()
@@ -99,6 +99,9 @@ void Get_Distributions(vector<InputFile>& files,
       //an index to indicate current cut number
       int cut_index = 0;//Incremented in Tabulate_Me
       
+      //Choose One of the following
+      //if(W_flavor != PDGELEC) continue;//Are Muons faking jets
+      if(W_flavor != PDGMUON) continue;//Are Elec faking jets
 
       Tabulate_Me(Num_surv_cut,cut_index,weight); //Before All Cuts
       
@@ -128,7 +131,7 @@ void Get_Distributions(vector<InputFile>& files,
 
   }//loop over files
   
-  printSummary(out, dir, Nthe_evt, Nexp_evt, Nexp_evt_cut);
+  printSummary(out, dir, Nthe_evt, Nexp_evt, Nexp_evt_cut, Cut);
   saveHistos(fout, dir);
   deleteHistos();
   
@@ -172,11 +175,9 @@ bool PassFakeLeptonProbeCut()
 }//--- Probe Cut
 
 //-----------------------------------------------------------
-void ExecuteTTbar()
+void ExecuteFakeRate()
 {
 //-----------------------------------------------------------
-
-  top_level_dir = "/uscms_data/d2/fantasia/CMSSW_3_8_4_patch2/src/RunWZ/";
 
   if (debugme)cout<<"Master macro to execute analysis"<<endl;
 
@@ -184,13 +185,13 @@ void ExecuteTTbar()
   cout<<"Using integrated luminosity of "<<lumiPb<<" inv pb"<<endl;
  
   //name of file where to write all histograms
-  TFile *fout = new TFile("TTbar_analysis.root","recreate");
+  TFile *fout = new TFile("FakeRate_analysis.root","recreate");
  
   //containers to
   //include signal and background files
 
   //keep account of events
-  string outfile("event_counts_TTbar.txt");
+  string outfile("event_counts_FakeRate.txt");
   ofstream out(outfile.c_str());
   if(!out) { 
     cout << "Cannot open file " << outfile << endl; 
@@ -202,19 +203,15 @@ void ExecuteTTbar()
   //the results will be written under respective directories
   //Add as many as you need:
 
-  vector<InputFile> EGSep17_files;
-  UseSample("EGSep17ReReco_Dilepton",EGSep17_files, fout, out);
-  vector<InputFile> MuSep17_files;
-  UseSample("MuSep17ReReco_Dilepton",MuSep17_files, fout, out);
-  vector<InputFile> ElectronPrompt_files;
-  UseSample("ElectronPromptReco_Dilepton",ElectronPrompt_files, fout, out);
-  vector<InputFile> MuPromptReco_files;
-  UseSample("MuPromptReco_Dilepton",MuPromptReco_files, fout, out);
+  vector<InputFile> Run2010_Dilepton_files;
+  UseSample("Run2010_Dilepton",Run2010_Dilepton_files, fout, out);
+  vector<InputFile> Run2010_files;
+  //UseSample("Run2010",Run2010_files, fout, out);
 
   out.close(); 
   fout->Close();
 
-}//ExecuteTTbar
+}//ExecuteFakeRate
 
 
 
