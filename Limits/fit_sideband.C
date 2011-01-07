@@ -83,19 +83,27 @@ void fit_sideband(bool useData=false) {
       //1.get the samples to shape the Z
       //cout<<"$$$$$$$$$$$$$$$$$  get the genuine-Z background shape"<<endl;
       map<string, float> zshapesamples;
-      zshapesamples["Wprime400"]=KFactor("Wprime400");
-      zshapesamples["WZ"]=KFactor("WZ");
-      zshapesamples["ZGamma"]=KFactor("ZGamma");
+//      zshapesamples["Wprime400_Dilepton"]=KFactor("Wprime400");
+//      zshapesamples["Wprime400"]=KFactor("Wprime400");
+      zshapesamples["WZ_Dilepton"]=KFactor("WZ");
+//      zshapesamples["WZ"]=KFactor("WZ");
+      zshapesamples["ZGamma_Dilepton"]=KFactor("ZGamma");
+//      zshapesamples["ZGamma"]=KFactor("ZGamma");
+      zshapesamples["ZJetsBinned_Dilepton"]=KFactor("ZJetsBinned");
       zshapesamples["ZJetsBinned"]=KFactor("ZJetsBinned");
-      zshapesamples["ZZ4l"]=KFactor("ZZ4l");
+      zshapesamples["ZZ4l_Dilepton"]=KFactor("ZZ4l");
+//      zshapesamples["ZZ4l"]=KFactor("ZZ4l");
       TH1F* zpeakhist = get_sum_of_hists(f, zshapesamples, "hZmass_AllCuts", 1);  
 
       //cout<<"$$$$$$$$$$$$$$$$$  get the non-genuine-Z background shape"<<endl;
       //1.get the samples to shape the non-genuine Z background
       map<string, float> nozshapesamples;
-      nozshapesamples["TTbar2l"]=KFactor("TTbar2l");
-      nozshapesamples["WenuJets"]=KFactor("WenuJets");
-      nozshapesamples["WmunuJets"]=KFactor("WmunuJets");
+      nozshapesamples["TTbar2l_Dilepton"]=KFactor("TTbar2l");
+//      nozshapesamples["TTbar2l"]=KFactor("TTbar2l");
+      nozshapesamples["WenuJets_Dilepton"]=KFactor("WenuJets");
+//      nozshapesamples["WenuJets"]=KFactor("WenuJets");
+      nozshapesamples["WmunuJets_Dilepton"]=KFactor("WmunuJets");
+//      nozshapesamples["WmunuJets"]=KFactor("WmunuJets");
       TH1F* nozpeakhist = get_sum_of_hists(f, nozshapesamples, "hZmass_AllCuts", 1);
     }
     //1.get the samples
@@ -104,7 +112,8 @@ void fit_sideband(bool useData=false) {
       allshapesamples.insert(zshapesamples.begin(),zshapesamples.end());
       allshapesamples.insert(nozshapesamples.begin(),nozshapesamples.end());
     }else{
-      allshapesamples["Data"]=1.;
+      allshapesamples["2010_Dilepton"]=1.;
+//      allshapesamples["Data"]=1.;
     }
     TH1F* hAll = get_sum_of_hists(f, allshapesamples, "hZmass_AllCuts", 1);
 

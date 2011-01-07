@@ -12,20 +12,28 @@ Est_Zjets(bool useElec=false, bool useData=false){
 
     map<string,float> allsamples;
     if(!useData){
-      allsamples["TTbar2l"]=KFactor("TTbar2l");
-      allsamples["WenuJets"]=KFactor("WmunuJets");
-      allsamples["WmunuJets"]=KFactor("WmunuJets");
+      allsamples["TTbar2l_Dilepton"]=KFactor("TTbar2l");
+//      allsamples["TTbar2l"]=KFactor("TTbar2l");
+      allsamples["WenuJets_Dilepton"]=KFactor("WmunuJets");
+//      allsamples["WenuJets"]=KFactor("WmunuJets");
+      allsamples["WmunuJets_Dilepton"]=KFactor("WmunuJets");
+//      allsamples["WmunuJets"]=KFactor("WmunuJets");
+      allsamples["ZJetsBinned_Dilepton"]=KFactor("ZJetsBinned");
       allsamples["ZJetsBinned"]=KFactor("ZJetsBinned");
-      allsamples["Wprime400"]=KFactor("Wprime400");
+//      allsamples["Wprime400_Dilepton"]=KFactor("Wprime400");
+//      allsamples["Wprime400"]=KFactor("Wprime400");
     }else{
-      allsamples["Data"]=1.;
+      allsamples["Run2010_Dilepton"]=1.;
+//      allsamples["Run2010"]=1.;
     }
+    TH1F* allTThist=NULL;
+    TH1F* allTFhist=NULL;
     if(useElec){
-      TH1F* allTThist = get_sum_of_hists(f, allsamples,"hZeemassTT_AllCuts", 0);
-      TH1F* allTFhist = get_sum_of_hists(f, allsamples,"hZeemassTF_AllCuts", 0);
+      allTThist = get_sum_of_hists(f, allsamples,"hZeemassTT_AllCuts", 0);
+      allTFhist = get_sum_of_hists(f, allsamples,"hZeemassTF_AllCuts", 0);
     }else{
-      TH1F* allTThist = get_sum_of_hists(f, allsamples,"hZmumumassTT_AllCuts", 0);
-      TH1F* allTFhist = get_sum_of_hists(f, allsamples,"hZmumumassTF_AllCuts", 0);
+      allTThist = get_sum_of_hists(f, allsamples,"hZmumumassTT_AllCuts", 0);
+      allTFhist = get_sum_of_hists(f, allsamples,"hZmumumassTF_AllCuts", 0);
     }
 
     TF1* linearTT = new TF1("linearTT", fline, 60, 120, 2);

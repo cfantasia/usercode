@@ -23,25 +23,15 @@
 const float nGenerated = 10000; //Number of MC Sig Evts Gen
 const float LumiUsed = 1000; //inv pb
 const float sLumiFrac = 0.1;
-const float sysEffFrac = 0.05;//Guess?Cory: include in number of events error
-const float sysEvtFrac = 0.05;//Cory: Guess
+const float sysEffFrac = 0.05;//Cory: Guess
+const float sysEvtFrac = 0.30;//Cory: Guess
 
-const int NLumi = 9;
-const float lumi[NLumi] = {200,400,600,800,1000,2000,3000,4000,5000};//inv pb
+const int NLumi = 10;
+const float lumi[NLumi] = {36, 200,400,600,800,1000,2000,3000,4000,5000};//inv pb
 
 const int NMass = 7;
 const float mass[NMass] = {   300,  400,  500,  600,
                               700,  800,  900};//GeV
-const float xsec[NMass] = {0.2756, 0.0890, 0.0360, 0.0150,  
-                           0.0078, 0.0044, 0.0023};//pb
-
-const int NMass_TC = 4;
-const float mass_TC[NMass_TC] = {225,300,400,500};//GeV
-
-//pb low pi mass
-const float xsec_TC[NMass_TC] = {0.148066, 0.0448773, 
-                                 0.0129922, 0.00522783}; 
-
 float
 KFactor(string sample){
   if      (!sample.find("Wprime"))
@@ -56,7 +46,7 @@ KFactor(string sample){
     return 28000/25900.4;
   else if (!sample.find("WmunuJets"))
     return 28000/25900.4;
-  else if (!sample.find("WlunuJets"))
+  else if (!sample.find("WlnuJets"))
     return 28000/25900.4;
   else if (!sample.find("ZJetsBinned"))
     return 2800/2541.89;

@@ -1,21 +1,22 @@
-Why are my limits so much worse than before?
-Why do limits get worse as Mass increases (expected bc error increases?)
-
-1)Run Expected Evnts 
+1)Run Expected Events 
+  root -b -q ExpectedEvts.C
    Writes to nEvents.txt
-   Use window method (look elsewhere effect?) or simple cut?
-   Modify to include sys error and correct stat error for each lumi
+   Use window method (what about look elsewhere effect?) or simple cut(doesn't work)?
 
-2a) Run LumiNeeded 
-    Reads from nEvents.txt
-    Writes to lumiNeeded.txt
+2a) Run CalcLimit
+  root -b -q CalcLimit.C
+  Reads from nEvents.txt
+  Writes to nLimit.txt
 
-3a) Run PlotLumi 
-    Reads from lumiNeeded.txt
+3a) Run PlotLimit
+  root -b -q PlotLimit.C++
+  Reads from nLimit.txt
 
 2b) Run CalcSig 
-    Reads from nEvents.txt
-    Writes to nSigma.txt
+  root -b -q CalcSig.C
+  Reads from nEvents.txt
+  Writes to nSigma.txt
 
 3b) Run PlotSig 
-    Reads from nSigma.txt
+  root -b -q PlotSig.C++
+  Reads from nSigma.txt
