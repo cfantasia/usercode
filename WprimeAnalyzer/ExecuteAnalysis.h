@@ -1,16 +1,5 @@
-//---------------------------------------------
-// Author: Edgar Carrera
-// 2010-01-13
-// This macro will be used for analyzing
-// Wprime -> WZ -> lllnu events
-// It works on an root-uple of events with
-// variables created by the "official" CMS WZ code
-//---------------------------------------------
 #ifndef _ExecuteAnalysis_h_
 #define _ExecuteAnalysis_h_
-
-#include "ExecuteFunctions.C"
-#include "ExecuteCuts.C"
 
 // +++++++++++++++++++Variables to store Branch Addresses:
 
@@ -24,14 +13,14 @@ const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs",
                            "MuonNormChi2", "MuonNPix",
                            "MuonNTrk", "MuonStation",
                            "MuonHitsUsed",
+                           "WLepIso",
                            "ZMass", "WTransMass", 
                            "MET",
                            "ZLepPt", "WLepPt", 
-                           "WLepIso",
                            "Ht", 
                            "Zpt", "Wpt",
                            "AllCuts"};
-const vector<string> Cut(Cut_Name, Cut_Name + sizeof(Cut_Name) / sizeof(string) );
+const std::vector<string> Cut(Cut_Name, Cut_Name + sizeof(Cut_Name) / sizeof(string) );
 const int NCuts = sizeof(Cut_Name) / sizeof(string);//works
 //const int NCuts = Cut.size();//Doesn't work
 

@@ -1,10 +1,6 @@
 #ifndef _ExecuteCuts_h_
 #define _ExecuteCuts_h_
 
-#include "ExecuteVariables.h"
-#include <math.h>
-#include <iostream>
-
 // ++++++++++++++++++++ Consts
 const float NOCUT = 9e9;
 

@@ -73,7 +73,7 @@ MakeSelection(){
   var["hZpt"] = "min";
   var["hWpt"] = "min";
 
-  for(it=var.begin() ; it != var.end(); it++ ){
+   for(it=var.begin() ; it != var.end(); it++ ){
     DrawSelection(fin, it->first, it->second);
   }
    

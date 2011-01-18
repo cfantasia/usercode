@@ -60,7 +60,8 @@ ComparePz(){
   TH1F* hmincomb = new TH1F("hmincomb", "Delta Min comb pz", 40, -20, 20);
   TH1F* hmaxcomb = new TH1F("hmaxcomb", "Delta Max comb pz", 40, -20, 20);
 
-  TH1F* hDeltaMass = new TH1F("hDeltaMass", "Delta Mass", 40, -100, 100);
+  TH1F* hDeltaMass = new TH1F("hDeltaMass", "Delta Mass", 200, -500, 500);
+  TH1F* hDeltaMassSubset = new TH1F("hDeltaMassSubSet", "Delta Mass", 200, -500, 500);
 
   Int_t           W_flavor;
   Int_t           Z_flavor;
@@ -346,7 +347,9 @@ ComparePz(){
     hmaxcomb->Fill(W_neutrino_pzMaxComb-neu_genpz);
 
     hDeltaMass->Fill(WZ_invMassMaxPz - WZ_invMassMinPz);
-        
+    if(fabs(W_neutrino_pzMaxPz) < 100 && fabs(W_neutrino_pzMinPz) < 100) 
+      hDeltaMassSubset->Fill(WZ_invMassMaxPz - WZ_invMassMinPz);
+
   }
     
   THStack* hs = new THStack("hs", "Neutrino Pz (Reco-Gen)");
@@ -419,6 +422,8 @@ ComparePz(){
 
   TCanvas* c5 = new TCanvas();
   hDeltaMass->Draw("");
+  hDeltaMassSubset->SetLineColor(kRed);
+  hDeltaMassSubset->Draw("same");
   c5->SaveAs("DeltaMass.eps");
 
 

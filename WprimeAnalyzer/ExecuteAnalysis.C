@@ -1,3 +1,5 @@
+#ifndef _ExecuteAnalysis_cxx_
+#define _ExecuteAnalysis_cxx_
 //------------------------------------------------
 // Author: Edgar Carrera
 // Cory Fantasia
@@ -9,8 +11,13 @@
 // 
 //------------------------------------------------
 
-#define ExecuteAnalysis_cxx
+
+#include "ExecuteVariables.h"
+#include "ExecuteCuts.h"
+#include "ExecuteFunctions.h"
+
 #include "ExecuteAnalysis.h"
+
 
 //--------------------------------------------------------------
 void Declare_Histos()
@@ -21,7 +28,7 @@ void Declare_Histos()
   listOfHists.clear();
 
   DeclareHistoSet("hWZInvMass", "Reconstructed WZ Invariant Mass",
-                  "m_{WZ} (GeV)", 25, 0, 1000, Cut, hWZInvMass);
+                  "m_{WZ} (GeV)", 100, 0, 1000, Cut, hWZInvMass);
   DeclareHistoSet("hWZ3e0muInvMass", "Reconstructed WZ(3e0\\mu) Invariant Mass",
                   "m_{WZ} (GeV)", 100, 0, 1000, Cut, hWZ3e0muInvMass);
   DeclareHistoSet("hWZ2e1muInvMass", "Reconstructed WZ(2e1\\mu) Invariant Mass",
@@ -37,10 +44,10 @@ void Declare_Histos()
   DeclareHistoSet("hHt", "H_{T}", 
                   "Lepton Pt Sum: H_{T} (GeV)", 80, 0, 800, Cut, hHt);
   //Wpt Histos
-  DeclareHistoSet("hWpt", "p_{T} of W", 
+  DeclareHistoSet("hWpt", "p_{T}^{W}", 
                   "p_{T}^{W} (GeV)", 40, 0, 400, Cut, hWpt);
   //Zpt Histos
-  DeclareHistoSet("hZpt", "p_{T} of Z", 
+  DeclareHistoSet("hZpt", "p_{T}^{Z}", 
                   "p_{T}^{Z} (GeV)", 40, 0, 400, Cut, hZpt);
   //MET Histos
   DeclareHistoSet("hMET", "MET",
@@ -48,7 +55,7 @@ void Declare_Histos()
 
   //Z Mass Histos
   DeclareHistoSet("hZMass" , "Reconstructed Mass of Z",
-                  "m_{Z}^{Reco} (GeV)", 8, 50, 130, Cut, hZMass);
+                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZMass);
   DeclareHistoSet("hZeeMass","Reconstructed Mass of Zee",
                   "m_{Z}^{Reco} (GeV)", 40, 50, 130, Cut, hZeeMass);
   DeclareHistoSet("hZmumuMass","Reconstructed Mass of Zmumu",
@@ -242,248 +249,163 @@ void Fill_Histos(int index, float weight)
     
 }//Fill_Histos
 
-//Get different types of distribution
-//-----------------------------------------------------------
-void Get_Distributions(vector<InputFile>& files, 
-                       TFile *fout, string dir, ofstream & out)
-{
-//-----------------------------------------------------------
-  if (debugme) cout<<"Get Distributions....."<<endl;
-  
-  
-  Declare_Histos();
+void
+CalcEventVariables(){
+  ////Calculate Important Quantities for each event
+  Ht = Calc_Ht();
+  LeadPt = CalcLeadPt();
+  LeadElecPt = CalcLeadPt(PDGELEC);
+  LeadMuonPt = CalcLeadPt(PDGMUON);
+}
 
-  int Nfiles = files.size();
-
-  //initialize counters for expected (already weighted) 
-  //number of events
-  //total, and after each cut.
-  float Nthe_evt = 0;
-  float Nexp_evt = 0;
-  float Nexp_evt_cut[NCuts] = {0};
-  
-  //loop over files
-  for(int tr = 0; tr != Nfiles; ++tr){
-    if(!files[tr].tree){
-      cout<<"Tree doesn't exist!!!!"<<endl;
-      continue;
-    }
-  
-    cout << "Processing file "<<files[tr].pathname<<endl;
-    
-
-    TTree *WZtree = files[tr].tree;    
-    int nevents = WZtree->GetEntries();
-    float weight = files[tr].weight;
-    float x_sect = files[tr].x_sect;
-
-    //get the variables that we need right here:
-    Set_Branch_Addresses(WZtree);
-
-    //counter (unweighted) events that pass each cut
-    int Num_surv_cut[NCuts] = {0};
-    
-    
-    //Loop over events:
-    //The ides is to keep each cut as a separate entity 
-    //so they can be better handled
-    for(int i = 0; i != nevents; ++i){//event loop
-
-      WZtree->GetEntry(i);
-      ////Calculate Important Quantities for each event
-      Ht = Calc_Ht();
-      LeadPt = CalcLeadPt();
-      LeadElecPt = CalcLeadPt(PDGELEC);
-      LeadMuonPt = CalcLeadPt(PDGMUON);
-
-      if (debugme) cout<<"Processing event "<<i<<endl;
-
-      //an index to indicate current cut number
-      int cut_index = 0;//Incremented in Tabulate_Me
+bool
+PassCuts(vector<int>& Num_surv_cut, const float& weight){
+  //an index to indicate current cut number
+  int cut_index = 0;//Incremented in Tabulate_Me
       
-      vector<int> idxs;
-      vector<int> inEC;
+  vector<int> idxs;
+  vector<int> inEC;
 
-      //cuts: These need to be ordered the same as Cut_Name in header file
+  //cuts: These need to be ordered the same as Cut_Name in header file
+  //The ides is to keep each cut as a separate entity 
+  //so they can be better handled
 
-      //No Cuts
-      Tabulate_Me(Num_surv_cut,cut_index,weight); 
+  //No Cuts
+  Tabulate_Me(Num_surv_cut,cut_index,weight); 
       
-      //if(!PassTriggersCut()) continue; //Cory fix Zjets binned trigger info
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!PassTriggersCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      if(!PassValidWandZCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!PassValidWandZCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      if(!PassNumberOfZsCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!PassNumberOfZsCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      /////////General Electron Cuts////////////////
-      bool pass = true;
+  /////////General Electron Cuts////////////////
+  if(Z_flavor == PDGELEC ){
+    idxs.push_back(Z_leptonIndex1); 
+    inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex1)));
+    idxs.push_back(Z_leptonIndex2);
+    inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex2)));
+  }     
+  if (W_flavor == PDGELEC){
+    idxs.push_back(W_leptonIndex); 
+    inEC.push_back(inEndCap(electron_ScEta->at(W_leptonIndex)));
+  }
       
-      if(Z_flavor == PDGELEC ){
-        idxs.push_back(Z_leptonIndex1); 
-        inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex1)));
-        idxs.push_back(Z_leptonIndex2);
-        inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex2)));
-      }     
-      if (W_flavor == PDGELEC){
-        idxs.push_back(W_leptonIndex); 
-        inEC.push_back(inEndCap(electron_ScEta->at(W_leptonIndex)));
-      }
-      
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecEtaCut        (idxs[lep])) pass = false;
-      if(!pass) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecEtaCut        (idxs[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecEtCut         (idxs[lep],0)) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecEtCut         (idxs[lep],0)) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecSigmaEtaEtaCut(idxs[lep],inEC[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecSigmaEtaEtaCut(idxs[lep],inEC[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecDeltaPhiCut   (idxs[lep],inEC[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecDeltaPhiCut   (idxs[lep],inEC[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecDeltaEtaCut   (idxs[lep],inEC[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecDeltaEtaCut   (idxs[lep],inEC[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecHOverECut     (idxs[lep],inEC[lep])) pass = false;       
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecHOverECut     (idxs[lep],inEC[lep])) return false;       
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      //////General Muon Cuts////////////
+  //////General Muon Cuts////////////
       
-      idxs.clear(); inEC.clear();
-      if(Z_flavor == PDGMUON ){
-        idxs.push_back(Z_leptonIndex1); 
-        idxs.push_back(Z_leptonIndex2);
-      }
-      if (W_flavor == PDGMUON){
-        idxs.push_back(W_leptonIndex); 
-      }
+  idxs.clear(); inEC.clear();
+  if(Z_flavor == PDGMUON ){
+    idxs.push_back(Z_leptonIndex1); 
+    idxs.push_back(Z_leptonIndex2);
+  }
+  if (W_flavor == PDGMUON){
+    idxs.push_back(W_leptonIndex); 
+  }
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonTypeCut      (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonTypeCut      (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonEtaCut       (idxs[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonEtaCut       (idxs[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonPtCut        (idxs[lep],0)) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonPtCut        (idxs[lep],0)) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonDxyCut       (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonDxyCut       (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonNormChi2Cut  (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonNormChi2Cut  (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonNpixhitCut   (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonNpixhitCut   (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonNtrkhitCut   (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonNtrkhitCut   (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonStationsCut  (idxs[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonStationsCut  (idxs[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonHitsUsedCut  (idxs[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonHitsUsedCut  (idxs[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      ////Boson Cuts/////////////
-      if(!PassZmassCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  ////Boson Cuts/////////////
+  if(!PassWLepIsoCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);      
+
+  if(!PassZmassCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
      
-      if(!PassWtransMassCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!PassWtransMassCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      if(!PassMETCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!PassMETCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      if(!PassZLepPtCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!PassZLepPtCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      if(!PassWLepPtCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);      
+  if(!PassWLepPtCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);      
 
-      if(!PassWLepIsoCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);      
+  ////Analysis Cuts/////////////
+  if(!PassHtCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      ////Other Cuts/////////////
-      if(!dir.compare("Run2010")){
-        cout<<" The following events passed All Cuts!!!\n\n";
-        PrintEventFull();
-        cout<<" ------------------\n";
-      }
+  if(!PassZptCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      if(!PassHtCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!PassWptCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      if(!PassZptCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  //After All Cuts
+  Tabulate_Me(Num_surv_cut,cut_index,weight); 
 
-      if(!PassWptCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      //After All Cuts
-      Tabulate_Me(Num_surv_cut,cut_index,weight); 
-    }//event loop
-    
-    // total # of events (before any cuts)
-    Nexp_evt += nevents * weight;
-    Nthe_evt += lumiPb * x_sect;
-
-    //Number of expected events for each cut (weighted)
-    for(int ii = 0; ii < NCuts; ++ii){
-      if(debugme) cout<<"Num_surv_cut["<<ii<<"] = "<<
-        Num_surv_cut[ii]<<endl;
-      Nexp_evt_cut[ii] += Num_surv_cut[ii] * weight;
-      if(debugme) cout<<"Nexp_evt_cut["<<ii<<"] = "<<
-        Nexp_evt_cut[ii]<<endl;
-    }
-
-  }//loop over files
-  
-  printSummary(out, dir, Nthe_evt, Nexp_evt, Nexp_evt_cut, Cut);
-  saveHistos(fout, dir);
-  deleteHistos();
-  
-}//Get_Distributions
+  return true;
+}
 
 //-----------------------------------------------------------
 void ExecuteAnalysis()
 {
 //-----------------------------------------------------------
   if (debugme)cout<<"Master macro to execute analysis"<<endl;
-
+  
   //lumiPb now defined in ExecuteAnalysis.h
   cout<<"Using integrated luminosity of "<<lumiPb<<" inv pb"<<endl;
  
@@ -507,67 +429,67 @@ void ExecuteAnalysis()
   //Add as many as you need:
   
   vector<InputFile> Wprime300_files;
-  UseSample("Wprime300",Wprime300_files, fout, out);
+  UseSample("Wprime300",Wprime300_files, Cut, fout, out);
   vector<InputFile> Wprime400_files;
-  UseSample("Wprime400",Wprime400_files, fout, out);
+  UseSample("Wprime400",Wprime400_files, Cut, fout, out);
   vector<InputFile> Wprime500_files;
-  UseSample("Wprime500",Wprime500_files, fout, out);
+  UseSample("Wprime500",Wprime500_files, Cut, fout, out);
   vector<InputFile> Wprime600_files;
-  UseSample("Wprime600",Wprime600_files, fout, out);
+  UseSample("Wprime600",Wprime600_files, Cut, fout, out);
   vector<InputFile> Wprime700_files;
-  UseSample("Wprime700",Wprime700_files, fout, out);
+  UseSample("Wprime700",Wprime700_files, Cut, fout, out);
   vector<InputFile> Wprime800_files;
-  UseSample("Wprime800",Wprime800_files, fout, out);
+  UseSample("Wprime800",Wprime800_files, Cut, fout, out);
   vector<InputFile> Wprime900_files;
-  UseSample("Wprime900",Wprime900_files, fout, out);
+  UseSample("Wprime900",Wprime900_files, Cut, fout, out);
   
   vector<InputFile> TC225_files;
-  UseSample("TC225", TC225_files, fout, out);
+  UseSample("TC225", TC225_files, Cut, fout, out);
   vector<InputFile> TC300_files;
-  UseSample("TC300", TC300_files, fout, out);
+  UseSample("TC300", TC300_files, Cut, fout, out);
   vector<InputFile> TC400_files;
-  UseSample("TC400", TC400_files, fout, out);
+  UseSample("TC400", TC400_files, Cut, fout, out);
   vector<InputFile> TC500_files;
-  UseSample("TC500", TC500_files, fout, out);
+  UseSample("TC500", TC500_files, Cut, fout, out);
   
   vector<InputFile> WZ_files;
-  UseSample("WZ",WZ_files, fout, out);
+  UseSample("WZ",WZ_files, Cut, fout, out);
   vector<InputFile> TTbar_files;
-  //UseSample("TTbar",TTbar_files, fout, out);
+  //UseSample("TTbar",TTbar_files, Cut, fout, out);
   vector<InputFile> TTbar2l_files;
-  UseSample("TTbar2l",TTbar2l_files, fout, out);
+  UseSample("TTbar2l",TTbar2l_files, Cut, fout, out);
   vector<InputFile> ZZ_files;
-  //UseSample("ZZ",ZZ_files, fout, out);
+  //UseSample("ZZ",ZZ_files, Cut, fout, out);
   vector<InputFile> ZZ4l_files;
-  UseSample("ZZ4l",ZZ4l_files, fout, out);
+  UseSample("ZZ4l",ZZ4l_files, Cut, fout, out);
   vector<InputFile> ZGamma_files;
-  UseSample("ZGamma",ZGamma_files, fout, out);
+  UseSample("ZGamma",ZGamma_files, Cut, fout, out);
 
   vector<InputFile> ZJetsBinned_files;
-  UseSample("ZJetsBinned",ZJetsBinned_files, fout, out);
+  UseSample("ZJetsBinned",ZJetsBinned_files, Cut, fout, out);
   vector<InputFile> ZeeJets_files;
-  //UseSample("ZeeJets",ZeeJets_files, fout, out);
+  //UseSample("ZeeJets",ZeeJets_files, Cut, fout, out);
   vector<InputFile> ZmumuJets_files;
-  //UseSample("ZmumuJets",ZmumuJets_files, fout, out);
+  //UseSample("ZmumuJets",ZmumuJets_files, Cut, fout, out);
   vector<InputFile> ZeeJetsPowheg_files;
-  //UseSample("ZeeJetsPowheg",ZeeJetsPowheg_files, fout, out);
+  //UseSample("ZeeJetsPowheg",ZeeJetsPowheg_files, Cut, fout, out);
   vector<InputFile> ZmumuJetsPowheg_files;
-  //UseSample("ZmumuJetsPowheg",ZmumuJetsPowheg_files, fout, out);
+  //UseSample("ZmumuJetsPowheg",ZmumuJetsPowheg_files, Cut, fout, out);
   vector<InputFile> ZllJetsMadgraph_files;
-  //UseSample("ZllJetsMadgraph",ZllJetsMadgraph_files, fout, out);
+  //UseSample("ZllJetsMadgraph",ZllJetsMadgraph_files, Cut, fout, out);
 
   vector<InputFile> WenuJets_files;
-  //UseSample("WenuJets",WenuJets_files, fout, out);
+  //UseSample("WenuJets",WenuJets_files, Cut, fout, out);
   vector<InputFile> WmunuJets_files;
-  //UseSample("WmunuJets",WmunuJets_files, fout, out);
+  //UseSample("WmunuJets",WmunuJets_files, Cut, fout, out);
   vector<InputFile> WlnuJetsMadgraph_files;
-  UseSample("WlnuJetsMadgraph",WlnuJetsMadgraph_files, fout, out);
+  UseSample("WlnuJetsMadgraph",WlnuJetsMadgraph_files, Cut, fout, out);
   
   vector<InputFile> Run2010_files;
-  UseSample("Run2010",Run2010_files, fout, out);
+  UseSample("Run2010",Run2010_files, Cut, fout, out);
   
   //vector<InputFile> Interesting_files;
-  //UseSample("interesting",Interesting_files, fout, out);
+  //UseSample("interesting",Interesting_files, Cut, fout, out);
     
   out.close(); 
   fout->Close();
@@ -580,9 +502,9 @@ main(int argc, char ** argv){
     fprintf(stderr,"%s usage: %s \n",argv[0],argv[0]);
     exit( 1 );
   }
-
   ExecuteAnalysis();
 
   return 0;
 }
 
+#endif//#define _ExecuteAnalysis_cxx_

@@ -1,7 +1,11 @@
 #ifndef _ExecuteFunctions_cxx_
 #define _ExecuteFunctions_cxx_
 
+#include "ExecuteVariables.h"
+#include "ExecuteCuts.h"
 #include "ExecuteFunctions.h"
+
+using namespace std;
 
 ///////////////Utilities//////////////////
 //--------------------------------------------------------------
@@ -758,7 +762,7 @@ void deleteHistos()
 
 //Tabulate results after the cut has been passed
 //-----------------------------------------------------------
-void Tabulate_Me(int Num_surv_cut[], int& cut_index, 
+void Tabulate_Me(vector<int>& Num_surv_cut, int& cut_index, 
                  const float& weight)
 {
 //-----------------------------------------------------------
@@ -780,7 +784,7 @@ void Tabulate_Me(int Num_surv_cut[], int& cut_index,
 //Writing results to a txt file
 //--------------------------------------------------------------------------
 void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
-                  const float& Nexp_evt, float Nexp_evt_cut[], const vector<string> & Cuts) 
+                  const float& Nexp_evt, vector<float>& Nexp_evt_cut, const vector<string> & Cuts) 
 { 
 //------------------------------------------------------------------------
   if(debugme) cout<<"Writing results to a txt file"<<endl;
@@ -791,10 +795,9 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
   out << " Total # of expected events = " << Nexp_evt << endl;
         
   for(unsigned int i = 0; i < Cuts.size(); ++i){
-    out<<setiosflags(ios::left)
-       <<"Cut " << setw(2) << i << "(" << setw(15) << Cuts[i]
-       <<setiosflags(ios::right)
-       << "): " <<"expected evts = " << setw(10) << Nexp_evt_cut[i];
+    out<<right<<"Cut " << setw(2) << i << "("
+       <<left<< setw(15) << Cuts[i]
+       <<right << "): " <<"expected evts = " << setw(10) << Nexp_evt_cut[i];
     hNumEvts->Fill(i,Nexp_evt_cut[i]);
 
     //calculate efficiencies
@@ -817,13 +820,92 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
 }//printSummary
 
 void 
-UseSample(string dir, vector<InputFile> & files, 
+UseSample(string dir, vector<InputFile> & files,
+          const vector<string> & Cut,
           TFile* fout, ofstream & out){
   if(!Load_Input_Files(dir, files)){
     return;
   }
-  Get_Distributions(files, fout, dir, out);
+  Get_Distributions(dir, files, Cut, fout, out);
 }
+
+//Get different types of distribution
+//-----------------------------------------------------------
+void Get_Distributions(string dir, vector<InputFile>& files, 
+                       const vector<string> & Cut,
+                       TFile *fout, ofstream & out)
+{
+//-----------------------------------------------------------
+  if (debugme) cout<<"Get Distributions....."<<endl;
+  
+  
+  Declare_Histos();
+
+  int Nfiles = files.size();
+
+  //initialize counters for expected (already weighted) 
+  //number of events
+  //total, and after each cut.
+  float Nthe_evt = 0;
+  float Nexp_evt = 0;
+  vector<float> Nexp_evt_cut(Cut.size(),0);  
+  //loop over files
+  for(int tr = 0; tr != Nfiles; ++tr){
+    if(!files[tr].tree){
+      cout<<"Tree doesn't exist!!!!"<<endl;
+      continue;
+    }
+  
+    cout << "Processing file "<<files[tr].pathname<<endl;
+    
+
+    TTree *WZtree = files[tr].tree;    
+    int nevents = WZtree->GetEntries();
+    float weight = files[tr].weight;
+    float x_sect = files[tr].x_sect;
+
+    //get the variables that we need right here:
+    Set_Branch_Addresses(WZtree);
+
+    //counter (unweighted) events that pass each cut
+    vector<int> Num_surv_cut(Cut.size(),0);
+   
+    
+    //Loop over events:
+    for(int i = 0; i != nevents; ++i){//event loop
+      if (debugme) cout<<"Processing event "<<i<<endl;
+
+      WZtree->GetEntry(i);
+      CalcEventVariables();
+      if(!PassCuts(Num_surv_cut, weight)) continue;
+      if(!dir.compare("Run2010")){
+        cout<<" The following data events passed All Cuts!!!\n\n";
+        PrintEventFull();
+        cout<<" ------------------\n";
+      }
+      
+    }//event loop
+    
+    // total # of events (before any cuts)
+    Nexp_evt += nevents * weight;
+    Nthe_evt += lumiPb * x_sect;
+
+    //Number of expected events for each cut (weighted)
+    for(unsigned int ii = 0; ii < Cut.size(); ++ii){
+      if(debugme) cout<<"Num_surv_cut["<<ii<<"] = "<<
+        Num_surv_cut[ii]<<endl;
+      Nexp_evt_cut[ii] += Num_surv_cut[ii] * weight;
+      if(debugme) cout<<"Nexp_evt_cut["<<ii<<"] = "<<
+        Nexp_evt_cut[ii]<<endl;
+    }
+
+  }//loop over files
+  
+  printSummary(out, dir, Nthe_evt, Nexp_evt, Nexp_evt_cut, Cut);
+  saveHistos(fout, dir);
+  deleteHistos();
+  
+}//Get_Distributions
 
 void PrintEvent(){
   cout<<"run #: "<<runNumber
@@ -915,7 +997,7 @@ PrintMuon(int idx, int parent){
   cout<<" Muon Pt: "<<muon_pt->at(idx)<<endl
       <<" Muon Eta: "<<muon_eta->at(idx)<<endl
       <<" Muon Dxy: "<<muon_globalD0->at(idx)<<endl //Dxy
-      <<" Muon NormX2: "<<Calc_MuonNormChi2(idx)<<endl //NormX2
+      <<" Muon NormX2: "<<muon_globalChi2->at(idx)/muon_globalNdof->at(idx)<<endl //NormX2
       <<" Muon NPix: "<<muon_globalNpixelHits->at(idx)<<endl //Npixhit
       <<" Muon NTrk: "<<muon_globalNtrackerHits->at(idx)<<endl //Ntrk hit
       <<" Muon NMatches: "<<muon_numGlobalMatches->at(idx)<<endl //MuonStations

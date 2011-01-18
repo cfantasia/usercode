@@ -9,8 +9,8 @@
 #ifndef _ExecuteZJets_h_
 #define _ExecuteZJets_h_
 
-#include "ExecuteFunctions.C"
 #include "ExecuteCuts.C"
+#include "ExecuteFunctions.C"
 
 ///My calculated qualities//////////////////
 bool TT;
@@ -72,9 +72,6 @@ TH1F * hZmumumassTT[NCuts];
 TH1F * hZmumumassTF[NCuts];
 
 // +++++++++++++++++++ Declare the methods that we use:
-void DeclareHistoSet(string n, string t, string xtitle,
-                     int nbins, float min, float max,
-                     TH1F** h);
 void ExecuteZJets();
 
 #endif//#define _ExecuteZJets_h_

@@ -1,81 +1,77 @@
 #ifndef _ExecuteVariables_h_
 #define _ExecuteVariables_h_
 
-#include <vector>
-#include "TROOT.h"
-#include <math.h>
+int           eventID;
+int           runNumber;
+int           lumiBlock;
 
-Int_t           eventID;
-Int_t           runNumber;
-Int_t           lumiBlock;
+int pass_HLT_Photon10_Cleaned_L1R;
+int pass_HLT_Photon10_L1R;
+int pass_HLT_Photon15_Cleaned_L1R;
+int pass_HLT_Photon15_L1R;
+int pass_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R;
+int pass_HLT_Ele10_LW_EleId_L1R;
+int pass_HLT_Ele10_SW_EleId_L1R;
+int pass_HLT_Ele10_SW_L1R;
+int pass_HLT_Ele12_SW_TightEleIdIsol_L1R;
+int pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1;
+int pass_HLT_Ele15_LW_L1R;
+int pass_HLT_Ele15_SW_L1R;
+int pass_HLT_Ele15_SW_CaloEleId_L1R;
+int pass_HLT_Ele17_SW_CaloEleId_L1R;
+int pass_HLT_Ele17_SW_TightEleId_L1R;
+int pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2;
+int pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3;
+int pass_HLT_Mu3;
+int pass_HLT_Mu5;
+int pass_HLT_Mu9;
+int pass_HLT_Mu11;
+int pass_HLT_Mu15_v1;
 
-Int_t pass_HLT_Photon10_Cleaned_L1R;
-Int_t pass_HLT_Photon10_L1R;
-Int_t pass_HLT_Photon15_Cleaned_L1R;
-Int_t pass_HLT_Photon15_L1R;
-Int_t pass_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R;
-Int_t pass_HLT_Ele10_LW_EleId_L1R;
-Int_t pass_HLT_Ele10_SW_EleId_L1R;
-Int_t pass_HLT_Ele10_SW_L1R;
-Int_t pass_HLT_Ele12_SW_TightEleIdIsol_L1R;
-Int_t pass_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1;
-Int_t pass_HLT_Ele15_LW_L1R;
-Int_t pass_HLT_Ele15_SW_L1R;
-Int_t pass_HLT_Ele15_SW_CaloEleId_L1R;
-Int_t pass_HLT_Ele17_SW_CaloEleId_L1R;
-Int_t pass_HLT_Ele17_SW_TightEleId_L1R;
-Int_t pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2;
-Int_t pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3;
-Int_t pass_HLT_Mu3;
-Int_t pass_HLT_Mu5;
-Int_t pass_HLT_Mu9;
-Int_t pass_HLT_Mu11;
-Int_t pass_HLT_Mu15_v1;
+int prescale_HLT_Photon10_Cleaned_L1R;
+int prescale_HLT_Photon10_L1R;
+int prescale_HLT_Photon15_Cleaned_L1R;
+int prescale_HLT_Photon15_L1R;
+int prescale_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R;
+int prescale_HLT_Ele10_LW_EleId_L1R;
+int prescale_HLT_Ele10_SW_EleId_L1R;
+int prescale_HLT_Ele10_SW_L1R;
+int prescale_HLT_Ele12_SW_TightEleIdIsol_L1R;
+int prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1;
+int prescale_HLT_Ele15_LW_L1R;
+int prescale_HLT_Ele15_SW_L1R;
+int prescale_HLT_Ele15_SW_CaloEleId_L1R;
+int prescale_HLT_Ele17_SW_CaloEleId_L1R;
+int prescale_HLT_Ele17_SW_TightEleId_L1R;
+int prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2;
+int prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3;
 
-Int_t prescale_HLT_Photon10_Cleaned_L1R;
-Int_t prescale_HLT_Photon10_L1R;
-Int_t prescale_HLT_Photon15_Cleaned_L1R;
-Int_t prescale_HLT_Photon15_L1R;
-Int_t prescale_HLT_Ele12_SW_EleIdIsolNoDEtaInEE_L1R;
-Int_t prescale_HLT_Ele10_LW_EleId_L1R;
-Int_t prescale_HLT_Ele10_SW_EleId_L1R;
-Int_t prescale_HLT_Ele10_SW_L1R;
-Int_t prescale_HLT_Ele12_SW_TightEleIdIsol_L1R;
-Int_t prescale_HLT_Ele12_SW_TighterEleIdIsol_L1R_v1;
-Int_t prescale_HLT_Ele15_LW_L1R;
-Int_t prescale_HLT_Ele15_SW_L1R;
-Int_t prescale_HLT_Ele15_SW_CaloEleId_L1R;
-Int_t prescale_HLT_Ele17_SW_CaloEleId_L1R;
-Int_t prescale_HLT_Ele17_SW_TightEleId_L1R;
-Int_t prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2;
-Int_t prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3;
+int prescale_HLT_Mu3;
+int prescale_HLT_Mu5;
+int prescale_HLT_Mu9;
+int prescale_HLT_Mu11;
+int prescale_HLT_Mu15_v1;
 
-Int_t prescale_HLT_Mu3;
-Int_t prescale_HLT_Mu5;
-Int_t prescale_HLT_Mu9;
-Int_t prescale_HLT_Mu11;
-Int_t prescale_HLT_Mu15_v1;
-
-Int_t           W_flavor;
-Int_t           Z_flavor;
-Float_t         W_pt;
-Float_t         Z_pt;
-Float_t         Z_mass;
-Float_t         W_transMass;
-Float_t         W_phi;
-Float_t         W_eta;
-Int_t           numberOfZs;
-Float_t         met_phi;
-Float_t         met_et;
-Float_t         pfMet_et;
-Float_t         tcMet_et;
-Float_t         WZ_invMassMinPz;
-Float_t         W_neutrino_pzMinPz;
-Float_t         W_neutrino_pzMaxPz;
-Float_t         WZ_transMass;
-Int_t           W_leptonIndex;
-Int_t           Z_leptonIndex1;
-Int_t           Z_leptonIndex2;
+int           W_flavor;
+int           Z_flavor;
+float         W_pt;
+float         Z_pt;
+float         Z_mass;
+float         W_transMass;
+float         W_phi;
+float         W_eta;
+int           numberOfZs;
+float         met_phi;
+float         met_et;
+float         pfMet_et;
+float         tcMet_et;
+float         WZ_invMassMinPz;
+float         W_neutrino_pzMinPz;
+float         W_neutrino_pzMaxPz;
+float         WZ_transMass;
+int           W_leptonIndex;
+int           Z_leptonIndex1;
+int           Z_leptonIndex2;
 
 std::vector<int  >   *electron_pdgId;
 std::vector<float>   *electron_mass;
@@ -130,8 +126,8 @@ std::vector<float>   *muon_globalNdof;
 std::vector<float>   *muon_globalD0;
 std::vector<float>   *muon_globalD0Error;
 
-Float_t         genmet_et;
-Float_t         genmet_phi;
+float         genmet_et;
+float         genmet_phi;
 
 std::vector<int>     *genMother_pdgId;
 std::vector<int>     *genParticle_pdgId;
@@ -175,13 +171,13 @@ const int PDGW = 24;
 const int PDGZ = 23;
 const int PDGWPRIME = 34;
 
-const double PI    = 2.0 * acos(0.);
+const double PI    = 2.0 * TMath::ACos(0.);
 const double TWOPI = 2.0 * PI;
 
 // +++++++++++++++++++
 //value of lumi to be used in the analysis
 //the weights will scale accordingly.
-const float lumiPb = 36.1;//1000;
+const float lumiPb = 1000;//36.1;
 
 // +++++++++++++++++++location of data files and samples info
 const std::string top_level_dir = "/uscms_data/d2/fantasia/38X/";

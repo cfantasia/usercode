@@ -97,12 +97,12 @@ MakePlots(){
   CheckSamples(fin,Bkg);
   
   //Sig.push_back(Sample("Wprime300", 1, 1, 10));
-  Sig.push_back(Sample("Wprime400", 1, 1, 10));
+  //Sig.push_back(Sample("Wprime400", 1, 1, 10));
   Sig.push_back(Sample("Wprime500", 1, 1, 10));
   //Sig.push_back(Sample("Wprime600", 1, 1, 10));
   //Sig.push_back(Sample("Wprime700", 1, 1, 10));
   //Sig.push_back(Sample("Wprime800", 1, 1, 10));
-  //Sig.push_back(Sample("Wprime900", 1, 1, 10));
+  Sig.push_back(Sample("Wprime900", 1, 1, 10));
 /*
   Sig.push_back(Sample("TC225",     2, 1, 10));
   Sig.push_back(Sample("TC300",     2, 1, 10));

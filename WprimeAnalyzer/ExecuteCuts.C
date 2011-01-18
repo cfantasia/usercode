@@ -1,9 +1,14 @@
 #ifndef _ExecuteCuts_cxx_
 #define _ExecuteCuts_cxx_
 
+#include <iostream>
+#include <math.h>
+
+#include "ExecuteVariables.h"
 #include "ExecuteCuts.h"
 
 using namespace std;
+
 /////////////////Cuts///////////////////////
 //Trigger requirements
 //-----------------------------------------------------------
@@ -248,8 +253,7 @@ bool PassMuonNtrkhitCut(int idx){
 
 bool PassMuonNormChi2Cut(int idx){
   if(debugme) cout<<"Check Muon Chi2 Cut"<<endl;
-  return ((muon_globalChi2->at(idx)/muon_globalNdof->at(idx) )
-          < maxMuonNormChi2);
+  return (Calc_MuonNormChi2(idx) < maxMuonNormChi2);
 }//--- PassMuonChi2Cut
 
 bool PassMuonHitsUsedCut(int idx){

@@ -80,206 +80,122 @@ void Fill_Histos(int index, float weight)
 
 }//Fill_Histos
 
-//Get different types of distribution
-//-----------------------------------------------------------
-void Get_Distributions(vector<InputFile>& files, 
-                       TFile *fout, string dir, ofstream & out)
-{
-//-----------------------------------------------------------
-  if (debugme) cout<<"Get Distributions....."<<endl;
-  
-  
-  Declare_Histos();
+void
+CalcEventVariables(){
+  ////Calculate Important Quantities for each event
+  Ht = Calc_Ht();
 
-  int Nfiles = files.size();
+  TT = TF = false;
+  if(Z_flavor){
+    bool tight1 = PassTightCut(Z_leptonIndex1, Z_flavor);
+    bool tight2 = PassTightCut(Z_leptonIndex2, Z_flavor);
+    //cout<<"tight1: "<<tight1<<" tight2: "<<tight2<<endl;
+    TT = tight1 && tight2;
+    TF = (tight1 && !tight2) || (!tight1 && tight2);
+  }
 
-  //initialize counters for expected (already weighted) 
-  //number of events
-  //total, and after each cut.
-  float Nthe_evt = 0;
-  float Nexp_evt = 0;
-  float Nexp_evt_cut[NCuts] = {0};
-  
-  //loop over files
-  for(int tr = 0; tr != Nfiles; ++tr){
-    if(!files[tr].tree){
-      cout<<"Tree doesn't exist!!!!"<<endl;
-      continue;
-    }
-  
-    cout << "Processing file "<<files[tr].pathname<<endl;
-    
+}
 
-    TTree *WZtree = files[tr].tree;    
-    int nevents = WZtree->GetEntries();
-    float weight = files[tr].weight;
-    float x_sect = files[tr].x_sect;
-
-    //get the variables that we need right here:
-    Set_Branch_Addresses(WZtree);
-
-    //counter (unweighted) events that pass each cut
-    int Num_surv_cut[NCuts] = {0};
-    
-    
-    //Loop over events:
-    //The ides is to keep each cut as a separate entity 
-    //so they can be better handled
-    for(int i = 0; i != nevents; ++i){//event loop
-
-      WZtree->GetEntry(i);
-      ////Calculate Important Quantities for each event
-      Ht = Calc_Ht();
-
-      TT = TF = false;
-      if(Z_flavor){
-        bool tight1 = PassTightCut(Z_leptonIndex1, Z_flavor);
-        bool tight2 = PassTightCut(Z_leptonIndex2, Z_flavor);
-        //cout<<"tight1: "<<tight1<<" tight2: "<<tight2<<endl;
-        TT = tight1 && tight2;
-        TF = (tight1 && !tight2) || (!tight1 && tight2);
-      }
-
-    
-
-      //////////////////////
-      if (debugme) cout<<"Processing event "<<i<<endl;
-
-      //an index to indicate current cut number
-      int cut_index = 0;//Incremented in Tabulate_Me
+bool
+PassCuts(vector<int>& Num_surv_cut, const float& weight){
+  //an index to indicate current cut number
+  int cut_index = 0;//Incremented in Tabulate_Me
       
-      vector<int> idxs;
-      vector<int> inEC;
+  vector<int> idxs;
+  vector<int> inEC;
 
 
-      //cuts: These need to be ordered the same as Cut_Name in header file
-      Tabulate_Me(Num_surv_cut,cut_index,weight); //No Cuts
+  //cuts: These need to be ordered the same as Cut_Name in header file
+  Tabulate_Me(Num_surv_cut,cut_index,weight); //No Cuts
       
-      //if(!PassTriggersCut()) continue; //Cory
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  //if(!PassTriggersCut()) return false; //Cory
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      if(!Z_flavor) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!Z_flavor) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      if(!PassNumberOfZsCut()) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  if(!PassNumberOfZsCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      ////////////////New Elec Cuts////////////////
-      bool pass = true;
+  ////////////////New Elec Cuts////////////////
+  if(Z_flavor == PDGELEC ){
+    idxs.push_back(Z_leptonIndex1); 
+    inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex1)));
+    idxs.push_back(Z_leptonIndex2);
+    inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex2)));
+  }     
       
-      if(Z_flavor == PDGELEC ){
-        idxs.push_back(Z_leptonIndex1); 
-        inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex1)));
-        idxs.push_back(Z_leptonIndex2);
-        inEC.push_back(inEndCap(electron_ScEta->at(Z_leptonIndex2)));
-      }     
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecEtaCut        (idxs[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecEtCut         (idxs[lep],0)) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecSigmaEtaEtaCut(idxs[lep],inEC[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecDeltaPhiCut   (idxs[lep],inEC[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecDeltaEtaCut   (idxs[lep],inEC[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassElecHOverECut     (idxs[lep],inEC[lep])) return false;       
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+  idxs.clear(); inEC.clear();
+  if(Z_flavor == PDGMUON ){
+    idxs.push_back(Z_leptonIndex1); 
+    idxs.push_back(Z_leptonIndex2);
+  }
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecEtaCut        (idxs[lep])) pass = false;
-      if(!pass) continue;
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecEtCut         (idxs[lep],0)) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecSigmaEtaEtaCut(idxs[lep],inEC[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecDeltaPhiCut   (idxs[lep],inEC[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecDeltaEtaCut   (idxs[lep],inEC[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassElecHOverECut     (idxs[lep],inEC[lep])) pass = false;       
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      idxs.clear(); inEC.clear();
-      if(Z_flavor == PDGMUON ){
-        idxs.push_back(Z_leptonIndex1); 
-        idxs.push_back(Z_leptonIndex2);
-      }
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonTypeCut      (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonTypeCut      (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonEtaCut       (idxs[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonEtaCut       (idxs[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonPtCut        (idxs[lep],0)) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonDxyCut       (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonNormChi2Cut  (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonPtCut        (idxs[lep],0)) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonDxyCut       (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonNormChi2Cut  (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonNpixhitCut   (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonNpixhitCut   (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
-      
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonNtrkhitCut   (idxs[lep])) pass = false; 
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonNtrkhitCut   (idxs[lep])) return false; 
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonStationsCut  (idxs[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonStationsCut  (idxs[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
 
-      for(size_t lep=0; lep != idxs.size(); ++lep) 
-        if(!PassMuonHitsUsedCut  (idxs[lep])) pass = false;
-      if(!pass) continue; 
-      Tabulate_Me(Num_surv_cut,cut_index,weight);
+  for(size_t lep=0; lep != idxs.size(); ++lep) 
+    if(!PassMuonHitsUsedCut  (idxs[lep])) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
       
 
-      Tabulate_Me(Num_surv_cut,cut_index,weight); //After All Cuts
+  Tabulate_Me(Num_surv_cut,cut_index,weight); //After All Cuts
       
-    }//event loop
-    
-    // total # of events (before any cuts)
-    Nexp_evt += nevents * weight;
-    Nthe_evt += lumiPb * x_sect;
-
-    //Number of expected events for each cut (weighted)
-    for(int ii = 0; ii < NCuts; ++ii){
-      if(debugme) cout<<"Num_surv_cut["<<ii<<"] = "<<
-        Num_surv_cut[ii]<<endl;
-      Nexp_evt_cut[ii] += Num_surv_cut[ii] * weight;
-      if(debugme) cout<<"Nexp_evt_cut["<<ii<<"] = "<<
-        Nexp_evt_cut[ii]<<endl;
-    }
-
-  }//loop over files
-  
-  printSummary(out, dir, Nthe_evt, Nexp_evt, Nexp_evt_cut, Cut);
-  saveHistos(fout, dir);
-  deleteHistos();
-  
-}//Get_Distributions
+  return true;
+}
 
 
 
@@ -312,96 +228,96 @@ void ExecuteZJets()
   //Add as many as you need:
 
   vector<InputFile> Wprime300_files;
-  UseSample("Wprime300",Wprime300_files, fout, out);
+  UseSample("Wprime300",Wprime300_files, Cut, fout, out);
   vector<InputFile> Wprime400_files;
-  UseSample("Wprime400",Wprime400_files, fout, out);
+  UseSample("Wprime400",Wprime400_files, Cut, fout, out);
   vector<InputFile> Wprime500_files;
-  UseSample("Wprime500",Wprime500_files, fout, out);
+  UseSample("Wprime500",Wprime500_files, Cut, fout, out);
   vector<InputFile> Wprime600_files;
-  UseSample("Wprime600",Wprime600_files, fout, out);
+  UseSample("Wprime600",Wprime600_files, Cut, fout, out);
   vector<InputFile> Wprime700_files;
-  UseSample("Wprime700",Wprime700_files, fout, out);
+  UseSample("Wprime700",Wprime700_files, Cut, fout, out);
   vector<InputFile> Wprime800_files;
-  UseSample("Wprime800",Wprime800_files, fout, out);
+  UseSample("Wprime800",Wprime800_files, Cut, fout, out);
   vector<InputFile> Wprime900_files;
-  UseSample("Wprime900",Wprime900_files, fout, out);
+  UseSample("Wprime900",Wprime900_files, Cut, fout, out);
   
   vector<InputFile> TC225_files;
-  UseSample("TC225", TC225_files, fout, out);
+  UseSample("TC225", TC225_files, Cut, fout, out);
   vector<InputFile> TC300_files;
-  UseSample("TC300", TC300_files, fout, out);
+  UseSample("TC300", TC300_files, Cut, fout, out);
   vector<InputFile> TC400_files;
-  UseSample("TC400", TC400_files, fout, out);
+  UseSample("TC400", TC400_files, Cut, fout, out);
   vector<InputFile> TC500_files;
-  UseSample("TC500", TC500_files, fout, out);
+  UseSample("TC500", TC500_files, Cut, fout, out);
   
   vector<InputFile> WZ_Dilepton_files;
-  UseSample("WZ_Dilepton",WZ_Dilepton_files, fout, out);
+  UseSample("WZ_Dilepton",WZ_Dilepton_files, Cut, fout, out);
   vector<InputFile> WZ_files;
-  //UseSample("WZ",WZ_files, fout, out);
+  //UseSample("WZ",WZ_files, Cut, fout, out);
   vector<InputFile> TTbar_Dilepton_files;
-  UseSample("TTbar_Dilepton",TTbar_Dilepton_files, fout, out);
+  UseSample("TTbar_Dilepton",TTbar_Dilepton_files, Cut, fout, out);
   vector<InputFile> TTbar_files;
-  //UseSample("TTbar",TTbar_files, fout, out);
+  //UseSample("TTbar",TTbar_files, Cut, fout, out);
   vector<InputFile> TTbar2l_Dilepton_files;
-  UseSample("TTbar2l_Dilepton",TTbar2l_Dilepton_files, fout, out);
+  UseSample("TTbar2l_Dilepton",TTbar2l_Dilepton_files, Cut, fout, out);
   vector<InputFile> TTbar2l_files;
-  //UseSample("TTbar2l",TTbar2l_files, fout, out);
+  //UseSample("TTbar2l",TTbar2l_files, Cut, fout, out);
   vector<InputFile> ZZ_Dilepton_files;
-  UseSample("ZZ_Dilepton",ZZ_Dilepton_files, fout, out);
+  UseSample("ZZ_Dilepton",ZZ_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZZ_files;
-  //UseSample("ZZ",ZZ_files, fout, out);
+  //UseSample("ZZ",ZZ_files, Cut, fout, out);
   vector<InputFile> ZZ4l_Dilepton_files;
-  UseSample("ZZ4l_Dilepton",ZZ4l_Dilepton_files, fout, out);
+  UseSample("ZZ4l_Dilepton",ZZ4l_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZZ4l_files;
-  //UseSample("ZZ4l",ZZ4l_files, fout, out);
+  //UseSample("ZZ4l",ZZ4l_files, Cut, fout, out);
   vector<InputFile> ZGamma_Dilepton_files;
-  UseSample("ZGamma_Dilepton",ZGamma_Dilepton_files, fout, out);
+  UseSample("ZGamma_Dilepton",ZGamma_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZGamma_files;
-  //UseSample("ZGamma",ZGamma_files, fout, out);
+  //UseSample("ZGamma",ZGamma_files, Cut, fout, out);
 
   vector<InputFile> ZJetsBinned_Dilepton_files;
-  UseSample("ZJetsBinned_Dilepton",ZJetsBinned_Dilepton_files, fout, out);
+  UseSample("ZJetsBinned_Dilepton",ZJetsBinned_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZJetsBinned_files;
-  UseSample("ZJetsBinned",ZJetsBinned_files, fout, out);
+  UseSample("ZJetsBinned",ZJetsBinned_files, Cut, fout, out);
   vector<InputFile> ZeeJets_Dilepton_files;
-  UseSample("ZeeJets_Dilepton",ZeeJets_Dilepton_files, fout, out);
+  UseSample("ZeeJets_Dilepton",ZeeJets_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZeeJets_files;
-  //UseSample("ZeeJets",ZeeJets_files, fout, out);
+  //UseSample("ZeeJets",ZeeJets_files, Cut, fout, out);
   vector<InputFile> ZmumuJets_Dilepton_files;
-  UseSample("ZmumuJets_Dilepton",ZmumuJets_Dilepton_files, fout, out);
+  UseSample("ZmumuJets_Dilepton",ZmumuJets_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZmumuJets_files;
-  //UseSample("ZmumuJets",ZmumuJets_files, fout, out);
+  //UseSample("ZmumuJets",ZmumuJets_files, Cut, fout, out);
   vector<InputFile> ZeeJetsPowheg_Dilepton_files;
-  UseSample("ZeeJetsPowheg_Dilepton",ZeeJetsPowheg_Dilepton_files, fout, out);
+  UseSample("ZeeJetsPowheg_Dilepton",ZeeJetsPowheg_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZeeJetsPowheg_files;
-  //UseSample("ZeeJetsPowheg",ZeeJetsPowheg_files, fout, out);
+  //UseSample("ZeeJetsPowheg",ZeeJetsPowheg_files, Cut, fout, out);
   vector<InputFile> ZmumuJetsPowheg_Dilepton_files;
-  UseSample("ZmumuJetsPowheg_Dilepton",ZmumuJetsPowheg_Dilepton_files, fout, out);
+  UseSample("ZmumuJetsPowheg_Dilepton",ZmumuJetsPowheg_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZmumuJetsPowheg_files;
-  //UseSample("ZmumuJetsPowheg",ZmumuJetsPowheg_files, fout, out);
+  //UseSample("ZmumuJetsPowheg",ZmumuJetsPowheg_files, Cut, fout, out);
   vector<InputFile> ZllJetsMadgraph_Dilepton_files;
-  UseSample("ZllJetsMadgraph_Dilepton",ZllJetsMadgraph_Dilepton_files, fout, out);
+  UseSample("ZllJetsMadgraph_Dilepton",ZllJetsMadgraph_Dilepton_files, Cut, fout, out);
   vector<InputFile> ZllJetsMadgraph_files;
-  //UseSample("ZllJetsMadgraph",ZllJetsMadgraph_files, fout, out);
+  //UseSample("ZllJetsMadgraph",ZllJetsMadgraph_files, Cut, fout, out);
 
   vector<InputFile> WenuJets_Dilepton_files;
-  UseSample("WenuJets_Dilepton",WenuJets_Dilepton_files, fout, out);
+  UseSample("WenuJets_Dilepton",WenuJets_Dilepton_files, Cut, fout, out);
   vector<InputFile> WenuJets_files;
-  //UseSample("WenuJets",WenuJets_files, fout, out);
+  //UseSample("WenuJets",WenuJets_files, Cut, fout, out);
   vector<InputFile> WmunuJets_Dilepton_files;
-  UseSample("WmunuJets_Dilepton",WmunuJets_Dilepton_files, fout, out);
+  UseSample("WmunuJets_Dilepton",WmunuJets_Dilepton_files, Cut, fout, out);
   vector<InputFile> WmunuJets_files;
-  //UseSample("WmunuJets",WmunuJets_files, fout, out);
+  //UseSample("WmunuJets",WmunuJets_files, Cut, fout, out);
   vector<InputFile> WlnuJetsMadgraph_Dilepton_files;
-  UseSample("WlnuJetsMadgraph_Dilepton",WlnuJetsMadgraph_Dilepton_files, fout, out);
+  UseSample("WlnuJetsMadgraph_Dilepton",WlnuJetsMadgraph_Dilepton_files, Cut, fout, out);
   vector<InputFile> WlnuJetsMadgraph_files;
-  //UseSample("WlnuJetsMadgraph",WlnuJetsMadgraph_files, fout, out);
+  //UseSample("WlnuJetsMadgraph",WlnuJetsMadgraph_files, Cut, fout, out);
   
   vector<InputFile> Run2010_Dilepton_files;
-  UseSample("Run2010_Dilepton",Run2010_Dilepton_files, fout, out);
+  UseSample("Run2010_Dilepton",Run2010_Dilepton_files, Cut, fout, out);
   vector<InputFile> Run2010_files;
-  //UseSample("Run2010",Run2010_files, fout, out);
+  //UseSample("Run2010",Run2010_files, Cut, fout, out);
 
   out.close(); 
   fout->Close();

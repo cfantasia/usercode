@@ -1,27 +1,6 @@
 #ifndef _ExecuteFunctions_h_
 #define _ExecuteFunctions_h_
 
-#include <stdio.h>
-#include <math.h>
-#include <string>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <fstream>
-#include "TFile.h"
-#include "TTree.h"
-#include "TH1F.h"
-#include "TRandom.h"
-#include "TMath.h"
-#include <algorithm>
-#include <limits>
-#include "TLorentzVector.h"
-
-#include "ExecuteCuts.h"
-#include "ExecuteVariables.h"
-
-using namespace std;
-
 // ++++++++++++++data structure to accumulate info about the file
 struct InputFile{
   float x_sect; // cross-section in pb
@@ -64,12 +43,16 @@ void Fill_Histos(int index, float weight);
 void saveHistos(TFile * fout, string dir);
 void deleteHistos();
 void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
-                  const float& Nexp_evt, float Nexp_evt_cut[], const vector<string> & Cuts);
-void Tabulate_Me(int Num_surv_cut[], int& cut_index,const float& weight);
-void Get_Distributions(vector<InputFile>& files,TFile *fout, 
-                       string dir, ofstream & out);
+                  const float& Nexp_evt, vector<float>& Nexp_evt_cut, const vector<string> & Cuts);
+void Tabulate_Me(vector<int>& Num_surv_cut, int& cut_index,const float& weight);
+void Get_Distributions(string dir, vector<InputFile>& files,
+                       const vector<string> & Cut,
+                       TFile *fout, ofstream & out);
 void UseSample(string dir, vector<InputFile> & files,
+               const vector<string> & Cut,
                TFile * fout, ofstream & out);
+void CalcEventVariables();
+bool PassCuts(vector<int>& Num_surv_cut, const float& weight);
 
 void PrintEvent();
 void PrintEventFull();
@@ -78,7 +61,7 @@ void PrintMuon(int idx, int parent);
 float CalcLeadPt(int type=0);
 
 // +++++++++++++++++++ Histogram Definitions
-vector<TH1F*> listOfHists;
+std::vector<TH1F*> listOfHists;
 
 TH1F * hEffRel;
 TH1F * hEffAbs;
