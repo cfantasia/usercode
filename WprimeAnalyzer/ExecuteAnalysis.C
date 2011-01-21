@@ -12,9 +12,9 @@
 //------------------------------------------------
 
 
-#include "ExecuteVariables.h"
-#include "ExecuteCuts.h"
-#include "ExecuteFunctions.h"
+#include "ExecuteVariables.C"
+#include "ExecuteCuts.C"
+#include "ExecuteFunctions.C"
 
 #include "ExecuteAnalysis.h"
 
@@ -279,6 +279,9 @@ PassCuts(vector<int>& Num_surv_cut, const float& weight){
   if(!PassValidWandZCut()) return false;
   Tabulate_Me(Num_surv_cut,cut_index,weight);
       
+  if(!PassValidWZCandCut()) return false;
+  Tabulate_Me(Num_surv_cut,cut_index,weight);
+      
   if(!PassNumberOfZsCut()) return false;
   Tabulate_Me(Num_surv_cut,cut_index,weight);
       
@@ -411,6 +414,9 @@ void ExecuteAnalysis()
  
   //name of file where to write all histograms
   TFile *fout = new TFile("Wprime_analysis.root","recreate");
+  
+  //Improves ability to rescale histograms
+  TH1::SetDefaultSumw2();
  
   //keep account of events
   string outfile("event_counts.txt");

@@ -1,3 +1,5 @@
+#ifndef _ExecuteFakeRate_cxx_
+#define _ExecuteFakeRate_cxx_
 //------------------------------------------------
 // Author: Edgar Carrera
 // Cory Fantasia
@@ -9,7 +11,10 @@
 // 
 //------------------------------------------------
 
-#define ExecuteFakeRate_cxx
+#include "ExecuteVariables.C"
+#include "ExecuteCuts.C"
+#include "ExecuteFunctions.C"
+
 #include "ExecuteFakeRate.h"
 
 //--------------------------------------------------------------
@@ -120,6 +125,9 @@ void ExecuteFakeRate()
   //name of file where to write all histograms
   TFile *fout = new TFile("FakeRate_analysis.root","recreate");
  
+  //Improves ability to rescale histograms
+  TH1::SetDefaultSumw2();
+
   //containers to
   //include signal and background files
 
@@ -146,7 +154,4 @@ void ExecuteFakeRate()
 
 }//ExecuteFakeRate
 
-
-
-
-
+#endif//#define _ExecuteAnalysis_cxx_

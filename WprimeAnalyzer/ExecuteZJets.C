@@ -1,3 +1,5 @@
+#ifndef _ExecuteZJets_cxx_
+#define ExecuteZJets_cxx
 //------------------------------------------------
 // Author: Edgar Carrera
 // Cory Fantasia
@@ -9,7 +11,11 @@
 // 
 //------------------------------------------------
 
-#define ExecuteZJets_cxx
+
+#include "ExecuteVariables.C"
+#include "ExecuteCuts.C"
+#include "ExecuteFunctions.C"
+
 #include "ExecuteZJets.h"
 
 //--------------------------------------------------------------
@@ -211,6 +217,10 @@ void ExecuteZJets()
   //name of file where to write all histograms
   TFile *fout = new TFile("ZJets_analysis.root","recreate");
  
+  
+  //Improves ability to rescale histograms
+  TH1::SetDefaultSumw2();
+
   //containers to
   //include signal and background files
 
@@ -322,3 +332,5 @@ void ExecuteZJets()
   out.close(); 
   fout->Close();
 }//ExecuteZJets
+
+#endif//#define _ExecuteAnalysis_cxx_
