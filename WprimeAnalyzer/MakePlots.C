@@ -96,7 +96,7 @@ MakePlots(){
   Bkg.push_back(Sample("WZ"       , 2, 1, 2));//Cory: Change back to 3
   CheckSamples(fin,Bkg);
   
-  //Sig.push_back(Sample("Wprime300", 1, 1, 10));
+  Sig.push_back(Sample("Wprime300", 1, 1, 10));
   //Sig.push_back(Sample("Wprime400", 1, 1, 10));
   Sig.push_back(Sample("Wprime500", 1, 1, 10));
   //Sig.push_back(Sample("Wprime600", 1, 1, 10));
@@ -160,7 +160,7 @@ MakePlots(){
 
   int size = variable.size();
   for(int i=0;i<size;++i){
-    for(int j=18;j<NCuts;++j){
+    for(int j=19;j<NCuts;++j){
       string title = variable[i] + "_" + Cut_Name[j];
       DrawandSave(fin,title,i>=13,0, 0);
     }
@@ -233,14 +233,14 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
     }
     
     Double_t max = sBkg->GetMaximum();
-    sBkg->Draw();
+    sBkg->Draw("HIST");
     for(unsigned int i=0; i<Sig.size(); i++){
       max = TMath::Max(max, sSigs[i]->GetMaximum());
-      sSigs[i]->Draw("same][");
+      sSigs[i]->Draw("HIST SAME");
     }
     if(hData){
       max = TMath::Max(max, hData->GetMaximum());
-      hData->Draw("E1same");
+      hData->Draw("E1 SAME");
     }
     sBkg->SetMaximum(1.1*max);
     
