@@ -1,16 +1,5 @@
-//---------------------------------------------
-// Author: Edgar Carrera
-// 2010-01-13
-// This macro will be used for analyzing
-// Wprime -> WZ -> lllnu events
-// It works on an root-uple of events with
-// variables created by the "official" CMS WZ code
-//---------------------------------------------
 #ifndef _ExecuteZJets_h_
 #define _ExecuteZJets_h_
-
-#include "ExecuteCuts.C"
-#include "ExecuteFunctions.C"
 
 ///My calculated qualities//////////////////
 bool TT;

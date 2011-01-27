@@ -177,7 +177,7 @@ const double TWOPI = 2.0 * PI;
 // +++++++++++++++++++
 //value of lumi to be used in the analysis
 //the weights will scale accordingly.
-const float lumiPb = 1000;//36.1;
+const float lumiPb = 36;//1000
 
 // +++++++++++++++++++location of data files and samples info
 const std::string top_level_dir = "/uscms_data/d2/fantasia/38X/";

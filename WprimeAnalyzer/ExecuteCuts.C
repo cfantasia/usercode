@@ -67,11 +67,15 @@ bool PassValidWandZCut()
 //-----------------------------------------------------------
   if(debugme) cout<<"Check if there are valid W and Z particles in the event"
                   <<endl;
-  bool has_valid_W_and_Z = Z_flavor && W_flavor;
-  has_valid_W_and_Z = has_valid_W_and_Z && WZ_invMassMinPz>0; 
-  return has_valid_W_and_Z;
-    
+  return Z_flavor && W_flavor;
 }//--- NotValidWandZCut
+
+bool PassValidWZCandCut()
+{
+  if(debugme) cout<<"Check if there are valid WZ Cadndidate"
+                  <<endl;
+  return WZ_invMassMinPz>0; 
+}
 
 //Check if there is more Zs than required
 //-----------------------------------------------------------

@@ -64,6 +64,7 @@ MakeSelection(){
   var.clear();
 
   SigSamples["Wprime400"]=KFactor("Wprime400");
+  //SigSamples["TC300"]=KFactor("TC300");
 
   BkgSamples["WZ"]=KFactor("WZ");
   BkgSamples["ZJetsBinned"]=KFactor("ZJetsBinned");
@@ -153,13 +154,14 @@ DrawSelection(TFile* fin, string title, string type){
     if(Straddles(fsig[bin],fsig[bin+1], 0.98)){
       //cout<<"Bin: "<<bin<<" straddles: "<<fsig[bin]<<" -> "<<fsig[bin+1]<<endl;
       cutbin = bin+1;
-      
+/*      
       cout<<title<<" cut is "
           <<hSig->GetBinLowEdge(cutbin-1)
           <<" < "<<hSig->GetBinLowEdge(cutbin)
           <<" < "<<hSig->GetBinLowEdge(cutbin+1)<<endl
           <<" With Sig Eff "<<fsig[cutbin]<<" and Bkg Eff "<<fbkg[cutbin]
           <<endl;
+*/
       break;
     }
   }

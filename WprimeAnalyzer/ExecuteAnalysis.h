@@ -4,7 +4,9 @@
 // +++++++++++++++++++Variables to store Branch Addresses:
 
 //matches the number of cuts
-const string Cut_Name[] = {"NoCuts", "HLT", "ValidWZ", "NumZs", 
+const string Cut_Name[] = {"NoCuts", "HLT", 
+                           "ValidWandZ", "ValidWZCand",
+                           "NumZs", 
                            "ElecEta","ElecEt", 
                            "ElecSigmaEtaEta", "ElecDPhi",
                            "ElecDEta", "ElecHOverE",

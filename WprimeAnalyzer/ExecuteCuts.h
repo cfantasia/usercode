@@ -9,15 +9,15 @@ const float PDGZMASS = 91.1876; //GeV
 // +++++++++++++++++++General Cut values
 const int maxNumZs = 1;
 const int minNumLeptons = 3;
-const float minMET = 20;
+const float minMET = 30;
 
 // +++++++++++++++++++Ht Cuts
-const float minHt = 190;
+const float minHt = 190;//150 for TC300; 190 for W'400
 const float minHtMet = 0; //Not Used
 
 // +++++++++++++++++++W Cuts
-const float minWtransMass = 40;
-const float minWpt = 100;
+const float minWtransMass = 0;//Cory: Removed cut
+const float minWpt = 110;//90 for TC300; 110 for W'400
 
 const float minWmunuMuonPt = 20.;
 const float maxWmunuCombRelIso = 0.15;
@@ -28,7 +28,7 @@ const float maxWenuECalRelIso[]   = {0.20 ,0.15};
 const float maxWenuHCalRelIso[]   = {0.15 ,0.12};
 
 // +++++++++++++++++++Z Cuts
-const float minZpt = 100;
+const float minZpt = 110;//90 for TC300; 110 for W'400
 const float minZmass = 60;
 const float maxZmass = 120;
 
@@ -45,13 +45,7 @@ const float maxElecSigmaEtaEta[] = {0.01 ,0.03 };
 const float maxElecDeltaPhiIn [] = {0.08 ,0.7  };
 const float maxElecDeltaEtaIn [] = {0.007,0.01 };
 const float maxElecHOverE     [] = {0.15 ,0.07 };
-/*
-//Optimized to 98% Cuts
-const float maxElecSigmaEtaEta[] = {0.02 ,0.04 }; 
-const float maxElecDeltaPhiIn [] = {0.08 ,0.07 }; 
-const float maxElecDeltaEtaIn [] = {0.010,0.02 }; 
-const float maxElecHOverE     [] = {0.14 ,0.12 }; 
-*/
+
 // +++++++++++++++++++Muon General Cuts
 const int cutMuonIsGlobal = true;
 const float maxMuonEta = 2.5;
@@ -63,20 +57,13 @@ const int minMuonNPixHit = 0;
 const int minMuonNTrkHit = 10;
 const int minMuonStations = 0;
 const int minMuonHitsUsed = 0;
-/*
-//Optimized to 98% Cuts
-const float maxMuonDxy = 0.1;
-const float maxMuonNormChi2 = 5.;
-const int minMuonNPixHit = 1; 
-const int minMuonNTrkHit = 12;;
-const int minMuonStations = 1;
-const int minMuonHitsUsed = 4;
-*/
+
 //methods for the cuts
 bool PassTriggersCut();
 bool PassMuonTriggerCut();
 bool PassElecTriggerCut();
 bool PassValidWandZCut();
+bool PassValidWZCandCut();
 bool PassNumberOfZsCut();
 bool PassWptCut();
 bool PassZptCut();

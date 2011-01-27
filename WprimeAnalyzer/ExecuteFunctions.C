@@ -537,7 +537,9 @@ bool Load_Input_Files(string file_desc,
     cout <<"Events produced in file = "<<files[i].Nprod_evt
          <<",  # of entries = "<< files[i].tree->GetEntries() 
          << ", x-sect = " << files[i].x_sect 
-         << ", weight = " << files[i].weight << endl;
+         << ", weight = " << files[i].weight 
+         << ", Eff Lumi = " << files[i].Nprod_evt / files[i].x_sect 
+         << endl;
       
   } // loop over input files 2
   
