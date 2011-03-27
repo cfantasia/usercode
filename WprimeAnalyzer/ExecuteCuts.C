@@ -369,21 +369,21 @@ bool PassHtCut()
 //-----------------------------------------------------------
 float Calc_Ht()
 {
-  float Ht=0;
+  float retval=0;
   
-  if     (W_flavor == PDGELEC) Ht += electron_pt->at(W_leptonIndex);
-  else if(W_flavor == PDGMUON) Ht += muon_pt->at(W_leptonIndex);
+  if     (W_flavor == PDGELEC) retval += electron_pt->at(W_leptonIndex);
+  else if(W_flavor == PDGMUON) retval += muon_pt->at(W_leptonIndex);
   //else                         cout<<"W didn't decay into e,mu"<<endl;
   
   if     (Z_flavor == PDGELEC){
-    Ht += electron_pt->at(Z_leptonIndex1);
-		Ht += electron_pt->at(Z_leptonIndex2);
+    retval += electron_pt->at(Z_leptonIndex1);
+		retval += electron_pt->at(Z_leptonIndex2);
   }else if(Z_flavor == PDGMUON){
-		Ht += muon_pt->at(Z_leptonIndex1);
-		Ht += muon_pt->at(Z_leptonIndex2);
+		retval += muon_pt->at(Z_leptonIndex1);
+		retval += muon_pt->at(Z_leptonIndex2);
   }//else                         cout<<"Z didn't decay into e,mu"<<endl;
   
-  return Ht;
+  return retval;
   
 }//--- CalcHt
 
