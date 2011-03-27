@@ -488,6 +488,18 @@ bool Load_Input_Files(string file_desc,
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"Run2011")){
+    files.push_back(InputFile()); 
+    const string filename = "../41X/TrileptonPatTuple-2011A_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"Run2011_Dilepton")){
+    files.push_back(InputFile()); 
+    const string filename = "../41X/DileptonPatTuple-2011A_WZ.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else{
     cout<<"No samples were found with the name "<<file_desc<<endl;
     return false;
