@@ -892,7 +892,7 @@ void Get_Distributions(string dir, vector<InputFile>& files,
       WZtree->GetEntry(i);
       CalcEventVariables();
       if(!PassCuts(Num_surv_cut, weight)) continue;
-      if(!dir.compare("Run2010")){
+      if(!dir.compare("Run2010") || !dir.compare("Run2011")){
         cout<<" The following data events passed All Cuts!!!\n\n";
         PrintEventFull();
         cout<<" ------------------\n";
@@ -921,7 +921,23 @@ void Get_Distributions(string dir, vector<InputFile>& files,
   
 }//Get_Distributions
 
+void PrintEventToFile(){
+  string outfile("candEvts.txt");
+  ofstream out(outfile.c_str(), ios_base::app);
+  if(!out) { 
+    cout << "Cannot open file " << outfile << endl; 
+    abort();
+  } 
+
+  out<<runNumber<<":"
+     <<lumiBlock<<":"
+     <<eventID<<endl;
+  
+  out.close(); 
+}
+
 void PrintEvent(){
+  PrintEventToFile();
   cout<<"run #: "<<runNumber
       <<" lumi: "<<lumiBlock
       <<" eventID: "<<eventID<<endl
@@ -987,7 +1003,10 @@ PrintElectron(int idx, int parent){
       <<" Elec dPhi: "<<electron_deltaPhiIn->at(idx)<<endl //DeltaPhi
       <<" Elec dEta: "<<electron_deltaEtaIn->at(idx)<<endl //DeltaEta
       <<" Elec HoverE: "<<electron_hOverE->at(idx)<<endl// H/E
-      <<" Elec EoverP: "<<electron_eOverP->at(idx)<<endl;// E/P
+      <<" Elec EoverP: "<<electron_eOverP->at(idx)<<endl// E/P
+      <<" Elec WP90: "<<electron_simpleEleId90relIso->at(idx)<<endl
+      <<" Elec WP85: "<<electron_simpleEleId85relIso->at(idx)<<endl
+      <<" Elec WP80: "<<electron_simpleEleId80relIso->at(idx)<<endl;
   /*
   cout<<"Elec 60%: "<<electron_simpleEleId60relIso->at(idx)<<endl
       <<"Elec 70%: "<<electron_simpleEleId70relIso->at(idx)<<endl

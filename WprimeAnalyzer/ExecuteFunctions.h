@@ -54,6 +54,7 @@ void UseSample(string dir, vector<InputFile> & files,
 void CalcEventVariables();
 bool PassCuts(vector<int>& Num_surv_cut, const float& weight);
 
+void PrintEventToFile();
 void PrintEvent();
 void PrintEventFull();
 void PrintElectron(int idx, int parent);
