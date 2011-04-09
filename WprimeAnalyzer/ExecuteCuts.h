@@ -55,7 +55,7 @@ const float maxMuonDxy = 0.2;
 const float maxMuonNormChi2 = 10.;
 const int minMuonNPixHit = 0;
 const int minMuonNTrkHit = 10;
-const int minMuonStations = 0;
+const int minMuonStations = 1;
 const int minMuonHitsUsed = 0;
 
 //methods for the cuts
