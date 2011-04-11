@@ -230,13 +230,13 @@ bool Load_Input_Files(string file_desc,
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
-  else if (!strcmp(file_desc.c_str(),"WZ")){
+  else if (!strcmp(file_desc.c_str(),"WZ3l")){
     files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTupleMC-WZ3l_WZ.root";
+    const string filename = "TrileptonPatTupleMC-V05-03-11-WZTo3LNu_TuneZ2_7TeV-pythia6_outputTree.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
-  else if (!strcmp(file_desc.c_str(),"WZ_Dilepton")){
+  else if (!strcmp(file_desc.c_str(),"WZ3l_Dilepton")){
     files.push_back(InputFile()); 
     const string filename = "DileptonPatTupleMC-WZ3l_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
@@ -256,7 +256,7 @@ bool Load_Input_Files(string file_desc,
   } 
   else if (!strcmp(file_desc.c_str(),"TTbar2l")){
     files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTupleMC-TTbar2l_WZ.root";
+    const string filename = "TrileptonPatTupleMC-V05-03-11-TTTo2L2Nu2B_7TeV-powheg-pythia6_outputTree.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
@@ -280,7 +280,7 @@ bool Load_Input_Files(string file_desc,
   } 
   else if (!strcmp(file_desc.c_str(),"ZZ")){
     files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTupleMC-ZZ_WZ.root";
+    const string filename = "TrileptonPatTupleMC-V05-03-11-ZZtoAnything_TuneZ2_7TeV-pythia6-tauola_outputTree.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
@@ -302,9 +302,9 @@ bool Load_Input_Files(string file_desc,
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
-  else if (!strcmp(file_desc.c_str(),"ZGamma")){
+  else if (!strcmp(file_desc.c_str(),"ZGamma2l")){
     files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTupleMC-Zgamma2l_WZ.root";
+    const string filename = "TrileptonPatTupleMC-V05-03-11-ZGtoLLG_TuneZ2_7TeV-pythia6-tauola_outputTree.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   }
@@ -370,7 +370,7 @@ bool Load_Input_Files(string file_desc,
   }
   else if (!strcmp(file_desc.c_str(),"WenuJets")){
     files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTupleMC-WenuJets_WZ.root";
+    const string filename = "TrileptonPatTupleMC-V05-03-11-WToENu_TuneZ2_7TeV-pythia6_outputTree.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
@@ -382,7 +382,7 @@ bool Load_Input_Files(string file_desc,
   } 
   else if (!strcmp(file_desc.c_str(),"WmunuJets")){
     files.push_back(InputFile()); 
-    const string filename = "TrileptonPatTupleMC-WmunuJets_WZ.root";
+    const string filename = "TrileptonPatTupleMC-V05-03-11-WToMuNu_TuneZ2_7TeV-pythia6_outputTree.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
@@ -464,6 +464,24 @@ bool Load_Input_Files(string file_desc,
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
+  else if (!strcmp(file_desc.c_str(),"DYJets2l")){
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-V05-03-11-DYJetsToLL_TuneZ2_M-50_7TeV-madgraph-tauola_outputTree.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"DYee")){
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-V05-03-11-DYToEE_M-20_TuneZ2_7TeV-pythia6_outputTree.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
+  else if (!strcmp(file_desc.c_str(),"DYmumu")){
+    files.push_back(InputFile()); 
+    const string filename = "TrileptonPatTupleMC-V05-03-11-DYToMuMu_M-20_TuneZ2_7TeV-pythia6_outputTree.root";
+    RecruitOrderedFiles(files,Nfiles,0,0,
+                        filename,"",file_desc);
+  } 
   else if (!strcmp(file_desc.c_str(),"test")){
     files.push_back(InputFile()); 
     const string filename = "test_WZ.root";
@@ -490,7 +508,7 @@ bool Load_Input_Files(string file_desc,
   } 
   else if (!strcmp(file_desc.c_str(),"Run2011")){
     files.push_back(InputFile()); 
-    const string filename = "../41X/TrileptonPatTuple-2011A_WZ.root";
+    const string filename = "TrileptonPatTuple-2011A_WZ.root";
     RecruitOrderedFiles(files,Nfiles,0,0,
                         filename,"",file_desc);
   } 
@@ -505,7 +523,7 @@ bool Load_Input_Files(string file_desc,
     return false;
   }
 
-  
+
   float Total_Nprod_evt = 0;
   
   //Loop over the files in order to get the correct tree
@@ -586,12 +604,19 @@ void Set_Branch_Addresses(TTree* WZtree)
   WZtree->SetBranchAddress("pass_HLT_Ele17_SW_TightEleId_L1R", &pass_HLT_Ele17_SW_CaloEleId_L1R);
   WZtree->SetBranchAddress("pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2", &pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2);
   WZtree->SetBranchAddress("pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3", &pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3);
+  WZtree->SetBranchAddress("pass_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v1", &pass_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v1);
+  WZtree->SetBranchAddress("pass_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v2", &pass_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v2);
+  WZtree->SetBranchAddress("pass_HLT_Ele45_CaloIdVT_TrkIdT_v1", &pass_HLT_Ele45_CaloIdVT_TrkIdT_v1);
+  WZtree->SetBranchAddress("pass_HLT_Ele45_CaloIdVT_TrkIdT_v2", &pass_HLT_Ele45_CaloIdVT_TrkIdT_v2);
 
   WZtree->SetBranchAddress("pass_HLT_Mu3", &pass_HLT_Mu3);
   WZtree->SetBranchAddress("pass_HLT_Mu5", &pass_HLT_Mu5);
   WZtree->SetBranchAddress("pass_HLT_Mu9", &pass_HLT_Mu9);
   WZtree->SetBranchAddress("pass_HLT_Mu11", &pass_HLT_Mu11);
   WZtree->SetBranchAddress("pass_HLT_Mu15_v1", &pass_HLT_Mu15_v1);
+  WZtree->SetBranchAddress("pass_HLT_Mu15_v2", &pass_HLT_Mu15_v2);
+  WZtree->SetBranchAddress("pass_HLT_Mu24_v1", &pass_HLT_Mu24_v1);
+  WZtree->SetBranchAddress("pass_HLT_Mu30_v1", &pass_HLT_Mu30_v1);
 
   WZtree->SetBranchAddress("prescale_HLT_Photon10_Cleaned_L1R", &prescale_HLT_Photon10_Cleaned_L1R);
   WZtree->SetBranchAddress("prescale_HLT_Photon10_L1R", &prescale_HLT_Photon10_L1R);
@@ -610,12 +635,19 @@ void Set_Branch_Addresses(TTree* WZtree)
   WZtree->SetBranchAddress("prescale_HLT_Ele17_SW_TightEleId_L1R", &prescale_HLT_Ele17_SW_CaloEleId_L1R);
   WZtree->SetBranchAddress("prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2", &prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2);
   WZtree->SetBranchAddress("prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3", &prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3);
+  WZtree->SetBranchAddress("prescale_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v1", &prescale_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v1);
+  WZtree->SetBranchAddress("prescale_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v2", &prescale_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v2);
+  WZtree->SetBranchAddress("prescale_HLT_Ele45_CaloIdVT_TrkIdT_v1", &prescale_HLT_Ele45_CaloIdVT_TrkIdT_v1);
+  WZtree->SetBranchAddress("prescale_HLT_Ele45_CaloIdVT_TrkIdT_v2", &prescale_HLT_Ele45_CaloIdVT_TrkIdT_v2);
 
   WZtree->SetBranchAddress("prescale_HLT_Mu3", &prescale_HLT_Mu3);
   WZtree->SetBranchAddress("prescale_HLT_Mu5", &prescale_HLT_Mu5);
   WZtree->SetBranchAddress("prescale_HLT_Mu9", &prescale_HLT_Mu9);
   WZtree->SetBranchAddress("prescale_HLT_Mu11", &prescale_HLT_Mu11);
   WZtree->SetBranchAddress("prescale_HLT_Mu15_v1", &prescale_HLT_Mu15_v1);
+  WZtree->SetBranchAddress("prescale_HLT_Mu15_v2", &prescale_HLT_Mu15_v2);
+  WZtree->SetBranchAddress("prescale_HLT_Mu24_v1", &prescale_HLT_Mu24_v1);
+  WZtree->SetBranchAddress("prescale_HLT_Mu30_v1", &prescale_HLT_Mu30_v1);
 
   WZtree->SetBranchAddress("pfW_flavor",&W_flavor);
   WZtree->SetBranchAddress("Z_flavor",&Z_flavor);
@@ -834,9 +866,9 @@ void printSummary(ofstream & out, const string& dir, const float& Nthe_evt,
 }//printSummary
 
 void 
-UseSample(string dir, vector<InputFile> & files,
-          const vector<string> & Cut,
+UseSample(string dir, const vector<string> & Cut,
           TFile* fout, ofstream & out){
+  vector<InputFile> files;
   if(!Load_Input_Files(dir, files)){
     return;
   }

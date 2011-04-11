@@ -54,6 +54,8 @@ TH1F * hW2e1muTransMass[NCuts];
 TH1F * hW1e2muTransMass[NCuts];
 TH1F * hW0e3muTransMass[NCuts];
 
+TH1F * hQ[NCuts];
+
 TH1F * hLeadPt[NCuts];
 TH1F * hLeadElecPt[NCuts];
 TH1F * hLeadMuonPt[NCuts];

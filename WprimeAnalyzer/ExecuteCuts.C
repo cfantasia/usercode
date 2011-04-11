@@ -42,7 +42,11 @@ bool PassElecTriggerCut()
           (prescale_HLT_Ele17_SW_CaloEleId_L1R <= 1           && pass_HLT_Ele17_SW_CaloEleId_L1R ) ||
           (prescale_HLT_Ele17_SW_TightEleId_L1R <= 1          && pass_HLT_Ele17_SW_TightEleId_L1R ) ||
           (prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2 <= 1 && pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2 ) ||
-          (prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3 <= 1 && pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3 )
+          (prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3 <= 1 && pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3 ) ||
+          (prescale_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v1 <= 1 && pass_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v1) ||
+          (prescale_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v2 <= 1 && pass_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v2) ||
+          (prescale_HLT_Ele45_CaloIdVT_TrkIdT_v1 <= 1 && pass_HLT_Ele45_CaloIdVT_TrkIdT_v1 ) ||
+          (prescale_HLT_Ele45_CaloIdVT_TrkIdT_v2 <= 1 && pass_HLT_Ele45_CaloIdVT_TrkIdT_v2 )
     );
     
 
@@ -55,7 +59,10 @@ bool PassMuonTriggerCut()
 
   return ((prescale_HLT_Mu9     <= 1 && pass_HLT_Mu9)     ||
           (prescale_HLT_Mu11    <= 1 && pass_HLT_Mu11)    ||
-          (prescale_HLT_Mu15_v1 <= 1 && pass_HLT_Mu15_v1)
+          (prescale_HLT_Mu15_v1 <= 1 && pass_HLT_Mu15_v1) ||
+          (prescale_HLT_Mu15_v1 <= 1 && pass_HLT_Mu15_v2) ||
+          (prescale_HLT_Mu24_v1 <= 1 && pass_HLT_Mu24_v1) || 
+          (prescale_HLT_Mu30_v1 <= 1 && pass_HLT_Mu30_v1)
     );
 
 }//--- PassMuonTriggersCut

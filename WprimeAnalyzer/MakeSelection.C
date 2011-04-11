@@ -20,7 +20,7 @@ MakeSelection(){
     Note: WZ is signal and TTbar + Zjets is background
     for Lepton Cut Plots!!!!!
   ***********/
-  SigSamples["WZ"]=KFactor("WZ");
+  SigSamples["WZ3l"]=KFactor("SM WZ3l");
 
   BkgSamples["ZJetsBinned"]=KFactor("ZJetsBinned");
   BkgSamples["TTbar2l"]=KFactor("TTbar2l");

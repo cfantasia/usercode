@@ -16,7 +16,8 @@
 #include "TROOT.h"
 #include "TStyle.h"
 #include "TLine.h"
-#include "ExecuteAnalysis.C"
+#include "ExecuteAnalysis.C"//Cory:
+//#include "ExecuteSMWZ.C"
 
 struct Sample{
   string name;
@@ -53,21 +54,25 @@ void CheckSamples(TFile* fin, vector<Sample> & sample);
 void
 MakePlots(){  
   gStyle->SetOptStat(0);
-  TFile *fin = TFile::Open("Wprime_analysis.root", "read");
+  TFile *fin = TFile::Open("Wprime_analysis.root", "read");//Cory:
+  //TFile *fin = TFile::Open("SMWZ_analysis.root", "read");
 
   SampleNames["Run2010"]="Data";
   SampleNames["WlnuJetsMadgraph"]="W+Jets";
-  SampleNames["WenuJets"]="W+Jets";
-  SampleNames["WmunuJets"]="W+Jets";
+  SampleNames["WenuJets"]="W+Jets\\rightarrowe\\nu";
+  SampleNames["WmunuJets"]="W+Jets\\rightarrow\\mu\\nu";
   SampleNames["TTbar"]="TTbar";
-  SampleNames["TTbar2l"]="TTbar2l";
+  SampleNames["TTbar2l"]="TTbar\\rightarrow2l";
   SampleNames["ZZ"]="ZZ";
-  SampleNames["ZZ4l"]="ZZ4l";
-  SampleNames["ZGamma"]="Z\\gamma";
+  SampleNames["ZZ4l"]="ZZ\\rightarrow4l";
+  SampleNames["ZGamma2l"]="Z\\gamma\\rightarrow2l";
+  SampleNames["DYJets2l"]="DY+Jets\\2l";
+  SampleNames["DYee"]="DY\\rightarrowee";
+  SampleNames["DYmumu"]="DY\\rightarrow\\mu\\mu";
   SampleNames["ZJetsBinned"]="Z+Jets";
-  SampleNames["ZeeJets"]="Z+Jets";
-  SampleNames["ZmumuJets"]="Z+Jets";
-  SampleNames["WZ"]="SM WZ";
+  SampleNames["ZeeJets"]="Z+Jets\\rightarrowee";
+  SampleNames["ZmumuJets"]="Z+Jets\\rightarrow\\mu\\mu";
+  SampleNames["WZ3l"]="SM WZ\\rightarrow3l";
   SampleNames["Wprime300"]="W' 300";
   SampleNames["Wprime400"]="W' 400";
   SampleNames["Wprime500"]="W' 500";
@@ -80,20 +85,24 @@ MakePlots(){
   SampleNames["TC400"]="\\rho_{TC} 400";
   SampleNames["TC500"]="\\rho_{TC} 500";
 
-  Data.push_back(Sample("Run2010"));
+  Data.push_back(Sample("Run2011"));
   CheckSamples(fin,Data);
   
-  Bkg.push_back(Sample("WlnuJetsMadgraph", 8, 1, 8));
-  //Bkg.push_back(Sample("WenuJets" , 8, 1, 8));
-  //Bkg.push_back(Sample("WmunuJets", 8, 1, 8));
+  //Bkg.push_back(Sample("WlnuJetsMadgraph", 8, 1, 8));
+  Bkg.push_back(Sample("WenuJets" , 8, 1, 8));
+  Bkg.push_back(Sample("WmunuJets", 8, 1, 8));
   //Bkg.push_back(Sample("TTbar"  , 4, 1, 4));
   Bkg.push_back(Sample("TTbar2l"  , 4, 1, 4));
-  Bkg.push_back(Sample("ZZ4l"     , 5, 1, 5));
-  Bkg.push_back(Sample("ZGamma"   , 6, 1, 6));
-  Bkg.push_back(Sample("ZJetsBinned", 7, 1, 7));
+  Bkg.push_back(Sample("ZZ"     , 5, 1, 5));
+  //Bkg.push_back(Sample("ZZ4l"     , 5, 1, 5));
+  Bkg.push_back(Sample("ZGamma2l"   , 6, 1, 6));
+  //Bkg.push_back(Sample("ZJetsBinned", 7, 1, 7));
   //Bkg.push_back(Sample("ZeeJets"  , 7, 1, 7));
   //Bkg.push_back(Sample("ZmumuJets", 7, 1, 7));
-  Bkg.push_back(Sample("WZ"       , 2, 1, 2));//Cory: Change back to 3
+  Bkg.push_back(Sample("DYJets2l", 7, 1, 7));
+  //Bkg.push_back(Sample("DYee", 7, 1, 7));
+  //Bkg.push_back(Sample("DYmumu", 7, 1, 7));
+  Bkg.push_back(Sample("WZ3l"       , 2, 1, 2));//Cory: Change back to 3
   CheckSamples(fin,Bkg);
   
   Sig.push_back(Sample("Wprime300", 1, 1, 10));
@@ -102,7 +111,7 @@ MakePlots(){
   //Sig.push_back(Sample("Wprime600", 1, 1, 10));
   //Sig.push_back(Sample("Wprime700", 1, 1, 10));
   //Sig.push_back(Sample("Wprime800", 1, 1, 10));
-  Sig.push_back(Sample("Wprime900", 1, 1, 10));
+  //Sig.push_back(Sample("Wprime900", 1, 1, 10));
 /*
   Sig.push_back(Sample("TC225",     2, 1, 10));
   Sig.push_back(Sample("TC300",     2, 1, 10));
@@ -128,7 +137,7 @@ MakePlots(){
   variable.push_back("hWZ2e1muInvMass");
   variable.push_back("hWZ1e2muInvMass");
   variable.push_back("hWZ0e3muInvMass");
-
+  
   //variable.push_back("hWZTransMass");
   variable.push_back("hHt");       //2
   variable.push_back("hWpt");      
@@ -138,18 +147,23 @@ MakePlots(){
   variable.push_back("hZMass");      //6
   variable.push_back("hZeeMass");      
   variable.push_back("hZmumuMass");  //8    
+/*
   variable.push_back("hZ3e0muMass");      
   variable.push_back("hZ2e1muMass");      
   variable.push_back("hZ1e2muMass");      
   variable.push_back("hZ0e3muMass");      
-
+*/
   variable.push_back("hWTransMass");      
   variable.push_back("hWenuTransMass");  //10    
   variable.push_back("hWmunuTransMass");      
+/*
   variable.push_back("hW3e0muTransMass");      
   variable.push_back("hW2e1muTransMass");      
   variable.push_back("hW1e2muTransMass");      
   variable.push_back("hW0e3muTransMass");      
+*/
+  variable.push_back("hQ");      
+
   variable.push_back("hLeadPt");      
   variable.push_back("hLeadElecPt");      
   variable.push_back("hLeadMuonPt");      
@@ -253,7 +267,7 @@ Draw(string filename, bool norm, bool logy, bool eff, TLine* line){
     for(unsigned int i=0; i<Sig.size(); ++i){
       hs->Add(Sig[i].hist);
     }
-    hs->Draw("nostack");
+    hs->Draw("nostack HIST");
   }
   if(debug) cout<<"Title: "<<title<<endl;
 

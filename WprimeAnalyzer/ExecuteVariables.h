@@ -22,11 +22,19 @@ int pass_HLT_Ele17_SW_CaloEleId_L1R;
 int pass_HLT_Ele17_SW_TightEleId_L1R;
 int pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2;
 int pass_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3;
+int pass_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v1;
+int pass_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v2;
+int pass_HLT_Ele45_CaloIdVT_TrkIdT_v1;
+int pass_HLT_Ele45_CaloIdVT_TrkIdT_v2;
+
 int pass_HLT_Mu3;
 int pass_HLT_Mu5;
 int pass_HLT_Mu9;
 int pass_HLT_Mu11;
 int pass_HLT_Mu15_v1;
+int pass_HLT_Mu15_v2;
+int pass_HLT_Mu24_v1;
+int pass_HLT_Mu30_v1;
 
 int prescale_HLT_Photon10_Cleaned_L1R;
 int prescale_HLT_Photon10_L1R;
@@ -45,12 +53,19 @@ int prescale_HLT_Ele17_SW_CaloEleId_L1R;
 int prescale_HLT_Ele17_SW_TightEleId_L1R;
 int prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v2;
 int prescale_HLT_Ele17_SW_TighterEleIdIsol_L1R_v3;
+int prescale_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v1;
+int prescale_HLT_Ele27_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_v2;
+int prescale_HLT_Ele45_CaloIdVT_TrkIdT_v1;
+int prescale_HLT_Ele45_CaloIdVT_TrkIdT_v2;
 
 int prescale_HLT_Mu3;
 int prescale_HLT_Mu5;
 int prescale_HLT_Mu9;
 int prescale_HLT_Mu11;
 int prescale_HLT_Mu15_v1;
+int prescale_HLT_Mu15_v2;
+int prescale_HLT_Mu24_v1;
+int prescale_HLT_Mu30_v1;
 
 int           W_flavor;
 int           Z_flavor;
@@ -171,19 +186,22 @@ const int PDGW = 24;
 const int PDGZ = 23;
 const int PDGWPRIME = 34;
 
+const float W_mass = 80.398;
+
 const double PI    = 2.0 * TMath::ACos(0.);
 const double TWOPI = 2.0 * PI;
 
 // +++++++++++++++++++
 //value of lumi to be used in the analysis
 //the weights will scale accordingly.
-const float lumiPb = 36;//1000
+const float lumiPb = 23;
 
 // +++++++++++++++++++location of data files and samples info
-const std::string top_level_dir = "/uscms_data/d2/fantasia/38X/";
+const std::string top_level_dir = "/uscms_data/d2/fantasia/41X/";
 
 ///My calculated qualities//////////////////
 float Ht;
+float Q;
 float LeadPt;
 float LeadElecPt;
 float LeadMuonPt;

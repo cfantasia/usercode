@@ -144,10 +144,10 @@ void ExecuteFakeRate()
   //the results will be written under respective directories
   //Add as many as you need:
 
-  vector<InputFile> Run2010_Dilepton_files;
-  UseSample("Run2010_Dilepton",Run2010_Dilepton_files, Cut, fout, out);
-  vector<InputFile> Run2010_files;
-  //UseSample("Run2010",Run2010_files, Cut, fout, out);
+  //UseSample("Run2010_Dilepton", Cut, fout, out);
+  //UseSample("Run2010", Cut, fout, out);
+  //UseSample("Run2011_Dilepton", Cut, fout, out);
+  UseSample("Run2011", Cut, fout, out);
 
   out.close(); 
   fout->Close();
