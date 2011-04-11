@@ -132,12 +132,14 @@ PassZLepPtCut(){
 //-----------------------------------------------------------
 bool 
 PassWenuIsoCut(){
+  /*
   bool inEC = inEndCap(electron_ScEta->at(W_leptonIndex));
   if(!PassElecTrkRelIsoCut (W_leptonIndex,inEC)) return false;
   if(!PassElecECalRelIsoCut(W_leptonIndex,inEC)) return false;
   if(!PassElecHCalRelIsoCut(W_leptonIndex,inEC)) return false;
-
   return true;
+  */
+  return PassElecWPRelIsoCut(W_leptonIndex);
 }
 
 //Check Wmunu decay Properties
@@ -203,6 +205,12 @@ bool PassElecHCalRelIsoCut(int idx,bool inEC){
 //-----------------------------------------------------------
   if(debugme) cout<<"Check Electron HcalRelIso Cut"<<endl;
   return (Calc_ElecRelHCalIso(idx) < maxWenuHCalRelIso[inEC]);
+}//--- PassHcalRelIsoElecCut
+
+bool PassElecWPRelIsoCut(int idx){
+//-----------------------------------------------------------
+  if(debugme) cout<<"Check Electron WP RelIso Cut"<<endl;
+  return (electron_simpleEleId80relIso->at(idx) & 0x2);
 }//--- PassHcalRelIsoElecCut
 
 bool PassElecSigmaEtaEtaCut(int idx,bool inEC){

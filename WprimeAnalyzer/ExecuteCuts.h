@@ -87,6 +87,7 @@ bool PassElecEtCut(int idx,int parent);
 bool PassElecTrkRelIsoCut(int idx,bool inEC);
 bool PassElecECalRelIsoCut(int idx,bool inEC);
 bool PassElecHCalRelIsoCut(int idx,bool inEC);
+bool PassElecWPRelIsoCut(int idx);
 bool PassElecSigmaEtaEtaCut(int idx,bool inEC);
 bool PassElecDeltaPhiCut(int idx,bool inEC);
 bool PassElecDeltaEtaCut(int idx,bool inEC);
