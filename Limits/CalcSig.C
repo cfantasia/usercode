@@ -9,13 +9,6 @@ CalcSig(bool useTC=0){
   TTree* tree = new TTree("tree", "Number of Events");
   tree->ReadFile("nEvents.txt");
 
-  TTree* tXsec = new TTree("tXsec", "W' Cross Sections");
-  tXsec->ReadFile("xSec.txt");
-
-  TTree* tXsec_TC = new TTree("tXsec", "TC Cross Sections");
-  tXsec_TC->ReadFile("xSec_TC.txt");
-
-
   string outfile;
   if(!useTC) outfile = "nSigma.txt";
   else       outfile = "nSigma_TC.txt";
@@ -38,50 +31,61 @@ CalcSig(bool useTC=0){
      <<"nSigma"
      <<endl;
     
-  for(int i=0; i<NLumi; ++i){
-    for(int j=0; j<NMass; ++j){
+  for(int ilumi=0; ilumi<NLumi; ++ilumi){
+    for(int imass=0; imass<NMass; ++imass){
       for(int isData=0; isData<2; ++isData){
-        if(i != 0 && isData == 1) continue;
+        if(ilumi != 0 && isData == 1) continue;
         tree->Draw("nTotEvts:nBkgEvts:snBkgEvts", 
                    Form("Mass==%f && Lumi==%f && isData==%i",
-                        mass[j], lumi[i], isData), "goff");
+                        Mass[imass], Lumi[ilumi], isData), "goff");
         Double_t n = tree->GetSelectedRows();
         if( n != 1){
           cout<<"Something went wrong "<<n<<endl;
-          cout<<Form("Mass==%f && Lumi==%f",mass[j], lumi[i])<<endl<<endl<<endl;
+          cout<<Form("Mass==%f && Lumi==%f",Mass[imass], Lumi[ilumi])<<endl<<endl<<endl;
           return;
         }
-        Double_t* nTotEvts  = tree->GetV1();
-        Double_t* nBkgEvts  = tree->GetV2();
-        Double_t* snBkgEvts = tree->GetV3();
+        Double_t nTotEvts  = tree->GetV1()[0];
+        Double_t nBkgEvts  = tree->GetV2()[0];
+        Double_t snBkgEvts = tree->GetV3()[0];
+        //Double_t snBkgEvts = min(tree->GetV3()[0], nBkgEvts);//Cory: remove min
 
-        Double_t nObs = floor(nTotEvts[0]);
+        Double_t nObsEvts = floor(nTotEvts);
         if(useTC){//Scale to # of TC
-          tXsec->Draw("Xsec", Form("Mass==%f", mass[j]), "goff");
-          tXsec_TC->Draw("Xsec", Form("Rho==%f && Pi==%f", 
-                                      mass[j], mass[j]-50), "goff");//Cory: High Pi Mass
-          if(tXsec->GetSelectedRows() != 1 || tXsec_TC->GetSelectedRows() != 1){
-            cout<<"Wrong\n\n\n\n\n";
-            return;
-          }
-        
-          Double_t nSig = nTotEvts[0] - nBkgEvts[0];
-          nSig *= tXsec_TC->GetV1()[0] / tXsec->GetV1()[0];
-          nObs = floor(nSig+nBkgEvts[0]);
+          Double_t Mpi = Mass[imass]*3/4 - 25;
+          Double_t ratio = XSecTC(Mass[imass], Mpi) / XSec(Mass[imass]);//Right, from PAS
+          //Double_t ratio = XSecTC10TeV(Mass[imass]) / XSec(Mass[imass]);
+          Double_t nSigEvts = (nTotEvts - nBkgEvts) * ratio;
+          nObsEvts = floor(nSigEvts+nBkgEvts);
+
+          cout<<"Mass: "<<Mass[imass]<<endl;
+          cout<<"Pi: "<<Mpi<<endl;
+          cout<<"Lumi: "<<Lumi[ilumi]<<endl;
+          cout<<"W' xSec: "<<XSec(Mass[imass])<<endl;
+          cout<<"TC xSec: "<<XSecTC(Mass[imass], Mpi)<<endl;
+          //cout<<"TC xSec: "<<XSecTC10TeV(Mass[imass])<<endl;
+          cout<<"ratio: "<<ratio<<endl;
+          cout<<"nTot:"<<nTotEvts<<endl;
+          cout<<"nBkg:"<<nBkgEvts<<endl;
+          cout<<"nSig W':"<<nTotEvts - nBkgEvts<<endl;
+          cout<<"nSig TC:"<<nSigEvts<<endl;
+          cout<<"nObs W':"<<floor(nTotEvts)<<endl;
+          cout<<"nObs TC:"<<nObsEvts<<endl;
+          cout<<endl;
+
         }
-        Double_t sNormFrac = snBkgEvts[0] / nBkgEvts[0];
+        Double_t sNormFrac = snBkgEvts / nBkgEvts;
 
         //nSigma = nSigma(evts, nObs, sBfrac);
-        Double_t nSig = nSigma(nBkgEvts[0], nObs, sNormFrac);
-      
+        Double_t nSig = nSigma(nBkgEvts, nObsEvts, sNormFrac);
+
         out<<isData<<"\t"
            <<setprecision(1)
-           <<setw(6)<<mass[j]<<"\t"
-           <<setw(6)<<lumi[i]<<"\t"
-           <<setw(6)<<nObs<<"\t"
+           <<setw(6)<<Mass[imass]<<"\t"
+           <<setw(6)<<Lumi[ilumi]<<"\t"
+           <<setw(6)<<nObsEvts<<"\t"
            <<setprecision(4)
-           <<setw(6)<<nBkgEvts[0]<<"\t"
-           <<setw(6)<<snBkgEvts[0]<<"\t"
+           <<setw(6)<<nBkgEvts<<"\t"
+           <<setw(6)<<snBkgEvts<<"\t"
            <<setw(6)<<sNormFrac<<"\t"
            <<setw(6)<<nSig<<"\t"
            <<endl;

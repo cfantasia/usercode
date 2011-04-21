@@ -79,43 +79,43 @@ void fit_sideband(bool useData=false) {
     
     TFile *f = TFile::Open("../WprimeAnalyzer/Wprime_analysis.root", "read");
 
+    map<string, float> allshapesamples;
     if(!useData){
       //1.get the samples to shape the Z
       //cout<<"$$$$$$$$$$$$$$$$$  get the genuine-Z background shape"<<endl;
       map<string, float> zshapesamples;
 //      zshapesamples["Wprime400_Dilepton"]=KFactor("Wprime400");
 //      zshapesamples["Wprime400"]=KFactor("Wprime400");
-      zshapesamples["WZ_Dilepton"]=KFactor("WZ");
-//      zshapesamples["WZ"]=KFactor("WZ");
-      zshapesamples["ZGamma_Dilepton"]=KFactor("ZGamma");
-//      zshapesamples["ZGamma"]=KFactor("ZGamma");
-      zshapesamples["ZJetsBinned_Dilepton"]=KFactor("ZJetsBinned");
+//      zshapesamples["WZ_Dilepton"]=KFactor("WZ");
+      zshapesamples["WZ"]=KFactor("WZ");
+//      zshapesamples["ZGamma_Dilepton"]=KFactor("ZGamma");
+      zshapesamples["ZGamma"]=KFactor("ZGamma");
+//      zshapesamples["ZJetsBinned_Dilepton"]=KFactor("ZJetsBinned");
       zshapesamples["ZJetsBinned"]=KFactor("ZJetsBinned");
-      zshapesamples["ZZ4l_Dilepton"]=KFactor("ZZ4l");
-//      zshapesamples["ZZ4l"]=KFactor("ZZ4l");
-      TH1F* zpeakhist = get_sum_of_hists(f, zshapesamples, "hZmass_AllCuts", 1);  
+//      zshapesamples["ZZ4l_Dilepton"]=KFactor("ZZ4l");
+      zshapesamples["ZZ4l"]=KFactor("ZZ4l");
+      //TH1F* zpeakhist = get_sum_of_hists(f, zshapesamples, "hZMass_AllCuts", 1);  
 
       //cout<<"$$$$$$$$$$$$$$$$$  get the non-genuine-Z background shape"<<endl;
       //1.get the samples to shape the non-genuine Z background
       map<string, float> nozshapesamples;
-      nozshapesamples["TTbar2l_Dilepton"]=KFactor("TTbar2l");
-//      nozshapesamples["TTbar2l"]=KFactor("TTbar2l");
-      nozshapesamples["WenuJets_Dilepton"]=KFactor("WenuJets");
+//      nozshapesamples["TTbar2l_Dilepton"]=KFactor("TTbar2l");
+      nozshapesamples["TTbar2l"]=KFactor("TTbar2l");
+//      nozshapesamples["WenuJets_Dilepton"]=KFactor("WenuJets");
 //      nozshapesamples["WenuJets"]=KFactor("WenuJets");
-      nozshapesamples["WmunuJets_Dilepton"]=KFactor("WmunuJets");
+//      nozshapesamples["WmunuJets_Dilepton"]=KFactor("WmunuJets");
 //      nozshapesamples["WmunuJets"]=KFactor("WmunuJets");
-      TH1F* nozpeakhist = get_sum_of_hists(f, nozshapesamples, "hZmass_AllCuts", 1);
-    }
-    //1.get the samples
-    map<string, float> allshapesamples;
-    if(!useData){
+      nozshapesamples["WlnuJetsMadgraph"]  =KFactor("WlnuJets");
+      //TH1F* nozpeakhist = get_sum_of_hists(f, nozshapesamples, "hZMass_AllCuts", 1);
+
       allshapesamples.insert(zshapesamples.begin(),zshapesamples.end());
       allshapesamples.insert(nozshapesamples.begin(),nozshapesamples.end());
     }else{
-      allshapesamples["2010_Dilepton"]=1.;
-//      allshapesamples["Data"]=1.;
+      //allshapesamples["2010_Dilepton"]=1.;
+      allshapesamples["Run2010"]=1.;
     }
-    TH1F* hAll = get_sum_of_hists(f, allshapesamples, "hZmass_AllCuts", 1);
+    TH1F* hAll = get_sum_of_hists(f, allshapesamples, "hZMass_AllCuts", 1);//Cory: Original
+    //TH1F* hAll = get_sum_of_hists(f, allshapesamples, "hZMass_ZMass", 1);
 
     ////Fit Background Outside Z Peak
     TCanvas* cBkg = new TCanvas("cBkg", "Background Fit");
@@ -125,13 +125,13 @@ void fit_sideband(bool useData=false) {
     hAll->Fit(fBkg, "MRELL", "e1");
     reject = false;
     fBkg->GetParameters(bkgFuncPars);
-    cBkg->Print("fitBkg.gif");
+    cBkg->Print(Form("fitBkg_useData%i.eps", useData));
 
     /////Fit the Whole Thing
     cout<<"$$$$$$$$$$$$$$ fit signal + background"<<endl;
     //2.shape the function
     TCanvas *cGlobal = new TCanvas("cGlobal", "Global Fit");
-    //TF1* fAll = shape_allfunc(hAll,bkgFuncPars);
+    TF1* fAll = shape_allfunc(hAll,bkgFuncPars);
     fAll = new TF1("fAll",fitFunctionAll,60,120,5);
     fAll->SetParameter(0,bkgFuncPars[0]); fAll->SetParName(0,"Const Coef");
     fAll->SetParameter(1,bkgFuncPars[1]); fAll->SetParName(1,"Linear Coef");
@@ -143,7 +143,7 @@ void fit_sideband(bool useData=false) {
     fAll->SetLineWidth(2);
     fAll->SetNpx(500);
     hAll->Fit(fAll,"MRELL", "e1");
-    cGlobal->Print("fitGlobal.gif");
+    cGlobal->Print(Form("fitGlobal_useData%i.eps", useData));
 
     //$$$$$$$$$$$$$$$$$$$Draw and extract the components
     cout<<"  Final Steps "<<endl;
@@ -157,7 +157,6 @@ void fit_sideband(bool useData=false) {
     //Get the final results of the fit
     fAll->Draw("same");
 
-    TF1 *fBkg = new TF1("fBkg",fline,60,120,2);
     fBkg->SetLineColor(kRed);
     fBkg->SetNpx(500);
     
@@ -188,7 +187,7 @@ void fit_sideband(bool useData=false) {
     legend->SetLineWidth(0);
     legend->SetBorderSize(0);
 
-    cComponent->Print("fitComponents.gif");
+    cComponent->Print(Form("fitComponents_useData%i.eps", useData));
 
 /*
     allfunc->Print();

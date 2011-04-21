@@ -46,8 +46,7 @@ Est_Zjets(bool useElec=false, bool useData=false){
     reject = false;
     double B_TT = linearTT->Integral(ZWind_low,ZWind_high);
     double sigma_B_TT = linearTT->IntegralError(ZWind_low,ZWind_high);
-
-    c1->Print("fit_zjets_BTT.gif");
+    c1->Print(Form("fit_zjets_BTT_useElec%i_useData%i.eps", useElec, useData));
 
     cout<<"Fitting Background TF"<<endl;
     TCanvas* c2 = new TCanvas("c2", "Z Mass TF");
@@ -56,8 +55,8 @@ Est_Zjets(bool useElec=false, bool useData=false){
     reject = false;
     double B_TF = linearTF->Integral(ZWind_low,ZWind_high);
     double sigma_B_TF = linearTF->IntegralError(ZWind_low,ZWind_high);
-    c2->Print("fit_zjets_BTF.gif");
-
+    c2->Print(Form("fit_zjets_BTF_useElec%i_useData%i.eps", useElec, useData));
+              
     int lowBin, highBin;
     lowBin = allTThist->FindBin(ZWind_low);  
     highBin = allTThist->FindBin(ZWind_high);

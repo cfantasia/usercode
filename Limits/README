@@ -13,10 +13,12 @@
   Reads from nLimit.txt
 
 2b) Run CalcSig 
-  root -b -q CalcSig.C
-  Reads from nEvents.txt
-  Writes to nSigma.txt
+  root -b -q "CalcSig.C(0)" #For W'
+  root -b -q "CalcSig.C(1)" #For TC  
+  Reads from nEvents.txt (nEvents_TC.txt)
+  Writes to nSigma.txt (nSigma_TC.txt)
 
 3b) Run PlotSig 
-  root -b -q PlotSig.C++
-  Reads from nSigma.txt
+  root -b -q "PlotSig.C++(0)" #For W'
+  root -b -q "PlotSig.C++(1)" #For TC
+  Reads from nSigma.txt (nSimga_TC.txt)

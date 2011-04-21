@@ -30,50 +30,44 @@ CalcLimit(){
 
   TTree* tree = new TTree("tree", "Number of Events");
   tree->ReadFile("nEvents.txt");
-  for(int i=0; i<NLumi; ++i){
-    for(int j=0; j<NMass; ++j){
+  for(int ilumi=0; ilumi<NLumi; ++ilumi){
+    for(int imass=0; imass<NMass; ++imass){
       for(int isData=0; isData<2; ++isData){
-        if(i != 0 && isData == 1) continue;
+        if(ilumi != 0 && isData == 1) continue;
         if(!isData){
           tree->Draw("nBkgEvts:snBkgEvts:Eff:sEff", 
                      Form("isData==%i && Mass==%f && Lumi==%f", 
-                          isData, mass[j],lumi[i]), "goff");
+                          isData, Mass[imass],Lumi[ilumi]), "goff");
         }else{
           tree->Draw("nTotEvts:snTotEvts:Eff:sEff", 
                      Form("isData==%i && Mass==%f && Lumi==%f", 
-                          isData, mass[j],lumi[i]), "goff");
+                          isData, Mass[imass],Lumi[ilumi]), "goff");
         }
         float n = tree->GetSelectedRows();
         if( n != 1){
           cout<<"Something went wrong "<<n<<endl;
           return;
         }
-        Double_t*  nEvts = tree->GetV1();
-        Double_t* snEvts = tree->GetV2();
-        Double_t*  Eff = tree->GetV3();
-        Double_t* sEff = tree->GetV4();
+        Double_t  nEvts = tree->GetV1()[0];
+        Double_t snEvts = tree->GetV2()[0];
+        Double_t  Eff = tree->GetV3()[0];
+        Double_t sEff = tree->GetV4()[0];
       
-        float sLumi = sLumiFrac*lumi[i];
-        printf("Mass: %i CLA(%4.2f,%4.2f,%4.4f,%4.4f,%4.2f,%4.2f)\n",
-               mass[j],
-               lumi[i], sLumi,
-               Eff[0], sEff[0],
-               nEvts[0], snEvts[0]);
-        float limit = 0;
-        limit = CLA(lumi[i], sLumi, 
-                    Eff[0], sEff[0],
-                    nEvts[0], snEvts[0]);
+        float sLumi = sLumiFrac*Lumi[ilumi];
+        float limit = CLA(Lumi[ilumi], sLumi, 
+                          Eff, sEff,
+                          nEvts, snEvts);
 
         out<<setprecision(1)
            <<isData<<"\t"
-           <<mass[j]<<"\t"
-           <<lumi[i]<<"\t"
+           <<Mass[imass]<<"\t"
+           <<Lumi[ilumi]<<"\t"
            <<sLumi<<"\t"
            <<setprecision(4)
-           <<Eff[0]<<"\t"
-           <<sEff[0]<<"\t"
-           <<nEvts[0]<<"\t"
-           <<snEvts[0]<<"\t"
+           <<Eff<<"\t"
+           <<sEff<<"\t"
+           <<nEvts<<"\t"
+           <<snEvts<<"\t"
            <<limit<<"\t"
            <<endl;
       }

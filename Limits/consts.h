@@ -20,22 +20,28 @@
 #include "TLegend.h"
 #include "TMath.h"
 
-const float nGenerated = 10000; //Number of MC Sig Evts Gen
-const float LumiUsed = 1000; //inv pb
-const float sLumiFrac = 0.1;
+const float nGenerated = 10000; //Number of Signal MC Sig Evts Gen
+const float LumiUsed = 36; //inv pb
+const float sLumiFrac = 0.04;
 const float sysEffFrac = 0.05;//Cory: Guess
-const float sysEvtFrac = 0.30;//Cory: Guess
+const float sysEvtFrac = 0.10;//Cory: Guess
 
 const int NLumi = 10;
-const float lumi[NLumi] = {36, 200,400,600,800,1000,2000,3000,4000,5000};//inv pb
+const float Lumi[NLumi] = {36, 200,400,600,800,1000,2000,3000,4000,5000};//inv pb
 
 const int NMass = 7;
-const float mass[NMass] = {   300,  400,  500,  600,
+const float Mass[NMass] = {   300,  400,  500,  600,
                               700,  800,  900};//GeV
+
+const float TCDMASS = 50;//125;
+
+const float ZWind_low = 80;
+const float ZWind_high = 100;
+
 float
 KFactor(string sample){
   if      (!sample.find("Wprime"))
-    return 1.35;//Cory: Don't think this is right
+    return 1.35;//Cory: Approx.
   else if (!sample.find("TC"))
     return 1.35;
   else if (!sample.find("WZ"))
@@ -55,13 +61,55 @@ KFactor(string sample){
   else if (!sample.find("Zmumu"))
     return 2800/2541.89;
   else if (!sample.find("ZGamma"))
-    return 7.3/7.3;//Cory: This is wrong, but no evts survive anyway
+    return 7.3/7.3;//Cory: This is wrong, but no evts survive anyway(guess ~ZZ)
   else if (!sample.find("ZZ"))
     return 5.9/4.3;
   else
     cout<<"Didn't find the sample "<<sample
         <<" Not weighted!!!!!\n\n\n";
     return 1.;
+}
+
+float
+XSecTC10TeV(float mass){
+  if(mass == 300.) return 0.074;
+  if(mass == 400.) return 0.024;
+  if(mass == 500.) return 0.009;
+  return 0;
+}
+
+float
+XSec(float m){
+  TTree* tXsec = new TTree("tXsec", "W' Cross Sections");
+  tXsec->ReadFile("xSec.txt");
+  tXsec->Draw("Xsec", Form("Mass==%f", m), "goff");
+  
+  if(tXsec->GetSelectedRows() != 1){
+    cout<<"Found "<<tXsec->GetSelectedRows()
+        <<" lines instead of 1!\n Quitting.\n";
+    return -1;
+  }
+  float retval = tXsec->GetV1()[0];
+  delete tXsec;
+  return retval;
+}
+
+float
+XSecTC(float rho, float pi){
+  TTree* tXsec = new TTree("tXsec", "TC Cross Sections");
+  tXsec->ReadFile("xSec_TC.txt");
+  tXsec->Draw("Xsec", Form("Rho==%f && Pi==%f", 
+                           rho, pi), "goff");
+  
+  if(tXsec->GetSelectedRows() != 1){
+    cout<<"Found "<<tXsec->GetSelectedRows()
+        <<" lines instead of 1!\n Quitting.\n";
+    return -1;
+  }
+ 
+  float retval = tXsec->GetV1()[0];
+  delete tXsec;
+  return retval;
 }
 
 //---------------------------------------------------------------
@@ -106,12 +154,12 @@ AddInQuad(float a, float b){
   return sqrt(a*a + b*b);
 }
 
-const float ZWind_low = 80;
-const float ZWind_high = 100;
+const float FitWind_low = 70;
+const float FitWind_high = 110;
 Bool_t reject;
 Double_t fline(Double_t *x, Double_t *par)
 {
-    if (reject && x[0] > ZWind_low && x[0] < ZWind_high) {
+    if (reject && x[0] > FitWind_low && x[0] < FitWind_high) {
       TF1::RejectPoint();
       return 0;
    }
