@@ -70,6 +70,7 @@ public:
   bool PassValidZCut();
   bool PassValidWandZCut();
   bool PassValidWZCandCut();
+  bool PassLeadLepPt();
   bool PassNumberOfZsCut();
   bool PassWptCut();
   bool PassZptCut();
@@ -172,6 +173,7 @@ public:
 // +++++++++++++++++++General Cut values
   int maxNumZs;
   int minNumLeptons;
+  float minLepPt; 
   float minMET;
 
 // +++++++++++++++++++Ht Cuts
@@ -229,6 +231,7 @@ public:
   TH1F * hEffRel;
   TH1F * hEffAbs;
   TH1F * hNumEvts;
+  TH1F * hLumiPb;
 
   std::vector<TH1F*> hEvtType;
 

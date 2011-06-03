@@ -11,6 +11,7 @@ void ExecuteAnalysis(float lumi, bool verbose)
   const string Cut_Name[] = {"NoCuts", 
                              //"HLT", 
                              "ValidWandZ", 
+                             "MinLepPt",
                              "NumZs", 
                              "LooseElec", 
                              "LooseMuon",

@@ -10,13 +10,15 @@ void ExecuteWprime(float lumi, bool verbose)
   if (verbose)cout<<"Master macro to execute analysis"<<endl;
   const string Cut_Name[] = {"NoCuts", 
                              //"HLT", 
-                             "ValidWandZ", 
+                             //"ValidWandZ", 
                              "ValidWZCand",
+                             "MinLepPt",
                              "NumZs", 
                              "LooseElec", 
                              "LooseMuon",
                              "WLepIso",
                              "WLepPt", 
+                             "DeltaR",
                              "ZMass", 
                              //"WTransMass", 
                              "MET",
@@ -65,7 +67,7 @@ void ExecuteWprime(float lumi, bool verbose)
   //wz.UseSample("ZeeJetsPowheg");
   //wz.UseSample("ZmumuJetsPowheg");
   //wz.UseSample("ZllJetsMadgraph");
-////////  wz.UseSample("DYJets2l");
+  wz.UseSample("DYJets2l");
   wz.UseSample("DYee");
   wz.UseSample("DYmumu");
 

@@ -95,6 +95,7 @@ WZAnalysis::WZAnalysis(const vector<string> C,
 // +++++++++++++++++++General Cut values
   maxNumZs = 2;
   minNumLeptons = 3;
+  minLepPt = 30.;
   minMET = 30;
 
 // +++++++++++++++++++Ht Cuts
@@ -163,6 +164,7 @@ void WZAnalysis::FillCutFns(){
   mFnPtrs["ValidZ"] = &WZAnalysis::PassValidZCut;
   mFnPtrs["ValidWandZ"] = &WZAnalysis::PassValidWandZCut;
   mFnPtrs["ValidWZCand"] = &WZAnalysis::PassValidWZCandCut;
+  mFnPtrs["MinLepPt"] = &WZAnalysis::PassLeadLepPt;
   mFnPtrs["NumZs"] = &WZAnalysis::PassNumberOfZsCut;
   mFnPtrs["LooseElec"] = &WZAnalysis::PassWZElecLooseCut;
   mFnPtrs["LooseMuon"] = &WZAnalysis::PassWZMuonLooseCut;
@@ -297,7 +299,7 @@ WZAnalysis::FindInputFilename(string file_desc){
   }else if (!file_desc.compare("Run2010")){
     filename = "TrileptonPatTuple-2010_WZ.root";
   }else if (!file_desc.compare("Run2011")){
-    filename = "TrileptonPatTupleV05-04-01FGH-2011A_outputTree.root";
+    filename = "TrileptonPatTupleV05-04-01GIJ-2011A_outputTree.root";
   }else{
     cout<<"No samples were found with the name "<<file_desc<<endl;
     abort();//return "";
@@ -414,27 +416,27 @@ void WZAnalysis::Declare_Histos()
 
 //Z Mass Histos
   DeclareHistoSet("hZMass" , "Reconstructed Mass of Z",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZMass);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZMass);
   DeclareHistoSet("hZeeMass","Reconstructed Mass of Zee",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZeeMass);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZeeMass);
   DeclareHistoSet("hZmumuMass","Reconstructed Mass of Zmumu",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZmumuMass);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZmumuMass);
   DeclareHistoSet("hZ3e0muMass" , "Reconstructed Mass of Z(3e0\\mu)",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZ3e0muMass);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZ3e0muMass);
   DeclareHistoSet("hZ2e1muMass" , "Reconstructed Mass of Z(2e1\\mu)",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZ2e1muMass);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZ2e1muMass);
   DeclareHistoSet("hZ1e2muMass" , "Reconstructed Mass of Z(1e2\\mu)",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZ1e2muMass);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZ1e2muMass);
   DeclareHistoSet("hZ0e3muMass" , "Reconstructed Mass of Z(0e3\\mu)",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZ0e3muMass);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZ0e3muMass);
   DeclareHistoSet("hZeeMassTT","Reconstructed MassTT of ZeeTT",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZeeMassTT);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZeeMassTT);
   DeclareHistoSet("hZeeMassTF","Reconstructed Mass of ZeeTF",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZeeMassTF);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZeeMassTF);
   DeclareHistoSet("hZmumuMassTT","Reconstructed Mass of ZmumuTT",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZmumuMassTT);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZmumuMassTT);
   DeclareHistoSet("hZmumuMassTF","Reconstructed Mass of ZmumuTF",
-                  "m_{Z}^{Reco} (GeV)", 40, 50, 130, hZmumuMassTF);
+                  "m_{Z}^{Reco} (GeV)", 30, 60, 120, hZmumuMassTF);
 
 //W Trans Mass Histos
   DeclareHistoSet("hWTransMass", "Reconstructed TransMass of W",
@@ -534,6 +536,10 @@ void WZAnalysis::Declare_Histos()
   listOfHists.push_back(hNumEvts);
   listOfHists.push_back(hEffRel);
   listOfHists.push_back(hEffAbs);
+
+  hLumiPb = new TH1F("hLumiPb", "Integrated luminosity in pb^{-1}", 1, 0, 1);
+  hLumiPb->SetBinContent(1, lumiPb);
+  listOfHists.push_back(hLumiPb);
 
 }//Declare_Histos
 
@@ -742,7 +748,7 @@ void WZAnalysis::printSummary(const string& dir, const float& Nthe_evt,
     }
     hEffRel->Fill(i,eff*100);
     outLogFile << setw(15) <<"\tRelative eff = "<<setw(6)<<eff*100 << " +/- " << setw(6)<<deff*100 << "%";
-        
+//    if(Nexp_evt_cut[i-1] && Nexp_evt_cut[i-1] < 1.) printf("eff:%.2f deff:%.2f num:%.2f den:%.2f\n",eff,deff,Nexp_evt_cut[i],Nexp_evt_cut[i-1]);
     getEff(eff, deff, Nexp_evt_cut[i], Nexp_evt);
     hEffAbs->Fill(i,eff*100);
     outLogFile << setw(15) <<"\tAbsolute eff = "<<setw(6)<<eff*100 << " +/- " << setw(6)<<deff*100 << "%"
@@ -948,14 +954,14 @@ WZAnalysis::PrintMuon(int idx, int parent){
 
 float
 WZAnalysis::CalcLeadPt(int type){
-  float leadpt=0;
+  float leadpt=-999;
   if(type==0){
-    if(electron_pt->size()>0) leadpt=TMath::Max(leadpt,electron_pt->at(0));
-    if(muon_pt->size()>0)     leadpt=TMath::Max(leadpt,muon_pt->at(0));
+    if(W_flavor == PDGELEC || Z_flavor == PDGELEC) leadpt=TMath::Max(leadpt,electron_pt->at(0));
+    if(W_flavor == PDGMUON || Z_flavor == PDGMUON) leadpt=TMath::Max(leadpt,muon_pt->at(0));
   }else if(type==PDGELEC){
-    if(electron_pt->size()>0) leadpt=TMath::Max(leadpt,electron_pt->at(0));
+        if(W_flavor == PDGELEC || Z_flavor == PDGELEC) leadpt=TMath::Max(leadpt,electron_pt->at(0));
   }else if(type==PDGMUON){
-    if(muon_pt->size()>0)     leadpt=TMath::Max(leadpt,muon_pt->at(0));
+    if(W_flavor == PDGMUON || Z_flavor == PDGMUON) leadpt=TMath::Max(leadpt,muon_pt->at(0));
   }
   return leadpt;
 }
@@ -1046,7 +1052,12 @@ bool WZAnalysis::PassValidZCut()
 bool WZAnalysis::PassValidWZCandCut()
 {
   if(debugme) cout<<"Check if there are valid WZ Candidate"<<endl;
-  return WZ_invMassMinPz>0.; 
+  return PassValidWandZCut() && WZ_invMassMinPz>0.; 
+}
+
+bool WZAnalysis::PassLeadLepPt(){
+  if(debugme) cout<<"Check if Leading Lep Pt"<<endl;
+  return LeadPt > minLepPt;
 }
 
 //Check if there is more Zs than required
