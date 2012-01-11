@@ -75,11 +75,12 @@ process.WprimeAnalyzer = cms.PSet(
       files = cms.VPSet(
     
         cms.PSet(
-          samplename = cms.string("data_testDoubleE"),
-          description = cms.untracked.string("Summer11_RSZZmmjj_750"),
-          x_section = cms.untracked.double(0.00835),
-          Nprod_evt = cms.untracked.int32(56754),
-          pathname = cms.string("//uscms_data/d3/fladias/DoubleEtest.root"),
+          samplename = cms.string("WZ"),
+          description = cms.untracked.string("Summer11_WZ"),
+          x_section = cms.untracked.double(0.879),
+          Nprod_evt = cms.untracked.int32(1221134),
+          subdir = cms.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/WZ/"),
+          pathname = cms.string("WZ.txt"),
         ),
         cms.PSet(
           samplename = cms.string("testDoubleE"),
