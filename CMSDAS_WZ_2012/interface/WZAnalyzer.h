@@ -29,7 +29,7 @@
 #include "PhysicsTools/SelectorUtils/interface/Selector.h"
 #include "PhysicsTools/CandUtils/interface/AddFourMomenta.h"
 
-#include "UserCode/CMGWPrimeGroup/interface/util.h"
+#include "UserCode/CMSDAS_WZ_2012/interface/util.h"
 
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 #include "PhysicsTools/Utilities/interface/Lumi3DReWeighting.h"
