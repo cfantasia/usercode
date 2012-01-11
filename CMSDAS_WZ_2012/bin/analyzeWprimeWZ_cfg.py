@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 import FWCore.PythonUtilities.LumiList as LumiList
 import FWCore.ParameterSet.Types as CfgTypes
-from UserCode.CMGWPrimeGroup.selectors_cff import *
+from UserCode.CMSDAS_WZ_2012.selectors_cff import *
 
 process = cms.Process("WPrimeAnalysis")
 
@@ -36,9 +36,9 @@ process.WprimeAnalyzer = cms.PSet(
 #    debug = cms.bool(False),
 
     #PileUp Inputs
-    MCPUDistFile = cms.string('UserCode/CMGWPrimeGroup/root_macros/MCSummer11S4PUDist.root'),
+    MCPUDistFile = cms.string('UserCode/CMSDAS_WZ_2012/root_macros/MCSummer11S4PUDist.root'),
     MCPUDistHist = cms.string('Fall11Dist'),
-    DataPUDistFile = cms.string('UserCode/CMGWPrimeGroup/root_macros/Cert_160404-180252_7TeV_Collisions11_JSON.pileupTruth_v2_finebin.root'),
+    DataPUDistFile = cms.string('UserCode/CMSDAS_WZ_2012/root_macros/Cert_160404-180252_7TeV_Collisions11_JSON.pileupTruth_v2_finebin.root'),
     DataPUDistHist = cms.string('pileup'),
     puScale = cms.double(1.0),
 
