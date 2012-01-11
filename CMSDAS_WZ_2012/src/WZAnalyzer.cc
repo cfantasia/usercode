@@ -1,4 +1,4 @@
-#include "UserCode/CMGWPrimeGroup/interface/WZAnalyzer.h"
+#include "UserCode/CMSDAS_WZ_2012/interface/WZAnalyzer.h"
 
 using namespace std;
 
