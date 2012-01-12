@@ -108,9 +108,8 @@ namespace wprime{
 
 //// Global constants ////////////////////////////////////////////////////////
 
-const float ZMASS = 91.188;
-const float WMASS = 80.398;
-const float VMASS = (ZMASS+WMASS)/2.;
+const float ZMASS = 9999.0;
+const float WMASS = 9999.0;
 
 const int PDG_ID_ELEC = 11;
 const int PDG_ID_ELECNEU = 12;
