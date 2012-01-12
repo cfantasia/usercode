@@ -170,7 +170,7 @@ void WZAnalyzer::getInputFiles(const Pset & cfg){
     if(pathname.find(".txt") != string::npos){
       cout<<"Using input file "<<pathname<<endl;
       ifstream infile;
-      pathname = "UserCode/CMGWPrimeGroup/config/" + pathname;
+      pathname = "UserCode/CMSDAS_WZ_2012/" + pathname;
       infile.open (pathname.c_str(), ifstream::in);
       
       while (infile.good()){
