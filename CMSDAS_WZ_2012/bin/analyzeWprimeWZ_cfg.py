@@ -20,8 +20,8 @@ process.WprimeAnalyzer = cms.PSet(
     maxEvents   = cms.int32(-1),                     
     reportAfter = cms.int32(-10),                  
 
-    muons = cms.InputTag('selectedPatMuons'),
-    electrons = cms.InputTag('selectedPatElectrons'),
+    muons = cms.InputTag('userPatMuons'),
+    electrons = cms.InputTag('userPatElectrons'),
     met   = cms.InputTag('patMETsPF'),
     hltEventTag = cms.InputTag('patTriggerEvent'),
     pileupTag  = cms.InputTag('addPileupInfo'),
@@ -73,19 +73,12 @@ process.WprimeAnalyzer = cms.PSet(
       files = cms.VPSet(
     
         cms.PSet(
-          samplename = cms.string("WZ"),
-          description = cms.untracked.string("Summer11_WZ"),
+          samplename = cms.string("Wprime500test"),
+          description = cms.untracked.string("Wprime500"),
           x_section = cms.untracked.double(0.879),
           Nprod_evt = cms.untracked.int32(1221134),
-          subdir = cms.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/WZ/"),
-          pathname = cms.string("WZ.txt"),
-        ),
-        cms.PSet(
-          samplename = cms.string("testDoubleE"),
-          description = cms.untracked.string("Summer11_RSZZmmjj_750"),
-          x_section = cms.untracked.double(0.00835),
-          Nprod_evt = cms.untracked.int32(10000),
-          pathname = cms.string("//uscms_data/d3/fladias/WZtest.root"),
+          subdir = cms.untracked.string("root://cmsxrootd.hep.wisc.edu/"),
+          pathname = cms.string("/store/user/jklukas/MC-W06-06-05A/WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6/MCPatOmnilepton-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6/patTuple_cfg-step3-step2-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6-0009.root"),
         ),
       ),#end of files
 
