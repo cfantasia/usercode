@@ -78,7 +78,7 @@ process.WprimeAnalyzer = cms.PSet(
           x_section = cms.untracked.double(0.879),
           Nprod_evt = cms.untracked.int32(1221134),
           subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6/"),
-          pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6.txt"),
+          pathname = cms.string("UserCode/CMSDAS_WZ_2012/filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6.txt"),
         ),
       ),#end of files
 
