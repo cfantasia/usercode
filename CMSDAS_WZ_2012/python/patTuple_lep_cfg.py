@@ -13,11 +13,6 @@ def lep_config(process, reportEveryNum=100, maxEvents=-1) :
     # redefine selectedPatMuons (isGlobalMuon not included in std definition)
     process.selectedPatMuons.cut = "pt > 10. & abs(eta) < 2.4 & isGlobalMuon"
     
-    # keep all events with 3 leptons above 10 GeV
-    process.countPatLeptons.electronSource = "selectedPatElectrons"
-    process.countPatLeptons.muonSource     = "selectedPatMuons"
-    process.countPatLeptons.minNumber = 3
-    
     from PhysicsTools.SelectorUtils.pvSelector_cfi import pvSelector
     process.goodOfflinePrimaryVertices = cms.EDFilter(
         "PrimaryVertexObjectFilter",
@@ -31,7 +26,6 @@ def lep_config(process, reportEveryNum=100, maxEvents=-1) :
         process.selectedPatMuons *
         process.patElectrons *
         process.selectedPatElectrons *
-        process.countPatLeptons +
         process.goodOfflinePrimaryVertices*
         process.patTrigger *
         process.patTriggerEvent *
