@@ -44,7 +44,7 @@ WZAnalyzer::~WZAnalyzer(){
 }
 
 void WZAnalyzer::run(){
-  int ievt_all=0;  int ievt_skipped = 0;
+  int ievt_all=0;
   unsigned i_sample = 1;
   float reportPercent = reportAfter_<0 ? reportAfter_/100. : 0;
   vector<wprime::InputFile>::iterator it;
@@ -77,8 +77,7 @@ void WZAnalyzer::run(){
       if(reportAfter_!=0 ? (ievt>0 && ievt%reportAfter_==0) : false) 
         cout << " Processing event: " << ievt << " or " 
              << 100.*ievt/it->Nact_evt << "% of input file #" << i_sample
-             << " (Total events processed: " << ievt_all 
-             << ", non-certified/skipped: " << ievt_skipped << ") " << endl;
+             << " (Total events processed: " << ievt_all << ") " << endl;
       
       
       ++ievt_all;
