@@ -3,13 +3,15 @@
 
 #include <TSystem.h>
 
+#include <TH1.h>
+
 #include "FWCore/FWLite/interface/AutoLibraryLoader.h"
 
 #include "FWCore/ParameterSet/interface/ProcessDesc.h"
 
 #include "FWCore/PythonParameterSet/interface/PythonProcessDesc.h"
 
-#include "UserCode/CMGWPrimeGroup/interface/WZAnalyzer.h"
+#include "UserCode/CMSDAS_WZ_2012/interface/WZAnalyzer.h"
 
 using std::cout; using std::cerr; using std::endl;
 
