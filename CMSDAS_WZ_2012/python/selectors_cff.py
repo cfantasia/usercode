@@ -20,21 +20,6 @@ muSelectors = cms.PSet(
     WZLoose = cms.PSet(),
     WZRelaxed = cms.PSet(),
     WZTight = cms.PSet(),
-    HadVZLoose = cms.PSet(),
-    HadVZTight = cms.PSet(),
-    exotica = cms.PSet(
-       maxEta = cms.untracked.double(2.4),
-       minIsGlobal = cms.untracked.int32(1),
-       minIsTracker = cms.untracked.int32(1),
-       maxDxy = cms.untracked.double(0.2),
-#       maxNormalizedChi2 = cms.untracked.double(10.), not needed for TeV muons
-#       minNTrackerHits = cms.untracked.int32(11), deprecated
-       minNPixelHits = cms.untracked.int32(1),
-       minNMuonHits = cms.untracked.int32(1),
-       minNMatches = cms.untracked.int32(2),
-       minNTrackerLayers = cms.untracked.int32(9),
-#       minTrackerValidFrac = cms.untracked.double(),
-    ),
     )
 muSelectors.WZLoose = muSelectors.VBTF.clone(
     minPt = 10.,
@@ -49,6 +34,7 @@ muSelectors.WZTight = muSelectors.VBTF.clone(
 ####  Electrons  ####
 #####################
 
+# indices correspond to working points: 95, 90, 85, 80, 70, 60 (% efficiencies)
 cutsMissingHits = [0, 0, 0, 0, 0, 0]
 cutsConvDist = [0., 0., 0.02, 0.02, 0.02, 0.02]
 cutsConvDcot = [0., 0., 0.02, 0.02, 0.02, 0.02]
@@ -65,7 +51,6 @@ elSelectors = cms.PSet(
     WZLoose = cms.PSet(),
     WZRelaxed = cms.PSet(),
     WZTight = cms.PSet(),
-    exotica = cms.PSet(),
     )
 
 for i, s in enumerate(["wp95", "wp90", "wp85", "wp80", "wp70", "wp60"]):
