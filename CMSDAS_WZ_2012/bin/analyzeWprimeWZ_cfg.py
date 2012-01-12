@@ -73,12 +73,12 @@ process.WprimeAnalyzer = cms.PSet(
       files = cms.VPSet(
     
         cms.PSet(
-          samplename = cms.string("Wprime500test"),
+          samplename = cms.string("Wprime500"),
           description = cms.untracked.string("Wprime500"),
           x_section = cms.untracked.double(0.879),
           Nprod_evt = cms.untracked.int32(1221134),
-          subdir = cms.untracked.string("root://cmsxrootd.hep.wisc.edu/"),
-          pathname = cms.string("/store/user/jklukas/MC-W06-06-05A/WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6/MCPatOmnilepton-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6/patTuple_cfg-step3-step2-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6-0009.root"),
+          subdir = cms.untracked.string("/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6/"),
+          pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6.txt"),
         ),
       ),#end of files
 
