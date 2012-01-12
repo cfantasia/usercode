@@ -15,6 +15,6 @@ process.p.replace(process.patElectrons, process.electronMatch+process.patElectro
 process.source.fileNames = [
 
     # 'file:/PATH/TO/FILE.root'
-    'file:/home/fladias/WPrime/RSGravitonToZZToEEJJ_kMpl005_M_750_pythia6_cff_py_GEN_FASTSIM_HLT.root'
+    'file:/uscms_data/d3/fladias/WZ_MadGraph.root'
        
     ]
