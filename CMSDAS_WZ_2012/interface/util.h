@@ -102,8 +102,6 @@ namespace wprime{
 
   };
 
-  const float MUON_MASS = 0.105658366;      // GeV
-  const float ELECTRON_MASS = 0.000511;     // GeV
 }
 
 //// Global constants ////////////////////////////////////////////////////////
