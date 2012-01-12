@@ -6,7 +6,7 @@ from UserCode.CMSDAS_WZ_2012.patTuple_mc_cfg import *
 
 # 2nd argument: message-logger frequency
 # 3rd argument: # of events to process
-lep_config(process, 1000, -1)
+lep_config(process, 100, 1000)
 mc_config(process, cms)
 
 process.p.replace(process.patMuons, process.muonMatch+process.patMuons+process.prunedGenParticles)
