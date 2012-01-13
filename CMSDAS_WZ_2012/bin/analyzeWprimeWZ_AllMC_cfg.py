@@ -17,7 +17,7 @@ process.WprimeAnalyzer = cms.PSet(
 
     outputFile  = cms.string("WprimeWZ.root"),
 
-    maxEvents   = cms.int32(-1),                     
+    maxEvents   = cms.int32(100),                     
     reportAfter = cms.int32(-10),                  
 
     muons = cms.InputTag('userPatMuons'),
@@ -81,14 +81,15 @@ process.WprimeAnalyzer = cms.PSet(
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WZJetsTo3LNu_TuneZ2_7TeV-madgraph-tauola.txt"),
         ),
 
-        cms.PSet(
-          samplename = cms.string("TTJets"),
-          description = cms.untracked.string("TTJets"),
-          x_section = cms.untracked.double(157.5),
-          Nprod_evt = cms.untracked.int32(50098875),
-          subdir = cms.untracked.string("dcache:"),
-          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola.txt"),
-        ),
+
+#        cms.PSet(
+#          samplename = cms.string("TTJets"),
+#          description = cms.untracked.string("TTJets"),
+#          x_section = cms.untracked.double(157.5),
+#          Nprod_evt = cms.untracked.int32(50098875),
+#          subdir = cms.untracked.string("dcache:"),
+#          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola.txt"),
+#        ),
 
         cms.PSet(
           samplename = cms.string("DYJetsToLL"),
