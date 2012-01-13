@@ -94,35 +94,6 @@ process.WprimeAnalyzer = cms.PSet(
         ),
 
         cms.PSet(
-          samplename = cms.string("DYJetsToLL"),
-          description = cms.untracked.string("DYJetsToLL"),
-          x_section = cms.untracked.double(3048),
-          Nprod_evt = cms.untracked.int32(36004635),
-          subdir = cms.untracked.string("dcache:"),
-          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-DYJetsToLL_TuneZ2_M-50_7TeV-madgraph-tauola.txt"),
-        ),
-
-
-        cms.PSet(
-          samplename = cms.string("GVJets"),
-          description = cms.untracked.string("GVJets"),
-          x_section = cms.untracked.double(173),
-          Nprod_evt = cms.untracked.int32(1067879),
-          subdir = cms.untracked.string("dcache:"),
-          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-GVJets_7TeV-madgraph.txt"),
-        ),
-
-
-        cms.PSet(
-          samplename = cms.string("WJetsToLNu"),
-          description = cms.untracked.string("WJetsToLNu"),
-          x_section = cms.untracked.double(31314),
-          Nprod_evt = cms.untracked.int32(68447497),
-          subdir = cms.untracked.string("dcache:"),
-          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-WJetsToLNu_TuneZ2_7TeV-madgraph-tauola.txt"),
-        ),
-
-        cms.PSet(
           samplename = cms.string("ZZ2e2m"),
           description = cms.untracked.string("ZZ2e2mu"),
           x_section = cms.untracked.double(0.03078),
@@ -130,26 +101,6 @@ process.WprimeAnalyzer = cms.PSet(
           subdir = cms.untracked.string("dcache:"),
           pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-ZZTo2e2mu_7TeV-powheg-pythia6.txt"),
         ),
-
-        cms.PSet(
-          samplename = cms.string("ZZ2e2t"),
-          description = cms.untracked.string("ZZ2e2tau"),
-          x_section = cms.untracked.double(0.03078),
-          Nprod_evt = cms.untracked.int32(484063),
-          subdir = cms.untracked.string("dcache:"),
-          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-ZZTo2e2tau_7TeV-powheg-pythia6.txt"),
-        ),
-
-
-        cms.PSet(
-          samplename = cms.string("ZZ2m2t"),
-          description = cms.untracked.string("ZZ2m2tau"),
-          x_section = cms.untracked.double(0.03078),
-          Nprod_evt = cms.untracked.int32(486266),
-          subdir = cms.untracked.string("dcache:"),
-          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-ZZTo2mu2tau_7TeV-powheg-pythia6.txt"),
-        ),
-
 
         cms.PSet(
           samplename = cms.string("ZZ4e"),
@@ -168,17 +119,6 @@ process.WprimeAnalyzer = cms.PSet(
           Nprod_evt = cms.untracked.int32(499918),
           subdir = cms.untracked.string("dcache:"),
           pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-ZZTo4mu_7TeV-powheg-pythia6.txt"),
-        ),
-
-
-
-        cms.PSet(
-          samplename = cms.string("ZZ4t"),
-          description = cms.untracked.string("ZZ4tau"),
-          x_section = cms.untracked.double(0.0154),
-          Nprod_evt = cms.untracked.int32(473838),
-          subdir = cms.untracked.string("dcache:"),
-          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-ZZTo4tau_7TeV-powheg-pythia6.txt"),
         ),
 
         
