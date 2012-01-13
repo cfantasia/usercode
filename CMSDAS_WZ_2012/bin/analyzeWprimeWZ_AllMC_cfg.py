@@ -82,14 +82,16 @@ process.WprimeAnalyzer = cms.PSet(
         ),
 
 
-#        cms.PSet(
-#          samplename = cms.string("TTJets"),
-#          description = cms.untracked.string("TTJets"),
-#          x_section = cms.untracked.double(157.5),
-#          Nprod_evt = cms.untracked.int32(50098875),
-#          subdir = cms.untracked.string("dcache:"),
-#          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola.txt"),
-#        ),
+        cms.PSet(
+          samplename = cms.string("TTJets"),
+          description = cms.untracked.string("TTJets"),
+          x_section = cms.untracked.double(157.5),
+          Nprod_evt = cms.untracked.int32(50098875),
+          subdir = cms.untracked.string("dcache:"),
+          pathname = cms.string("filelists/MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola.txt"),
+          splitInto = cms.untracked.int32(10),
+          
+        ),
 
         cms.PSet(
           samplename = cms.string("DYJetsToLL"),
@@ -121,7 +123,7 @@ process.WprimeAnalyzer = cms.PSet(
         ),
 
         cms.PSet(
-          samplename = cms.string("ZZ"),
+          samplename = cms.string("ZZ2e2m"),
           description = cms.untracked.string("ZZ2e2mu"),
           x_section = cms.untracked.double(0.03078),
           Nprod_evt = cms.untracked.int32(499917),
@@ -130,7 +132,7 @@ process.WprimeAnalyzer = cms.PSet(
         ),
 
         cms.PSet(
-          samplename = cms.string("ZZ"),
+          samplename = cms.string("ZZ2e2t"),
           description = cms.untracked.string("ZZ2e2tau"),
           x_section = cms.untracked.double(0.03078),
           Nprod_evt = cms.untracked.int32(484063),
@@ -140,7 +142,7 @@ process.WprimeAnalyzer = cms.PSet(
 
 
         cms.PSet(
-          samplename = cms.string("ZZ"),
+          samplename = cms.string("ZZ2m2t"),
           description = cms.untracked.string("ZZ2m2tau"),
           x_section = cms.untracked.double(0.03078),
           Nprod_evt = cms.untracked.int32(486266),
@@ -150,7 +152,7 @@ process.WprimeAnalyzer = cms.PSet(
 
 
         cms.PSet(
-          samplename = cms.string("ZZ"),
+          samplename = cms.string("ZZ4e"),
           description = cms.untracked.string("ZZ4e"),
           x_section = cms.untracked.double(0.0154),
           Nprod_evt = cms.untracked.int32(499929),
@@ -160,7 +162,7 @@ process.WprimeAnalyzer = cms.PSet(
 
 
         cms.PSet(
-          samplename = cms.string("ZZ"),
+          samplename = cms.string("ZZ4m"),
           description = cms.untracked.string("ZZ4m"),
           x_section = cms.untracked.double(0.0154),
           Nprod_evt = cms.untracked.int32(499918),
@@ -171,7 +173,7 @@ process.WprimeAnalyzer = cms.PSet(
 
 
         cms.PSet(
-          samplename = cms.string("ZZ"),
+          samplename = cms.string("ZZ4t"),
           description = cms.untracked.string("ZZ4tau"),
           x_section = cms.untracked.double(0.0154),
           Nprod_evt = cms.untracked.int32(473838),
