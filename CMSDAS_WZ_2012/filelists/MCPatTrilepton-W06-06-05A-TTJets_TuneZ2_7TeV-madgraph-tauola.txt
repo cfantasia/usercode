@@ -111,7 +111,6 @@
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part0/patTuple_238.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part0/patTuple_99.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part0/patTuple_10.root
-/pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part0/patTuple_106.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part0/patTuple_148.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part0/patTuple_239.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part0/patTuple_107.root
@@ -381,7 +380,6 @@
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part1/patTuple_190.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part1/patTuple_64.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part1/patTuple_191.root
-/pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part1/patTuple_240.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part1/patTuple_55.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part1/patTuple_150.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part1/patTuple_192.root
@@ -581,7 +579,6 @@
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_36.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_50.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_100.root
-/pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_142.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_184.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_233.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_27.root
@@ -607,7 +604,6 @@
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_146.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_188.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_237.root
-/pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_105.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_147.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_189.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part2/patTuple_238.root
@@ -766,7 +762,6 @@
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part3/patTuple_62.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part3/patTuple_171.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part3/patTuple_220.root
-/pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part3/patTuple_9.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part3/patTuple_39.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part3/patTuple_53.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part3/patTuple_130.root
@@ -1030,8 +1025,6 @@
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part4/patTuple_35.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part4/patTuple_132.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part4/patTuple_174.root
-/pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part4/patTuple_223.root
-/pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part4/patTuple_26.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part4/patTuple_40.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part4/patTuple_133.root
 /pnfs/cms/WAX/11/store/user/fladias//MCPatTrilepton-W06-06-05A-TTJets_TuneZ2_7TeV-madgraph-tauola_part4/patTuple_175.root
