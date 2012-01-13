@@ -77,7 +77,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime200"),
           x_section = cms.untracked.double(1.324),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-200_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-200_7TeV-pythia6.txt"),
         ),
 
@@ -86,7 +86,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime300"),
           x_section = cms.untracked.double(0.8599),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-300_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-300_7TeV-pythia6.txt"),
         ),
 
@@ -95,7 +95,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime400"),
           x_section = cms.untracked.double(0.2768),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-400_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-400_7TeV-pythia6.txt"),
         ),
 
@@ -105,7 +105,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime500"),
           x_section = cms.untracked.double(0.1074),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-500_7TeV-pythia6.txt"),
         ),
 
@@ -115,7 +115,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime600"),
           x_section = cms.untracked.double(0.0489),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-600_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-600_7TeV-pythia6.txt"),
         ),
 
@@ -124,7 +124,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime700"),
           x_section = cms.untracked.double(0.0244),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-700_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-700_7TeV-pythia6.txt"),
         ),
 
@@ -133,7 +133,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime800"),
           x_section = cms.untracked.double(0.01328),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-800_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-800_7TeV-pythia6.txt"),
         ),
 
@@ -142,7 +142,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime900"),
           x_section = cms.untracked.double(0.00744),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-900_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-900_7TeV-pythia6.txt"),
         ),
 
@@ -151,7 +151,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime1000"),
           x_section = cms.untracked.double(0.00442),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1000_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1000_7TeV-pythia6.txt"),
         ),
 
@@ -160,7 +160,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime1100"),
           x_section = cms.untracked.double(0.002704),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1100_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1100_7TeV-pythia6.txt"),
         ),
 
@@ -169,7 +169,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime1200"),
           x_section = cms.untracked.double(0.001690),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1200_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1200_7TeV-pythia6.txt"),
         ),
 
@@ -178,7 +178,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime1300"),
           x_section = cms.untracked.double(0.001082),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1300_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1300_7TeV-pythia6.txt"),
         ),
 
@@ -187,7 +187,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime1400"),
           x_section = cms.untracked.double(0.000690),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1400_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1400_7TeV-pythia6.txt"),
         ),
 
@@ -196,7 +196,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("Wprime1500"),
           x_section = cms.untracked.double(0.000456),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1500_7TeV-pythia6/"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-WprimeToWZTo3LNu_emt_M-1500_7TeV-pythia6.txt"),
         ),
         
@@ -206,7 +206,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("TC300"),
           x_section = cms.untracked.double(0.05822),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-300_7TeV-pythia6"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-300_7TeV-pythia6.txt"),
         ),
 
@@ -215,7 +215,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("TC400"),
           x_section = cms.untracked.double(0.01751),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-400_7TeV-pythia6"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-400_7TeV-pythia6.txt"),
         ),
 
@@ -224,7 +224,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("TC500"),
           x_section = cms.untracked.double(0.007056),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-500_7TeV-pythia6"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-500_7TeV-pythia6.txt"),
         ),
 
@@ -233,7 +233,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("TC600"),
           x_section = cms.untracked.double(0.003364),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-600_7TeV-pythia6"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-600_7TeV-pythia6.txt"),
         ),
 
@@ -242,7 +242,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("TC700"),
           x_section = cms.untracked.double(0.001774),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-700_7TeV-pythia6"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-700_7TeV-pythia6.txt"),
         ),
 
@@ -251,7 +251,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("TC800"),
           x_section = cms.untracked.double(0.0009728),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-800_7TeV-pythia6"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-800_7TeV-pythia6.txt"),
         ),
 
@@ -260,7 +260,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("TC900"),
           x_section = cms.untracked.double(0.0009866),
           Nprod_evt = cms.untracked.int32(20000),
-          subdir = cms.untracked.string("dcache:/pnfs/cms/WAX/11/store/user/fladias/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-900_7TeV-pythia6"),
+          subdir = cms.untracked.string("dcache:");
           pathname = cms.string("filelists/MCPatOmnilepton-W06-06-05A-TCRhoToWZTo3LNu_emt_M-900_7TeV-pythia6.txt"),
         ),
 
