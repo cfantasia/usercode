@@ -17,7 +17,7 @@ process.WprimeAnalyzer = cms.PSet(
 
     outputFile  = cms.string("WprimeWZ.root"),
 
-    maxEvents   = cms.int32(100),                     
+    maxEvents   = cms.int32(1),                     
     reportAfter = cms.int32(-10),                  
 
     muons = cms.InputTag('userPatMuons'),
@@ -77,9 +77,9 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleMu_May10"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleMu-Run2011A-May10ReReco-v1.txt"),
-        ),
+          ),
 
 
         cms.PSet(
@@ -87,9 +87,9 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleE_May10"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1.txt"),
-        ),
+          ),
 
 
         cms.PSet(
@@ -97,7 +97,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleMu_PRv4"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleMu-Run2011A-PromptReco-v4.txt"),
         ),
 
@@ -107,7 +107,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleE_PRv4"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleElectron-Run2011A-PromptReco-v4.txt"),
         ),
 
@@ -116,7 +116,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleMu_Aug05"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleMu-Run2011A-05Aug2011-v1.txt"),
         ),
 
@@ -126,7 +126,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleE_Aug05"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleElectron-Run2011A-05Aug2011-v1.txt"),
         ),
 
@@ -136,7 +136,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleM_PRv6"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleMu-Run2011A-PromptReco-v6.txt"),
         ),
 
@@ -147,7 +147,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleE_PRv6"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleElectron-Run2011A-PromptReco-v6.txt"),
         ),
 
@@ -156,7 +156,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleM_PRv1"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleMu-Run2011B-PromptReco-v1.txt"),
         ),
 
@@ -166,7 +166,7 @@ process.WprimeAnalyzer = cms.PSet(
           description = cms.untracked.string("DoubleE_PRv1"),
           x_section = cms.untracked.double(1),
           Nprod_evt = cms.untracked.int32(9999),
-          subdir = cms.untracked.string("dcache:"),
+          subdir = cms.untracked.string("/"),
           pathname = cms.string("filelists/DataPatTrilepton-W06-06-05A-DoubleElectron-Run2011B-PromptReco-v1.txt"),
         ),
  
