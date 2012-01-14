@@ -520,12 +520,10 @@
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AA593FCC-517B-E011-B09F-00304867904E.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AA9A2440-387D-E011-A467-003048679000.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AAB9DDF5-5B7B-E011-B018-00304867916E.root
-/uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AA9ECC2A-537B-E011-AF4E-001A9281174C.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AAEC57B0-E37C-E011-8005-002354EF3BE1.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AAF33932-667B-E011-84D4-003048D15DB6.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AC2CC47A-857B-E011-AF0D-0026189438DA.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AC34009C-8E7B-E011-9304-0026189438BA.root
-/uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AC34F735-537B-E011-BDEF-003048679012.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AC64782A-5C7C-E011-ACA6-002618943863.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-AC72A0C8-5B7B-E011-BBC5-003048678B7C.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-ACD04E51-537B-E011-88F8-001A92811738.root
@@ -544,7 +542,6 @@
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-B2B7BB85-927B-E011-9FF9-00248C0BE016.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-B2BD7EC2-7D7B-E011-B92D-00261894386C.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-B4239A82-7B7B-E011-9446-002618943954.root
-/uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-B42914C9-6E7B-E011-ADD5-001A92971BB8.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-B4EE2AC3-527B-E011-9807-001BFCDBD190.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-B4BB5E3D-6E7B-E011-BA68-0026189438A0.root
 /uscmst1b_scratch/lpc1/3DayLifetime/fantasia/filelists//lepton-W06-06-05A-DoubleElectron-Run2011A-May10ReReco-v1/patTuple_cfg-B6175449-A07B-E011-ADD4-0018F3D096BA.root

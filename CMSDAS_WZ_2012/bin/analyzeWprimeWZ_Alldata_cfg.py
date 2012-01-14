@@ -17,7 +17,7 @@ process.WprimeAnalyzer = cms.PSet(
 
     outputFile  = cms.string("WprimeWZ.root"),
 
-    maxEvents   = cms.int32(1),                     
+    maxEvents   = cms.int32(-1),                     
     reportAfter = cms.int32(-10),                  
 
     muons = cms.InputTag('userPatMuons'),
