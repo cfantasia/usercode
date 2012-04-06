@@ -1,5 +1,6 @@
 #!/bin/bash
 # Get with srmls srm://cmssrm.hep.wisc.edu:8443//pnfs/hep.wisc.edu/store/user/jklukas/ | grep DileptonPatTupleMC
+# srm://cmssrm.hep.wisc.edu:8443/srm/v2/server?SFN=/hdfs/store/
 
 if [ $# -ne 2 ]
 then
@@ -7,10 +8,10 @@ then
   exit 65
 fi
 
-Ver="41X"
+Ver="42X"
 #WISC
-WISC_USER=jklukas
-WISC_BASE=/pnfs/hep.wisc.edu
+WISC_USER=fantasia #jklukas
+WISC_BASE=/hdfs
 WISC_SRM=srm://cmssrm.hep.wisc.edu:8443/${WISC_BASE}
 WISC_PNFS=store/user/${WISC_USER}
 
@@ -74,18 +75,23 @@ for FileList in `ls filelists/ | grep .txt`
   
   for File in `less filelists/${Directory}.txt`
     do
-    Filename=${Directory}/${File##*${Directory}/}
-    #echo $Filename
+    #strip off $IN_BASE/$IN_PNFS
+    Filename=${File##*$IN_BASE/$IN_PNFS/}
+#    Filename=${Directory}/${File##*${Directory}/}
+#    Filename=${Directory}/`basename $File`
+#    echo $File
+#    echo $Filename
 
     INPUT=$IN_SRM/${IN_PNFS}/$Filename
     OUTPUT=$OUT_SRM/${OUT_PNFS}/$Filename
     
     if [ -f ${OUT_BASE}/${OUT_PNFS}/$Filename ]; then
-        echo file exists, skipping
+        echo $Filename exists, skipping
     else
-        echo Copying $INPUT $OUTPUT
-#        srmcp $INPUT $OUTPUT
-        lcg-cp $INPUT $OUTPUT
+        echo Copying \"$INPUT\" \"$OUTPUT\"
+####        srmcp $INPUT $OUTPUT #doesn't work on lpc
+####        lcg-cp -v "srm://cmssrm.hep.wisc.edu:8443//hdfs/store/user/jklukas/MC-W06-06-05A/WprimeToWZTo3LNu_emt_M-1000_7TeV-pythia6/MCPatOmnilepton-WprimeToWZTo3LNu_emt_M-1000_7TeV-pythia6/patTuple_cfg-step3-step2-WprimeToWZTo3LNu_emt_M-1000_7TeV-pythia6-0372.root" test.root
+        lcg-cp -n 4 $INPUT $OUTPUT
     fi
   done
 done

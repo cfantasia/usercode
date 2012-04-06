@@ -6,7 +6,7 @@ set Process=${2}
 set Offset=0
 
 if ( $# < 2 ) then
-    echo Usage: $0 MODE Number PWD
+    echo Usage: $0 MODE Number CWD Offset
 endif
 
 if ( $# > 2 ) then
@@ -31,15 +31,6 @@ if ( $# > 2 ) then
         echo Sample Number is $Process
     endif
 endif
-
-# if ( $Process < 10 ) then
-#     set ProcessPadded = 00${Process}
-# else if ( $Process < 100 ) then
-#     set ProcessPadded = 0${Process}
-# else
-#     set ProcessPadded = ${Process}
-# endif 
-# echo $ProcessPadded
 
 set OutFile=Sample${Process}_${Mode}.txt
 #set OutFile=${Mode}_Sample${Process}.txt
