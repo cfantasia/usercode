@@ -1,22 +1,20 @@
 #!/bin/bash
 if [ "$#" -lt 1 ]; then
-   echo "syntax: `basename $0` Mode Offset"
+   echo "Usage: `basename $0` Mode [Offset]"
    exit
 fi
 
 Mode=${1}
-Offset=0
+WD=$(pwd)
 
 if [ "$#" -gt 1 ]; then
     Offset=${2}
+    NJobs=1
+else
+    ./run.sh $Mode 999 >& /dev/null
+    Offset=0
+    NJobs=$(grep "You asked for sample " ${Mode}_Sample999.txt | awk '{print $8;}')
 fi
-
-WD=$(pwd)
-
-#if [ ! -e "${Config}_py_GEN.log" ]; then
-./run.sh $Mode 999 >& /dev/null
-#fi
-NJobs=$(grep "You asked for sample " Sample999_${Mode}.txt | awk '{print $8;}')
 
 date
 

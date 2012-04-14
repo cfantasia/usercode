@@ -1,18 +1,20 @@
 #!/bin/tcsh -f
 
+if ( $# < 2 ) then
+    echo "Usage: `basename $0` MODE Number [CWD] [Offset]"
+endif
+
 #echo You gave me $# parameters
 set Mode=${1}
 set Process=${2}
 set Offset=0
 
-if ( $# < 2 ) then
-    echo Usage: $0 MODE Number CWD Offset
-endif
 
 if ( $# > 2 ) then
     echo Moving to ${3}
     set SRC_Dir=${3}
     
+    #This IS LPC Specific to get cmsenv to work
     source /uscmst1/prod/sw/cms/setup/cshrc prod
     setenv SCRAM_ARCH slc5_amd64_gcc434
 
@@ -32,44 +34,46 @@ if ( $# > 2 ) then
     endif
 endif
 
-set OutFile=Sample${Process}_${Mode}.txt
-#set OutFile=${Mode}_Sample${Process}.txt
+set OutFile=${Mode}_Sample${Process}.txt
 
 switch ($Mode)
     case "WprimeWZ": #Wprime WZ
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeWprimeWZ_cfg.py ${Process} >& $OutFile
+        set Config=analyzeWprimeWZ_cfg.py
         breaksw
     case "HadVZ": #Had VZ
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeWprimeHadVZ_cfg.py ${Process} >& $OutFile
+        set Config=analyzeWprimeHadVZ_cfg.py
         breaksw
     case "HadVW": #Had WZ
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeWprimeHadVW_cfg.py ${Process} >& $OutFile
+        set Config=analyzeWprimeHadVW_cfg.py
         breaksw
     case "TB": #TB
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeWprimeTB_cfg.py ${Process} >& $OutFile
+        set Config=analyzeWprimeTB_cfg.py
         breaksw
     case "EWKWZ": #EWK WZ
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeEWKWZ_cfg.py ${Process} >& $OutFile
+        set Config=analyzeEWKWZ_cfg.py
         breaksw
     case "WZMatrix": #Matrix Method
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeWprimeWZMatrix_cfg.py ${Process} >& $OutFile
+        set Config=analyzeWprimeWZMatrix_cfg.py
         breaksw
     case "WZEffRate": #Eff Rate
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeWZEffRate_cfg.py ${Process} >& $OutFile
+        set Config=analyzeWZEffRate_cfg.py
         breaksw
-    case "WZElecFakeRate": #Elec Fake Rate
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeWZFakeRate_cfg.py ${Process} >& $OutFile
+    case "WZFakeRateElec": #Elec Fake Rate
+        set Config=analyzeWZFakeRateElec_cfg.py
         breaksw
-    case "WZMuonFakeRate": #Muon Fake Rate
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeWZFakeRate_cfg.py ${Process} >& $OutFile
+    case "WZFakeRateMuon": #Muon Fake Rate
+        set Config=analyzeWZFakeRateMuon_cfg.py
         breaksw
     case "TTbar": #HadVZ TTbar check
-        time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/analyzeTTbar_cfg.py ${Process} >& $OutFile
+        set Config=analyzeTTbar_cfg.py
         breaksw
     default:
         echo "You didn't choose a valid mode: " $Mode
         exit 1
 endsw
+
+time WPrimeAnalyzer UserCode/CMGWPrimeGroup/bin/${Config} ${Process} >& $OutFile
+#I don't want to use $OutFile if using condor, right?
 
 date
 
