@@ -5,14 +5,15 @@
 Cur=`pwd`
 echo $Cur
 
-for Dir in WprimeToWZToJJLL WprimeToWZToLNuJJ WprimeToWZToLLLNu WprimeToWZToJJNuNu  \
-    RSGravitonToWWToLNuJJ  RSGravitonToZZToLLJJ  RSGravitonToZZToLLNuNu RSGravitonToZZToNuNuJJ
+for Dir in WprimeToWZToLLLNu #WprimeToWZToJJLL WprimeToWZToLNuJJ WprimeToWZToLLLNu WprimeToWZToJJNuNu  \
+    #RSGravitonToWWToLNuJJ  RSGravitonToZZToLLJJ  RSGravitonToZZToLLNuNu RSGravitonToZZToNuNuJJ
   do
 
 #  mkdir ${Cur}/Test_${Dir}
   cd ${Cur}/Test_${Dir}
 
   echo Now `pwd`
+  rm -f xSec_*.dat
 
   for ConfigFull in `ls ../${Dir}/*.py`
     do
@@ -52,10 +53,15 @@ for Dir in WprimeToWZToJJLL WprimeToWZToLNuJJ WprimeToWZToLLLNu WprimeToWZToJJNu
     time=$(tail --lines=1 ${Config}_py_GEN_SIM.log)
     #echo time is $time
 
+    mass=$(echo $Config | awk 'BEGIN { FS = "_" } ; { print $3 }')
+
+    En=$(echo $Config | awk 'BEGIN { FS = "_" } ; { print $5 }')
+    En=$(echo $En | sed 's/TeV//')
+
     #Coming from gen file: xsec,  
     #Coming from gen-sim file: ngen, time, size
     echo $DSname $Config 0 50000 1.00 $xsecnew_pb $nGen $time $size
-
+    echo $mass $xsecnew_pb >> xSec_WZ_${En}TeV.dat
   done
   
 
